@@ -13,23 +13,23 @@ Prerequisite
 - Java 17
 - Docker and Docker Compose.
 
-1. **Clone the repository:**
+Clone the repository:
 
 ```sh
 git clone [repository_url]
 cd senior-hub-api
 ```
 
-2. Install Dependencies:
+Install Dependencies:
 
 ```sh
-mvn clean install
+./mvnw clean install
 ```
 
 Run the Application:
 
 ```sh
-java -jar target/senior-hub.jar
+java -jar target/seniorhub-0.0.1-SNAPSHOT.jar
 ```
 
 ## License
