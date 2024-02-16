@@ -22,13 +22,23 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.config;
+package com.ericafenyo.seniorhub.service;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+import com.ericafenyo.seniorhub.dto.UserCreationDto;
+import com.ericafenyo.seniorhub.dto.UserUpdateDto;
+import com.ericafenyo.seniorhub.model.User;
 
-@Configuration
-@EnableTransactionManagement
-@EnableJpaAuditing
-public class AppConfig { }
+import java.util.List;
+
+
+public interface UserService {
+  List<User> getUsers();
+
+  User getUserById(String id);
+
+  User createUser(UserCreationDto userCreationDto);
+
+  User updateUser(String id, UserUpdateDto updateUserDto);
+
+  void deleteUser(String id);
+}

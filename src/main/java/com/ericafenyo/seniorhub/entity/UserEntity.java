@@ -22,51 +22,90 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.model;
+package com.ericafenyo.seniorhub.entity;
 
-import lombok.Builder;
+import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A user domain model representing an individual who interacts with the application.
+ * A database entity representing an individual or entity who interacts with the application.
  */
+@Entity(name = "users")
+@EntityListeners(AuditingEntityListener.class)
 @Data
-public class User {
+public class UserEntity {
+
   /**
    * The unique identifier for the user.
    */
-  private String id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
+
+  /**
+   * A secondary unique identifier.
+   */
+  @Column(name = "uuid")
+  private String uuid;
+
   /**
    * The first name of the user.
    */
+  @Column(name = "first_name")
   private String firstName;
+
   /**
    * The last name of the user.
    */
+  @Column(name = "last_name")
   private String lastName;
+
   /**
    * The email address of the user.
    */
+  @Column(name = "email")
   private String email;
+
   /**
    * The URL pointing to the user's profile photo.
    */
+  @Column(name = "photo")
   private String photoUrl;
+
   /**
    * The date and time when the user was created.
    */
+  @CreatedDate
+  @Column(name = "created_at")
   private LocalDateTime createdAt;
+
   /**
    * The date and time when the user was last updated.
    */
+  @LastModifiedDate
+  @Column(name = "updated_at")
   private LocalDateTime updatedAt;
 
   /**
-   * The address where the user leaves.
+   * Represents an address where the user leaves.
    */
-  private Address address;
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "address_id")
+  private AddressEntity address;
+
+  @ManyToMany()
+  @JoinTable(
+      name = "user_roles",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "role_id")
+  )
+  private List<RoleEntity> roles = new ArrayList<>();
 }

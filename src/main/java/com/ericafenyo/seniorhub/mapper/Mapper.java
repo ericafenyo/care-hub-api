@@ -22,51 +22,14 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.model;
+package com.ericafenyo.seniorhub.mapper;
 
-import lombok.Builder;
-import lombok.Data;
-
-import java.net.URL;
-import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.function.Function;
 
 /**
- * A user domain model representing an individual who interacts with the application.
+ * A functional interface representing a mapper that converts an input of type P to an output of type R.
+ *
+ * @param <P> The input type.
+ * @param <R> The output type.
  */
-@Data
-public class User {
-  /**
-   * The unique identifier for the user.
-   */
-  private String id;
-  /**
-   * The first name of the user.
-   */
-  private String firstName;
-  /**
-   * The last name of the user.
-   */
-  private String lastName;
-  /**
-   * The email address of the user.
-   */
-  private String email;
-  /**
-   * The URL pointing to the user's profile photo.
-   */
-  private String photoUrl;
-  /**
-   * The date and time when the user was created.
-   */
-  private LocalDateTime createdAt;
-  /**
-   * The date and time when the user was last updated.
-   */
-  private LocalDateTime updatedAt;
-
-  /**
-   * The address where the user leaves.
-   */
-  private Address address;
-}
+public interface Mapper<P, R> extends Function<P, R> { }

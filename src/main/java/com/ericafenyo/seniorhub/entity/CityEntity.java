@@ -22,51 +22,46 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.model;
+package com.ericafenyo.seniorhub.entity;
 
-import lombok.Builder;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.net.URL;
-import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A user domain model representing an individual who interacts with the application.
+ * A database entity representing a city of a country.
  */
+@Entity(name = "cities")
+@EntityListeners(AuditingEntityListener.class)
 @Data
-public class User {
+public class CityEntity {
   /**
-   * The unique identifier for the user.
+   * The unique identifier for the city.
    */
-  private String id;
-  /**
-   * The first name of the user.
-   */
-  private String firstName;
-  /**
-   * The last name of the user.
-   */
-  private String lastName;
-  /**
-   * The email address of the user.
-   */
-  private String email;
-  /**
-   * The URL pointing to the user's profile photo.
-   */
-  private String photoUrl;
-  /**
-   * The date and time when the user was created.
-   */
-  private LocalDateTime createdAt;
-  /**
-   * The date and time when the user was last updated.
-   */
-  private LocalDateTime updatedAt;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
 
   /**
-   * The address where the user leaves.
+   * The name of the city.
    */
-  private Address address;
+  @Column(name = "name")
+  private String name;
+
+  /**
+   * The list of addresses associated with the city.
+   */
+  @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
+  private List<AddressEntity> addresses = new ArrayList<>();
 }

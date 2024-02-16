@@ -22,10 +22,11 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.data.dao;
+package com.ericafenyo.seniorhub.dao;
 
-
-import com.ericafenyo.seniorhub.data.entity.UserEntity;
+import com.ericafenyo.seniorhub.entity.RoleEntity;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Component;
 
-public interface RepoInspir extends CrudRepository<UserEntity, Long> { }
+@Component
+public interface RoleDao extends CrudRepository<RoleEntity, Long> { }

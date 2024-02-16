@@ -22,51 +22,16 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.model;
+package com.ericafenyo.seniorhub.repository;
 
-import lombok.Builder;
-import lombok.Data;
+import com.ericafenyo.seniorhub.entity.UserEntity;
 
-import java.net.URL;
-import java.time.LocalDateTime;
-import java.util.UUID;
+public interface UserRepository {
+  UserEntity save(UserEntity entity);
 
-/**
- * A user domain model representing an individual who interacts with the application.
- */
-@Data
-public class User {
-  /**
-   * The unique identifier for the user.
-   */
-  private String id;
-  /**
-   * The first name of the user.
-   */
-  private String firstName;
-  /**
-   * The last name of the user.
-   */
-  private String lastName;
-  /**
-   * The email address of the user.
-   */
-  private String email;
-  /**
-   * The URL pointing to the user's profile photo.
-   */
-  private String photoUrl;
-  /**
-   * The date and time when the user was created.
-   */
-  private LocalDateTime createdAt;
-  /**
-   * The date and time when the user was last updated.
-   */
-  private LocalDateTime updatedAt;
+  Iterable<UserEntity> findAll();
 
-  /**
-   * The address where the user leaves.
-   */
-  private Address address;
+  UserEntity findById(String id);
+
+  void delete(String id);
 }

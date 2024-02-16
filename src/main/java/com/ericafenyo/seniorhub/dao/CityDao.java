@@ -22,6 +22,11 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.data.dao;
+package com.ericafenyo.seniorhub.dao;
 
-public interface RoleDao { }
+import com.ericafenyo.seniorhub.entity.CityEntity;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Component;
+
+@Component
+public interface CityDao extends CrudRepository<CityEntity, Long> { }

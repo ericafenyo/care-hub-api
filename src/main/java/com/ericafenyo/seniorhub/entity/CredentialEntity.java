@@ -22,30 +22,28 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.data.entity;
+package com.ericafenyo.seniorhub.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-@Entity(name = "roles")
+/**
+ * Entity class representing user credentials.
+ *
+ * <p>The {@code CredentialEntity} class is mapped to the "credentials" table in the database.
+ */
+@Entity(name = "credentials")
+@EntityListeners(AuditingEntityListener.class)
 @Data
-public class RoleEntity {
+public class CredentialEntity {
 
   /**
-   * The unique identifier for the role.
+   * The unique identifier for the credential.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,51 +51,29 @@ public class RoleEntity {
   private Long id;
 
   /**
-   * The name of the role
+   * The password associated with the credential.
    */
-  @Column(name = "name")
-  private String name;
+  @Column(name = "password")
+  private String password;
 
   /**
-   * Human-readable name of the role
+   * The user associated with the credential.
    */
-  @Column(name = "slug")
-  private String slug;
+  @OneToOne
+  @JoinColumn(name = "user_id")
+  private UserEntity user;
 
   /**
-   * A brief description or explanation of the role.
-   */
-  @Column(name = "description")
-  private String description;
-
-  /**
-   * The date and time when the role was created.
+   * The date and time when the credential was created.
    */
   @CreatedDate
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 
   /**
-   * The date and time when the role was last updated.
+   * The date and time when the credential was last updated.
    */
   @LastModifiedDate
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
-
-  /**
-   * The users having this role.
-   */
-  @ManyToMany(mappedBy = "roles")
-  private List<UserEntity> users = new ArrayList<>();
-
-  /**
-   * The actions or operations that users with this role are allowed to perform.
-   */
-  @ManyToMany()
-  @JoinTable(
-      name = "role_permission",
-      joinColumns = @JoinColumn(name = "role_id")
-      , inverseJoinColumns = @JoinColumn(name = "permission_id")
-  )
-  private List<PermissionEntity> permissions = new ArrayList<>();
 }

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.data.entity;
+package com.ericafenyo.seniorhub.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -34,16 +34,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A database entity representing an individual or entity who interacts with the application.
- */
-@Entity(name = "users")
+@Entity(name = "permissions")
 @EntityListeners(AuditingEntityListener.class)
 @Data
-public class UserEntity {
+public class PermissionEntity {
 
   /**
-   * The unique identifier for the user.
+   * The unique identifier for the permission.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,61 +48,31 @@ public class UserEntity {
   private Long id;
 
   /**
-   * A secondary unique identifier.
+   * The name of the permission
    */
-  @Column(name = "uuid")
-  private String uuid;
+  @Column(name = "name")
+  private String name;
 
   /**
-   * The first name of the user.
+   * A brief description or explanation of the permission.
    */
-  @Column(name = "first_name")
-  private String firstName;
+  @Column(name = "description")
+  private String description;
 
   /**
-   * The last name of the user.
-   */
-  @Column(name = "last_name")
-  private String lastName;
-
-  /**
-   * The email address of the user.
-   */
-  @Column(name = "email")
-  private String email;
-
-  /**
-   * The URL pointing to the user's profile photo.
-   */
-  @Column(name = "photo")
-  private String photoUrl;
-
-  /**
-   * The date and time when the user was created.
+   * The date and time when the permission was created.
    */
   @CreatedDate
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 
-  /**
-   * The date and time when the user was last updated.
+  /**!
+   * The date and time when the permission was last updated.
    */
   @LastModifiedDate
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
 
-  /**
-   * Represents an address where the user leaves.
-   */
-  @OneToOne
-  @JoinColumn(name = "address_id")
-  private AddressEntity address;
-
-  @ManyToMany()
-  @JoinTable(
-      name = "user_roles",
-      joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "role_id")
-  )
+  @ManyToMany(mappedBy = "permissions")
   private List<RoleEntity> roles = new ArrayList<>();
 }

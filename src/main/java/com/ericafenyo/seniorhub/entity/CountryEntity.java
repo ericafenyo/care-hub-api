@@ -22,51 +22,38 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.model;
+package com.ericafenyo.seniorhub.entity;
 
-import lombok.Builder;
+import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.net.URL;
-import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A user domain model representing an individual who interacts with the application.
+ * A database entity representing a country.
  */
+@Entity(name = "countries")
 @Data
-public class User {
+public class CountryEntity {
   /**
-   * The unique identifier for the user.
+   * The unique identifier for the country.
    */
-  private String id;
-  /**
-   * The first name of the user.
-   */
-  private String firstName;
-  /**
-   * The last name of the user.
-   */
-  private String lastName;
-  /**
-   * The email address of the user.
-   */
-  private String email;
-  /**
-   * The URL pointing to the user's profile photo.
-   */
-  private String photoUrl;
-  /**
-   * The date and time when the user was created.
-   */
-  private LocalDateTime createdAt;
-  /**
-   * The date and time when the user was last updated.
-   */
-  private LocalDateTime updatedAt;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
 
   /**
-   * The address where the user leaves.
+   * The name of the country.
    */
-  private Address address;
+  @Column(name = "name")
+  private String name;
+
+  /**
+   * The list of addresses associated with the country.
+   */
+  @OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
+  private List<AddressEntity> addresses = new ArrayList<>();
 }

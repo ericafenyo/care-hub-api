@@ -22,47 +22,21 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.data.entity;
-
-import jakarta.persistence.*;
-import lombok.Data;
-
 /**
- * Represents an address with country, city, street, and postal code information.
+ * This package contains the internal default implementations of the Service Provider Interface (SPI) in the application.
+ *
+ * <p>
+ * The SPI is a design pattern that allows defining a service interface, and multiple implementations can be provided
+ * for the interface. This package specifically contains default implementations that are meant to be used internally
+ * within the application.
+ * </p>
+ *
+ * <p>
+ * Developers should avoid relying on the classes in this package directly unless they are working on the internal
+ * implementation details of the SPI. For general usage, it is recommended to use the public API provided in other
+ * packages.
+ *
+ * </p>
  */
-@Entity(name = "addresses")
-@Data
-public class AddressEntity {
-  /**
-   * The unique identifier for the address.
-   */
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
-  /**
-   * A secondary unique identifier.
-   */
-  @Column(name = "uuid")
-  private String uuid;
-  /**
-   * Indicates a precise street address.
-   */
-  private String street;
-  /**
-   * The postal code of the address.
-   */
-  private String postalCode;
-  /**
-   * The city of the address.
-   */
-  private String city;
-  /**
-   * The country of the address.
-   */
-  private String country;
 
-  @OneToOne
-  @JoinColumn(name = "user_id")
-  private UserEntity entity;
-}
+package com.ericafenyo.seniorhub.internal;

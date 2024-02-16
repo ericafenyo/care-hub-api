@@ -22,51 +22,35 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.model;
+package com.ericafenyo.seniorhub.mapper;
 
-import lombok.Builder;
-import lombok.Data;
-
-import java.net.URL;
-import java.time.LocalDateTime;
-import java.util.UUID;
+import com.ericafenyo.seniorhub.entity.AddressEntity;
+import com.ericafenyo.seniorhub.entity.UserEntity;
+import com.ericafenyo.seniorhub.model.Address;
+import com.ericafenyo.seniorhub.model.User;
+import org.springframework.stereotype.Component;
 
 /**
- * A user domain model representing an individual who interacts with the application.
+ * Maps a {@link AddressEntity} to a {@link Address}.
  */
-@Data
-public class User {
-  /**
-   * The unique identifier for the user.
-   */
-  private String id;
-  /**
-   * The first name of the user.
-   */
-  private String firstName;
-  /**
-   * The last name of the user.
-   */
-  private String lastName;
-  /**
-   * The email address of the user.
-   */
-  private String email;
-  /**
-   * The URL pointing to the user's profile photo.
-   */
-  private String photoUrl;
-  /**
-   * The date and time when the user was created.
-   */
-  private LocalDateTime createdAt;
-  /**
-   * The date and time when the user was last updated.
-   */
-  private LocalDateTime updatedAt;
+@Component
+public class AddressMapper implements Mapper<AddressEntity, Address> {
 
   /**
-   * The address where the user leaves.
+   * Converts a {@link UserEntity} to a {@link User}.
+   *
+   * @param entity The input user entity.
+   * @return The mapped user.
    */
-  private Address address;
+  @Override
+  public Address apply(AddressEntity entity) {
+    var address = new Address();
+
+    address.setStreet(entity.getStreet());
+    address.setPostalCode(entity.getPostalCode());
+    address.setCity(entity.getCity().getName());
+    address.setCountry(entity.getCountry().getName());
+
+    return address;
+  }
 }

@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.data.dao;
+package com.ericafenyo.seniorhub;
 
-public interface UserDao { }
+public class DataTransferer {
+
+}

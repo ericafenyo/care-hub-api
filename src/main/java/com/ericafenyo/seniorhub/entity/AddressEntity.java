@@ -22,51 +22,54 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.model;
+package com.ericafenyo.seniorhub.entity;
 
-import lombok.Builder;
+import jakarta.persistence.*;
 import lombok.Data;
-
-import java.net.URL;
-import java.time.LocalDateTime;
-import java.util.UUID;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * A user domain model representing an individual who interacts with the application.
+ * A database entity for an address with country, city, street, and postal code information.
  */
+@Entity(name = "addresses")
+@EntityListeners(AuditingEntityListener.class)
 @Data
-public class User {
+public class AddressEntity {
   /**
-   * The unique identifier for the user.
+   * The unique identifier for the address.
    */
-  private String id;
-  /**
-   * The first name of the user.
-   */
-  private String firstName;
-  /**
-   * The last name of the user.
-   */
-  private String lastName;
-  /**
-   * The email address of the user.
-   */
-  private String email;
-  /**
-   * The URL pointing to the user's profile photo.
-   */
-  private String photoUrl;
-  /**
-   * The date and time when the user was created.
-   */
-  private LocalDateTime createdAt;
-  /**
-   * The date and time when the user was last updated.
-   */
-  private LocalDateTime updatedAt;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
 
   /**
-   * The address where the user leaves.
+   * A secondary unique identifier.
    */
-  private Address address;
+  @Column(name = "uuid")
+  private String uuid;
+  /**
+   * Indicates a precise street address.
+   */
+  private String street;
+  /**
+   * The postal code of the address.
+   */
+  private String postalCode;
+  /**
+   * The city of the address.
+   */
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "city_id")
+  private CityEntity city;
+  /**
+   * The country of the address.
+   */
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "country_id")
+  private CountryEntity country;
+
+  @OneToOne
+  @JoinColumn(name = "user_id")
+  private UserEntity entity;
 }
