@@ -22,20 +22,15 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.repository;
+package com.ericafenyo.seniorhub.exception.user;
 
-import com.ericafenyo.seniorhub.entity.UserEntity;
+import com.ericafenyo.seniorhub.exception.NotFoundException;
 
-import java.util.Optional;
+public class UserNotFoundException extends NotFoundException {
+  private static final String MESSAGE = "The requested user record could not be found";
+  private static final String ERROR_CODE = "user_not_found";
 
-public interface UserRepository {
-  UserEntity save(UserEntity entity);
-
-  Iterable<UserEntity> findAll();
-
-  Optional<UserEntity> findById(String id);
-
-  Optional<UserEntity> findByEmail(String email);
-
-  void delete(String id);
+  public UserNotFoundException() {
+    super(MESSAGE, ERROR_CODE);
+  }
 }

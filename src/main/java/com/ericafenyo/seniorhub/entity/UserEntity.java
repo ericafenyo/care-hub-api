@@ -24,7 +24,17 @@
 
 package com.ericafenyo.seniorhub.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -53,25 +63,25 @@ public class UserEntity {
   /**
    * A secondary unique identifier.
    */
-  @Column(name = "uuid")
+  @Column(name = "uuid", unique = true)
   private String uuid;
 
   /**
    * The first name of the user.
    */
-  @Column(name = "first_name")
+  @Column(name = "first_name", length = 50)
   private String firstName;
 
   /**
    * The last name of the user.
    */
-  @Column(name = "last_name")
+  @Column(name = "last_name", length = 50)
   private String lastName;
 
   /**
    * The email address of the user.
    */
-  @Column(name = "email")
+  @Column(name = "email", unique = true)
   private String email;
 
   /**

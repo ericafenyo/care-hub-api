@@ -33,6 +33,8 @@ import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public class UserRepositoryImpl implements UserRepository {
   @PersistenceContext
@@ -58,11 +60,16 @@ public class UserRepositoryImpl implements UserRepository {
 
   @Override
   @Transactional
-  public UserEntity findById(String id) {
+  public Optional<UserEntity> findById(String id) {
     TypedQuery<UserEntity> query = manager.createQuery("SELECT e FROM users as e WHERE uuid=:uuid", UserEntity.class)
         .setParameter("uuid", id);
 
-    return query.getSingleResult();
+    return query.getResultStream().findFirst();
+  }
+
+  @Override
+  public Optional<UserEntity> findByEmail(String email) {
+    return userDao.findByEmail(email);
   }
 
   @Override
@@ -71,7 +78,5 @@ public class UserRepositoryImpl implements UserRepository {
     int updated = manager.createQuery("DELETE FROM users as e WHERE e.uuid=:uuid")
         .setParameter("uuid", id)
         .executeUpdate();
-
-    System.out.println("Deleted count:" + updated);
   }
 }

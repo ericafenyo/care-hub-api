@@ -24,12 +24,21 @@
 
 package com.ericafenyo.seniorhub.dto;
 
-import com.ericafenyo.seniorhub.controller.request.AddressRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
 public class UserUpdateDto {
+  @NotBlank()
+  @Size(max = 50)
   private String firstName;
+
+  @NotBlank()
+  @Size(max = 50)
   private String lastName;
-  private AddressRequest address;
+
+  @Valid
+  private AddressDto address;
 }

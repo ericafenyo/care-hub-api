@@ -22,20 +22,17 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.repository;
+package com.ericafenyo.seniorhub.exception;
 
-import com.ericafenyo.seniorhub.entity.UserEntity;
+import org.springframework.http.HttpStatus;
 
-import java.util.Optional;
+public class NotFoundException extends HttpException {
 
-public interface UserRepository {
-  UserEntity save(UserEntity entity);
+  public NotFoundException(String message, String code) {
+    super(HttpStatus.NOT_FOUND, message, code);
+  }
 
-  Iterable<UserEntity> findAll();
-
-  Optional<UserEntity> findById(String id);
-
-  Optional<UserEntity> findByEmail(String email);
-
-  void delete(String id);
+  public NotFoundException(String message, String code, Throwable cause) {
+    super(HttpStatus.NOT_FOUND, message, code, cause);
+  }
 }

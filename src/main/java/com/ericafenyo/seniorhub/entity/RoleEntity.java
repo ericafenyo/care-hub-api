@@ -24,6 +24,7 @@
 
 package com.ericafenyo.seniorhub.entity;
 
+import com.ericafenyo.seniorhub.model.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -50,8 +51,9 @@ public class RoleEntity {
   /**
    * The name of the role
    */
+  @Enumerated(EnumType.STRING)
   @Column(name = "name")
-  private String name;
+  private Role name;
 
   /**
    * Human-readable name of the role

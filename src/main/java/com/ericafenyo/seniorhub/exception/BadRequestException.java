@@ -22,26 +22,17 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.controller.request;
+package com.ericafenyo.seniorhub.exception;
 
-import lombok.Data;
+import org.springframework.http.HttpStatus;
 
-@Data
-public class AddressRequest {
-  /**
-   * Indicates a precise street address.
-   */
-  private String street;
-  /**
-   * The postal code of the address.
-   */
-  private String postalCode;
-  /**
-   * The city of the address.
-   */
-  private String city;
-  /**
-   * The country of the address.
-   */
-  private String country;
+public class BadRequestException extends HttpException{
+
+  public BadRequestException(HttpStatus status, String message, String code) {
+    super(status, message, code);
+  }
+
+  public BadRequestException(HttpStatus status, String message, String code, Throwable cause) {
+    super(status, message, code, cause);
+  }
 }

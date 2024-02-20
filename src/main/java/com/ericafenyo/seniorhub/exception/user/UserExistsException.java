@@ -22,20 +22,15 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.repository;
+package com.ericafenyo.seniorhub.exception.user;
 
-import com.ericafenyo.seniorhub.entity.UserEntity;
+import com.ericafenyo.seniorhub.exception.ConflictException;
 
-import java.util.Optional;
+public class UserExistsException extends ConflictException {
+  private static final String MESSAGE = "The user you are attempting to create already exists";
+  private static final String ERROR_CODE = "user_exists";
 
-public interface UserRepository {
-  UserEntity save(UserEntity entity);
-
-  Iterable<UserEntity> findAll();
-
-  Optional<UserEntity> findById(String id);
-
-  Optional<UserEntity> findByEmail(String email);
-
-  void delete(String id);
+  public UserExistsException() {
+    super(MESSAGE, ERROR_CODE);
+  }
 }

@@ -26,6 +26,7 @@ package com.ericafenyo.seniorhub.service;
 
 import com.ericafenyo.seniorhub.dto.UserCreationDto;
 import com.ericafenyo.seniorhub.dto.UserUpdateDto;
+import com.ericafenyo.seniorhub.exception.HttpException;
 import com.ericafenyo.seniorhub.model.User;
 
 import java.util.List;
@@ -34,9 +35,9 @@ import java.util.List;
 public interface UserService {
   List<User> getUsers();
 
-  User getUserById(String id);
+  User getUserById(String id) throws HttpException;
 
-  User createUser(UserCreationDto userCreationDto);
+  User createUser(UserCreationDto userCreationDto) throws HttpException;
 
   User updateUser(String id, UserUpdateDto updateUserDto);
 

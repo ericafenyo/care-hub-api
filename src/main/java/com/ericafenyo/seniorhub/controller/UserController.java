@@ -26,8 +26,11 @@ package com.ericafenyo.seniorhub.controller;
 
 import com.ericafenyo.seniorhub.dto.UserCreationDto;
 import com.ericafenyo.seniorhub.dto.UserUpdateDto;
+import com.ericafenyo.seniorhub.exception.HttpException;
 import com.ericafenyo.seniorhub.service.UserService;
 import com.ericafenyo.seniorhub.model.User;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,17 +56,17 @@ public class UserController {
   }
 
   @GetMapping("users/{id}")
-  public User getUserById(@PathVariable String id) {
+  public User getUserById(@PathVariable String id) throws Exception {
     return service.getUserById(id);
   }
 
   @PostMapping("users")
-  public User createUser(@RequestBody UserCreationDto userCreationDto) {
+  public User createUser(@RequestBody @Valid UserCreationDto userCreationDto) throws Exception {
     return service.createUser(userCreationDto);
   }
 
   @PutMapping("users/{id}")
-  public User updateUser(@PathVariable String id, @RequestBody UserUpdateDto userUpdateDto) {
+  public User updateUser(@PathVariable String id, @RequestBody @Valid UserUpdateDto userUpdateDto) {
     return service.updateUser(id, userUpdateDto);
   }
 

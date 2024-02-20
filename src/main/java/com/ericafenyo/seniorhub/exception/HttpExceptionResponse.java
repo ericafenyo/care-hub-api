@@ -22,15 +22,36 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.controller.request;
+package com.ericafenyo.seniorhub.exception;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
+/**
+ * Represents a response structure for HTTP exceptions.
+ */
 @Data
-public class CreateUserRequest {
-  private String firstName;
-  private String lastName;
-  private String email;
-  private String password;
-  private AddressRequest address;
+public class HttpExceptionResponse {
+
+  /**
+   * The HTTP status code associated with the response.
+   */
+  private int status;
+
+  /**
+   * A descriptive message providing additional information about the exception.
+   */
+  private Object message;
+
+  /**
+   * A unique error code associated with the exception.
+   */
+  private String code;
+
+  /**
+   * The timestamp when the exception response was created.
+   */
+  private LocalDateTime timestamp;
 }
+

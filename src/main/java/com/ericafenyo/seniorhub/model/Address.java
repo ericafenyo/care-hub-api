@@ -32,6 +32,10 @@ import lombok.Data;
 @Data
 public class Address {
   /**
+   * The unique identifier for the address.
+   */
+  private String id;
+  /**
    * Indicates a precise street address.
    */
   private String street;

@@ -69,7 +69,7 @@ public class AddressEntity {
   @JoinColumn(name = "country_id")
   private CountryEntity country;
 
-  @OneToOne
+  @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id")
-  private UserEntity entity;
+  private UserEntity user;
 }

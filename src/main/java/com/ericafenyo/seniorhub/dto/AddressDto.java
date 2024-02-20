@@ -22,20 +22,31 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.repository;
+package com.ericafenyo.seniorhub.dto;
 
-import com.ericafenyo.seniorhub.entity.UserEntity;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
-import java.util.Optional;
-
-public interface UserRepository {
-  UserEntity save(UserEntity entity);
-
-  Iterable<UserEntity> findAll();
-
-  Optional<UserEntity> findById(String id);
-
-  Optional<UserEntity> findByEmail(String email);
-
-  void delete(String id);
+@Data
+public class AddressDto {
+  /**
+   * Indicates a precise street address.
+   */
+  @NotBlank()
+  private String street;
+  /**
+   * The postal code of the address.
+   */
+  @NotBlank()
+  private String postalCode;
+  /**
+   * The city of the address.
+   */
+  @NotBlank()
+  private String city;
+  /**
+   * The country of the address.
+   */
+  @NotBlank()
+  private String country;
 }

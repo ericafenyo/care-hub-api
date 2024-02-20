@@ -30,6 +30,9 @@ import com.ericafenyo.seniorhub.entity.AddressEntity;
 import com.ericafenyo.seniorhub.entity.CityEntity;
 import com.ericafenyo.seniorhub.entity.CountryEntity;
 import com.ericafenyo.seniorhub.entity.UserEntity;
+import com.ericafenyo.seniorhub.exception.HttpException;
+import com.ericafenyo.seniorhub.exception.user.UserExistsException;
+import com.ericafenyo.seniorhub.exception.user.UserNotFoundException;
 import com.ericafenyo.seniorhub.mapper.UserMapper;
 import com.ericafenyo.seniorhub.model.User;
 import com.ericafenyo.seniorhub.repository.UserRepository;
@@ -39,6 +42,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -62,18 +66,30 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User getUserById(String id) {
-    UserEntity entity = repository.findById(id);
-    return mapper.apply(entity);
+  public User getUserById(String id) throws UserNotFoundException {
+    Optional<UserEntity> user = repository.findById(id);
+
+    if (user.isEmpty()) {
+      throw new UserNotFoundException();
+    }
+    return mapper.apply(user.get());
   }
 
   @Override
-  public User createUser(UserCreationDto dto) {
-    var user = new UserEntity();
-    user.setFirstName(dto.getFirstName());
-    user.setLastName(dto.getLastName());
-    user.setEmail(dto.getEmail());
-    user.setUuid(UUID.randomUUID().toString());
+  public User createUser(UserCreationDto dto) throws HttpException {
+    // Get the current user by email
+    Optional<UserEntity> user = repository.findByEmail(dto.getEmail());
+
+    // Throw error if the user already exists
+    if (user.isPresent()) {
+      throw new UserExistsException();
+    }
+
+    var entity = new UserEntity();
+    entity.setFirstName(dto.getFirstName());
+    entity.setLastName(dto.getLastName());
+    entity.setEmail(dto.getEmail());
+    entity.setUuid(UUID.randomUUID().toString());
 
     CityEntity city = new CityEntity();
     city.setName(dto.getAddress().getCity());
@@ -83,19 +99,20 @@ public class UserServiceImpl implements UserService {
 
     AddressEntity address = new AddressEntity();
     address.setStreet(dto.getAddress().getStreet());
+    address.setUuid(UUID.randomUUID().toString());
     address.setPostalCode(dto.getAddress().getPostalCode());
     address.setCity(city);
     address.setCountry(country);
+    address.setUser(entity);
 
-    user.setAddress(address);
+    entity.setAddress(address);
 
-    UserEntity saved = repository.save(user);
-    return mapper.apply(saved);
+    return mapper.apply(repository.save(entity));
   }
 
   @Override
   public User updateUser(String id, UserUpdateDto dto) {
-    UserEntity user = repository.findById(id);
+    UserEntity user = repository.findById(id).get();
 
     AddressEntity address = user.getAddress();
     CityEntity city = address.getCity();
