@@ -22,17 +22,17 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exception;
+package com.ericafenyo.seniorhub.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class NotFoundException extends HttpException {
+public class BadRequestException extends HttpException{
 
-  public NotFoundException(String message, String code) {
-    super(HttpStatus.NOT_FOUND, message, code);
+  public BadRequestException(HttpStatus status, String message, String code) {
+    super(status, message, code);
   }
 
-  public NotFoundException(String message, String code, Throwable cause) {
-    super(HttpStatus.NOT_FOUND, message, code, cause);
+  public BadRequestException(HttpStatus status, String message, String code, Throwable cause) {
+    super(status, message, code, cause);
   }
 }

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exception;
+package com.ericafenyo.seniorhub.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

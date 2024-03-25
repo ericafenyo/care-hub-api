@@ -22,17 +22,17 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exception;
+package com.ericafenyo.seniorhub.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class BadRequestException extends HttpException{
+public class UnauthorizedException extends HttpException{
 
-  public BadRequestException(HttpStatus status, String message, String code) {
+  public UnauthorizedException(HttpStatus status, String message, String code) {
     super(status, message, code);
   }
 
-  public BadRequestException(HttpStatus status, String message, String code, Throwable cause) {
+  public UnauthorizedException(HttpStatus status, String message, String code, Throwable cause) {
     super(status, message, code, cause);
   }
 }

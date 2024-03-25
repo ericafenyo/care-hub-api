@@ -22,36 +22,17 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exception;
+package com.ericafenyo.seniorhub.exceptions;
 
-import lombok.Data;
+import org.springframework.http.HttpStatus;
 
-import java.time.LocalDateTime;
+public class UnprocessableEntityException extends HttpException{
 
-/**
- * Represents a response structure for HTTP exceptions.
- */
-@Data
-public class HttpExceptionResponse {
+  public UnprocessableEntityException(HttpStatus status, String message, String code) {
+    super(status, message, code);
+  }
 
-  /**
-   * The HTTP status code associated with the response.
-   */
-  private int status;
-
-  /**
-   * A descriptive message providing additional information about the exception.
-   */
-  private Object message;
-
-  /**
-   * A unique error code associated with the exception.
-   */
-  private String code;
-
-  /**
-   * The timestamp when the exception response was created.
-   */
-  private LocalDateTime timestamp;
+  public UnprocessableEntityException(HttpStatus status, String message, String code, Throwable cause) {
+    super(status, message, code, cause);
+  }
 }
-

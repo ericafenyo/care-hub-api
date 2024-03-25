@@ -22,15 +22,17 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exception.user;
+package com.ericafenyo.seniorhub.exceptions;
 
-import com.ericafenyo.seniorhub.exception.NotFoundException;
+import org.springframework.http.HttpStatus;
 
-public class UserNotFoundException extends NotFoundException {
-  private static final String MESSAGE = "The requested user record could not be found";
-  private static final String ERROR_CODE = "user_not_found";
+public class ConflictException extends HttpException {
 
-  public UserNotFoundException() {
-    super(MESSAGE, ERROR_CODE);
+  public ConflictException(String message, String code) {
+    super(HttpStatus.CONFLICT, message, code);
+  }
+
+  public ConflictException(String message, String code, Throwable cause) {
+    super(HttpStatus.CONFLICT, message, code, cause);
   }
 }

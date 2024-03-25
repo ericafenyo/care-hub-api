@@ -22,17 +22,36 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exception;
+package com.ericafenyo.seniorhub.exceptions;
 
-import org.springframework.http.HttpStatus;
+import lombok.Data;
 
-public class InternalServerErrorException extends HttpException {
+import java.time.LocalDateTime;
 
-  public InternalServerErrorException(HttpStatus status, String message, String code) {
-    super(status, message, code);
-  }
+/**
+ * Represents a response structure for HTTP exceptions.
+ */
+@Data
+public class HttpExceptionResponse {
 
-  public InternalServerErrorException(HttpStatus status, String message, String code, Throwable cause) {
-    super(status, message, code, cause);
-  }
+  /**
+   * The HTTP status code associated with the response.
+   */
+  private int status;
+
+  /**
+   * A descriptive message providing additional information about the exception.
+   */
+  private Object message;
+
+  /**
+   * A unique error code associated with the exception.
+   */
+  private String code;
+
+  /**
+   * The timestamp when the exception response was created.
+   */
+  private LocalDateTime timestamp;
 }
+

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exception;
+package com.ericafenyo.seniorhub.exceptions;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

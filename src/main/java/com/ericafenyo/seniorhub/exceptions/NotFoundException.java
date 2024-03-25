@@ -22,17 +22,17 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exception;
+package com.ericafenyo.seniorhub.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class UnprocessableEntityException extends HttpException{
+public class NotFoundException extends HttpException {
 
-  public UnprocessableEntityException(HttpStatus status, String message, String code) {
-    super(status, message, code);
+  public NotFoundException(String message, String code) {
+    super(HttpStatus.NOT_FOUND, message, code);
   }
 
-  public UnprocessableEntityException(HttpStatus status, String message, String code, Throwable cause) {
-    super(status, message, code, cause);
+  public NotFoundException(String message, String code, Throwable cause) {
+    super(HttpStatus.NOT_FOUND, message, code, cause);
   }
 }

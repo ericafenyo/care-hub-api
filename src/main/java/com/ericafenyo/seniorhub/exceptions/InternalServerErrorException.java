@@ -22,15 +22,17 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exception.user;
+package com.ericafenyo.seniorhub.exceptions;
 
-import com.ericafenyo.seniorhub.exception.ConflictException;
+import org.springframework.http.HttpStatus;
 
-public class UserExistsException extends ConflictException {
-  private static final String MESSAGE = "The user you are attempting to create already exists";
-  private static final String ERROR_CODE = "user_exists";
+public class InternalServerErrorException extends HttpException {
 
-  public UserExistsException() {
-    super(MESSAGE, ERROR_CODE);
+  public InternalServerErrorException(HttpStatus status, String message, String code) {
+    super(status, message, code);
+  }
+
+  public InternalServerErrorException(HttpStatus status, String message, String code, Throwable cause) {
+    super(status, message, code, cause);
   }
 }
