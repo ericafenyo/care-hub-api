@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.entity;
+package com.ericafenyo.seniorhub.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;

@@ -22,23 +22,21 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.entity;
+package com.ericafenyo.seniorhub.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * A database entity representing a country.
+ * A database entity for an address with country, city, street, and postal code information.
  */
-@Entity(name = "countries")
+@Entity(name = "addresses")
+@EntityListeners(AuditingEntityListener.class)
 @Data
-public class CountryEntity {
+public class AddressEntity {
   /**
-   * The unique identifier for the country.
+   * The unique identifier for the address.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,14 +44,32 @@ public class CountryEntity {
   private Long id;
 
   /**
-   * The name of the country.
+   * A secondary unique identifier.
    */
-  @Column(name = "name")
-  private String name;
-
+  @Column(name = "uuid")
+  private String uuid;
   /**
-   * The list of addresses associated with the country.
+   * Indicates a precise street address.
    */
-  @OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
-  private List<AddressEntity> addresses = new ArrayList<>();
+  private String street;
+  /**
+   * The postal code of the address.
+   */
+  private String postalCode;
+  /**
+   * The city of the address.
+   */
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "city_id")
+  private CityEntity city;
+  /**
+   * The country of the address.
+   */
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "country_id")
+  private CountryEntity country;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "user_id")
+  private UserEntity user;
 }

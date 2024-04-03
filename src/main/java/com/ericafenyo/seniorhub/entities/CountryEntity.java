@@ -22,31 +22,22 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.entity;
+package com.ericafenyo.seniorhub.entities;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A database entity representing a city of a country.
+ * A database entity representing a country.
  */
-@Entity(name = "cities")
-@EntityListeners(AuditingEntityListener.class)
+@Entity(name = "countries")
 @Data
-public class CityEntity {
+public class CountryEntity {
   /**
-   * The unique identifier for the city.
+   * The unique identifier for the country.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,14 +45,14 @@ public class CityEntity {
   private Long id;
 
   /**
-   * The name of the city.
+   * The name of the country.
    */
   @Column(name = "name")
   private String name;
 
   /**
-   * The list of addresses associated with the city.
+   * The list of addresses associated with the country.
    */
-  @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
   private List<AddressEntity> addresses = new ArrayList<>();
 }

@@ -22,8 +22,9 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.entity;
+package com.ericafenyo.seniorhub.entities;
 
+import com.ericafenyo.seniorhub.model.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -31,19 +32,16 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Entity class representing user credentials.
- *
- * <p>The {@code CredentialEntity} class is mapped to the "credentials" table in the database.
- */
-@Entity(name = "credentials")
+@Entity(name = "roles")
 @EntityListeners(AuditingEntityListener.class)
 @Data
-public class CredentialEntity {
+public class RoleEntity {
 
   /**
-   * The unique identifier for the credential.
+   * The unique identifier for the role.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,29 +49,52 @@ public class CredentialEntity {
   private Long id;
 
   /**
-   * The password associated with the credential.
+   * The name of the role
    */
-  @Column(name = "password")
-  private String password;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "name")
+  private Role name;
 
   /**
-   * The user associated with the credential.
+   * Human-readable name of the role
    */
-  @OneToOne
-  @JoinColumn(name = "user_id")
-  private UserEntity user;
+  @Column(name = "slug")
+  private String slug;
 
   /**
-   * The date and time when the credential was created.
+   * A brief description or explanation of the role.
+   */
+  @Column(name = "description")
+  private String description;
+
+  /**
+   * The date and time when the role was created.
    */
   @CreatedDate
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 
   /**
-   * The date and time when the credential was last updated.
+   * The date and time when the role was last updated.
    */
   @LastModifiedDate
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
+
+  /**
+   * The users having this role.
+   */
+  @ManyToMany(mappedBy = "roles")
+  private List<UserEntity> users = new ArrayList<>();
+
+  /**
+   * The actions or operations that users with this role are allowed to perform.
+   */
+  @ManyToMany()
+  @JoinTable(
+      name = "role_permission",
+      joinColumns = @JoinColumn(name = "role_id")
+      , inverseJoinColumns = @JoinColumn(name = "permission_id")
+  )
+  private List<PermissionEntity> permissions = new ArrayList<>();
 }

@@ -22,26 +22,31 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.entity;
+package com.ericafenyo.seniorhub.entities;
 
-import com.ericafenyo.seniorhub.model.Role;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "roles")
+/**
+ * A database entity representing a city of a country.
+ */
+@Entity(name = "cities")
 @EntityListeners(AuditingEntityListener.class)
 @Data
-public class RoleEntity {
-
+public class CityEntity {
   /**
-   * The unique identifier for the role.
+   * The unique identifier for the city.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,52 +54,14 @@ public class RoleEntity {
   private Long id;
 
   /**
-   * The name of the role
+   * The name of the city.
    */
-  @Enumerated(EnumType.STRING)
   @Column(name = "name")
-  private Role name;
+  private String name;
 
   /**
-   * Human-readable name of the role
+   * The list of addresses associated with the city.
    */
-  @Column(name = "slug")
-  private String slug;
-
-  /**
-   * A brief description or explanation of the role.
-   */
-  @Column(name = "description")
-  private String description;
-
-  /**
-   * The date and time when the role was created.
-   */
-  @CreatedDate
-  @Column(name = "created_at")
-  private LocalDateTime createdAt;
-
-  /**
-   * The date and time when the role was last updated.
-   */
-  @LastModifiedDate
-  @Column(name = "updated_at")
-  private LocalDateTime updatedAt;
-
-  /**
-   * The users having this role.
-   */
-  @ManyToMany(mappedBy = "roles")
-  private List<UserEntity> users = new ArrayList<>();
-
-  /**
-   * The actions or operations that users with this role are allowed to perform.
-   */
-  @ManyToMany()
-  @JoinTable(
-      name = "role_permission",
-      joinColumns = @JoinColumn(name = "role_id")
-      , inverseJoinColumns = @JoinColumn(name = "permission_id")
-  )
-  private List<PermissionEntity> permissions = new ArrayList<>();
+  @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
+  private List<AddressEntity> addresses = new ArrayList<>();
 }

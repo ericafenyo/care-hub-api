@@ -22,21 +22,28 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.entity;
+package com.ericafenyo.seniorhub.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
+
 /**
- * A database entity for an address with country, city, street, and postal code information.
+ * Entity class representing user credentials.
+ *
+ * <p>The {@code CredentialEntity} class is mapped to the "credentials" table in the database.
  */
-@Entity(name = "addresses")
+@Entity(name = "credentials")
 @EntityListeners(AuditingEntityListener.class)
 @Data
-public class AddressEntity {
+public class CredentialEntity {
+
   /**
-   * The unique identifier for the address.
+   * The unique identifier for the credential.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,32 +51,29 @@ public class AddressEntity {
   private Long id;
 
   /**
-   * A secondary unique identifier.
+   * The password associated with the credential.
    */
-  @Column(name = "uuid")
-  private String uuid;
-  /**
-   * Indicates a precise street address.
-   */
-  private String street;
-  /**
-   * The postal code of the address.
-   */
-  private String postalCode;
-  /**
-   * The city of the address.
-   */
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "city_id")
-  private CityEntity city;
-  /**
-   * The country of the address.
-   */
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "country_id")
-  private CountryEntity country;
+  @Column(name = "password")
+  private String password;
 
-  @OneToOne(cascade = CascadeType.ALL)
+  /**
+   * The user associated with the credential.
+   */
+  @OneToOne
   @JoinColumn(name = "user_id")
   private UserEntity user;
+
+  /**
+   * The date and time when the credential was created.
+   */
+  @CreatedDate
+  @Column(name = "created_at")
+  private LocalDateTime createdAt;
+
+  /**
+   * The date and time when the credential was last updated.
+   */
+  @LastModifiedDate
+  @Column(name = "updated_at")
+  private LocalDateTime updatedAt;
 }
