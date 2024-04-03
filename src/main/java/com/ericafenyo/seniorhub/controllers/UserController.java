@@ -22,15 +22,13 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.controller;
+package com.ericafenyo.seniorhub.controllers;
 
 import com.ericafenyo.seniorhub.dto.UserCreationDto;
 import com.ericafenyo.seniorhub.dto.UserUpdateDto;
-import com.ericafenyo.seniorhub.exception.HttpException;
-import com.ericafenyo.seniorhub.service.UserService;
 import com.ericafenyo.seniorhub.model.User;
+import com.ericafenyo.seniorhub.services.UserService;
 import jakarta.validation.Valid;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
