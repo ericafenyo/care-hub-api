@@ -22,13 +22,16 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+package com.ericafenyo.seniorhub.dto;
 
-public final class Constants {
-  public static final String REGEX_EMAIL = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-  public static final String REGEX_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z]).{8,16}$";
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
-  public static final String EXTRA_VERIFICATION_CODE_KEY = "extra_verification_code";
-
-  public static final String COOKIES_EMAIL_VERIFICATION_CODE_KEY = "verification-key";
+@Data()
+public class BasicAuthenticateRequest {
+  @Email()
+  private String email;
+  @NotBlank()
+  private String password;
 }

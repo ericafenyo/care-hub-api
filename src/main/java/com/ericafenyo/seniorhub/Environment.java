@@ -24,11 +24,16 @@
 
 package com.ericafenyo.seniorhub;
 
-public final class Constants {
-  public static final String REGEX_EMAIL = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-  public static final String REGEX_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z]).{8,16}$";
 
-  public static final String EXTRA_VERIFICATION_CODE_KEY = "extra_verification_code";
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-  public static final String COOKIES_EMAIL_VERIFICATION_CODE_KEY = "verification-key";
+@Component
+@ConfigurationProperties(prefix = "seniorhub.env")
+@Getter
+@Setter
+public class Environment {
+  private String jwtSecretKey;
 }

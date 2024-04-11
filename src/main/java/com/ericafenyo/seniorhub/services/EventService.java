@@ -22,13 +22,24 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+package com.ericafenyo.seniorhub.services;
 
-public final class Constants {
-  public static final String REGEX_EMAIL = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-  public static final String REGEX_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z]).{8,16}$";
+import com.ericafenyo.seniorhub.dto.CreateEventRequest;
+import com.ericafenyo.seniorhub.dto.UpdateEventRequest;
+import com.ericafenyo.seniorhub.exceptions.HttpException;
+import com.ericafenyo.seniorhub.exceptions.event.EventNotFoundException;
+import com.ericafenyo.seniorhub.model.Event;
 
-  public static final String EXTRA_VERIFICATION_CODE_KEY = "extra_verification_code";
+import java.util.List;
 
-  public static final String COOKIES_EMAIL_VERIFICATION_CODE_KEY = "verification-key";
+public interface EventService {
+  List<Event> getEvents() throws HttpException;
+
+  Event getEventById(String id) throws HttpException;
+
+  Event createEvent(CreateEventRequest request);
+
+  Event updateEvent(String id, UpdateEventRequest userUpdateDto);
+
+  void deleteEvent(String id);
 }

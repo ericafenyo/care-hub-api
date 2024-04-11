@@ -22,25 +22,55 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.services;
+package com.ericafenyo.seniorhub.model;
 
-import com.ericafenyo.seniorhub.dto.UserCreationDto;
-import com.ericafenyo.seniorhub.dto.UserUpdateDto;
-import com.ericafenyo.seniorhub.exceptions.HttpException;
-import com.ericafenyo.seniorhub.model.Role;
-import com.ericafenyo.seniorhub.model.User;
+import lombok.Builder;
+import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+@Data
+@Builder
+public class Account implements UserDetails {
+  private String id;
+  private String email;
+  private String password;
+  private List<Role> roles = new ArrayList<>();
 
-public interface UserService {
-  List<User> getUsers();
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    var authorities = new ArrayList<SimpleGrantedAuthority>();
+    roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.name())));
+    return authorities;
+  }
 
-  User getUserById(String id) throws HttpException;
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-  User createUser(UserCreationDto userCreationDto, Role role) throws HttpException;
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
 
-  User updateUser(String id, UserUpdateDto updateUserDto);
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
 
-  void deleteUser(String id);
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
+
+  @Override
+  public String getUsername() {
+    return email;
+  }
 }

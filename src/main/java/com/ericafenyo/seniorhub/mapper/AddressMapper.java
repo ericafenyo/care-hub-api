@@ -24,8 +24,8 @@
 
 package com.ericafenyo.seniorhub.mapper;
 
-import com.ericafenyo.seniorhub.entity.AddressEntity;
-import com.ericafenyo.seniorhub.entity.UserEntity;
+import com.ericafenyo.seniorhub.entities.AddressEntity;
+import com.ericafenyo.seniorhub.entities.UserEntity;
 import com.ericafenyo.seniorhub.model.Address;
 import com.ericafenyo.seniorhub.model.User;
 import org.springframework.stereotype.Component;

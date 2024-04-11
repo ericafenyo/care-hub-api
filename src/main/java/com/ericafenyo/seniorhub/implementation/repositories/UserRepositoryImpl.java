@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.internal.repositories;
+package com.ericafenyo.seniorhub.implementation.repositories;
 
 import com.ericafenyo.seniorhub.dao.UserDao;
-import com.ericafenyo.seniorhub.entity.UserEntity;
+import com.ericafenyo.seniorhub.entities.UserEntity;
 import com.ericafenyo.seniorhub.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -47,29 +47,46 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  @Transactional
   public UserEntity save(UserEntity entity) {
     return userDao.save(entity);
   }
 
   @Override
-  @Transactional
   public Iterable<UserEntity> findAll() {
     return userDao.findAll();
   }
 
   @Override
-  @Transactional
   public Optional<UserEntity> findById(String id) {
-    TypedQuery<UserEntity> query = manager.createQuery("SELECT e FROM users as e WHERE uuid=:uuid", UserEntity.class)
-        .setParameter("uuid", id);
+    var rr = userDao.findById(1L);
 
-    return query.getResultStream().findFirst();
+    return rr;
+//    TypedQuery<UserEntity> query = manager.createQuery("SELECT e FROM users as e WHERE uuid=:uuid", UserEntity.class)
+//        .setParameter("uuid", id);
+//
+//    return query.getResultStream().findFirst();
   }
 
   @Override
   public Optional<UserEntity> findByEmail(String email) {
-    return userDao.findByEmail(email);
+    TypedQuery<UserEntity> query = manager.createQuery("SELECT e FROM users as e WHERE email=:email", UserEntity.class)
+        .setParameter("email", email);
+
+    Optional<UserEntity> first = query.getResultStream().findFirst();
+
+   var t = first.get();
+
+    return first;
+  }
+
+  @Override
+  public boolean existsByEmail(String email) {
+    return userDao.existsByEmail(email);
+  }
+
+  @Override
+  public boolean existsById(String id) {
+    return userDao.existsByUuid(id);
   }
 
   @Override

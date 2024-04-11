@@ -22,13 +22,19 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+/**
+ * This package contains the internal default implementations of the Service Provider Interface (SPI) in the application.
+ *
+ * <p>
+ * The SPI is a design pattern that allows defining a service interface, and multiple implementations can be provided
+ * for the interface. This package specifically contains default implementations that are meant to be used internally
+ * within the application.
+ * </p>
+ *
+ * <p>
+ * Developers should avoid relying on the classes in this package directly unless they are working on the internal
+ * implementation details of interfaces. For general usage, it is recommended to use objects provided in other
+ * packages.
+ */
 
-public final class Constants {
-  public static final String REGEX_EMAIL = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-  public static final String REGEX_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z]).{8,16}$";
-
-  public static final String EXTRA_VERIFICATION_CODE_KEY = "extra_verification_code";
-
-  public static final String COOKIES_EMAIL_VERIFICATION_CODE_KEY = "verification-key";
-}
+package com.ericafenyo.seniorhub.implementation;

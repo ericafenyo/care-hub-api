@@ -22,13 +22,34 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+package com.ericafenyo.seniorhub.implementation.daos;
 
-public final class Constants {
-  public static final String REGEX_EMAIL = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-  public static final String REGEX_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z]).{8,16}$";
+import com.ericafenyo.seniorhub.dao.CredentialDao;
+import com.ericafenyo.seniorhub.entities.CredentialEntity;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Repository;
 
-  public static final String EXTRA_VERIFICATION_CODE_KEY = "extra_verification_code";
+import java.util.Optional;
 
-  public static final String COOKIES_EMAIL_VERIFICATION_CODE_KEY = "verification-key";
+@Repository
+@Transactional
+public class DefaultCredentialDao implements CredentialDao {
+  @PersistenceContext
+  private EntityManager manager;
+
+  @Override
+  public Optional<CredentialEntity> findByUserId(Long userId) {
+    return manager.createQuery("SELECT e FROM credentials as e JOIN user u WHERE u.id=:userId", CredentialEntity.class)
+        .setParameter("userId", userId)
+        .getResultStream()
+        .findFirst();
+  }
+
+  @Override
+  public CredentialEntity save(CredentialEntity entity) {
+    manager.persist(entity);
+    return entity;
+  }
 }

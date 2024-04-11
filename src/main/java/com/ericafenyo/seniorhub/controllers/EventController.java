@@ -24,52 +24,46 @@
 
 package com.ericafenyo.seniorhub.controllers;
 
-import com.ericafenyo.seniorhub.dto.UserCreationDto;
-import com.ericafenyo.seniorhub.dto.UserUpdateDto;
-import com.ericafenyo.seniorhub.model.Role;
-import com.ericafenyo.seniorhub.model.User;
-import com.ericafenyo.seniorhub.services.UserService;
-import com.ericafenyo.seniorhub.validation.constraints.UserRole;
+import com.ericafenyo.seniorhub.dto.CreateEventRequest;
+import com.ericafenyo.seniorhub.dto.UpdateEventRequest;
+import com.ericafenyo.seniorhub.model.Event;
+import com.ericafenyo.seniorhub.services.EventService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
-public class UserController {
+public class EventController {
 
-  private final UserService service;
+  private final EventService service;
 
-  public UserController(UserService service) {
+  public EventController(EventService service) {
     this.service = service;
   }
 
-  @GetMapping()
-  public List<User> getUsers() {
-    return service.getUsers();
+  @GetMapping("events")
+  public List<Event> getEvents() throws Exception {
+    return service.getEvents();
   }
 
-  @GetMapping("/{id}")
-  public User getUserById(@PathVariable String id) throws Exception {
-    return service.getUserById(id);
+  @GetMapping("events/{id}")
+  public Event getUserById(@PathVariable String id) throws Exception {
+    return service.getEventById(id);
   }
 
-  @PostMapping()
-  public Object createUser(
-      @RequestBody UserCreationDto userCreationDto,
-      @RequestParam("role") @UserRole String slug
-  ) throws Exception {
-    return service.createUser(userCreationDto, Role.from(slug));
+  @PostMapping("events")
+  public Event createUser(@RequestBody @Valid CreateEventRequest request) throws Exception {
+    return service.createEvent(request);
   }
 
-  @PutMapping("/{id}")
-  public User updateUser(@PathVariable String id, @RequestBody @Valid UserUpdateDto userUpdateDto) {
-    return service.updateUser(id, userUpdateDto);
+  @PutMapping("events/{id}")
+  public Event updateUser(@PathVariable String id, @RequestBody @Valid UpdateEventRequest userUpdateDto) {
+    return service.updateEvent(id, userUpdateDto);
   }
 
-  @DeleteMapping("/{id}")
-  public void deleteUser(@PathVariable String id) {
-    service.deleteUser(id);
+  @DeleteMapping("events/{id}")
+  public void deleteEvent(@PathVariable String id) {
+    service.deleteEvent(id);
   }
 }

@@ -24,7 +24,7 @@
 
 package com.ericafenyo.seniorhub.repository;
 
-import com.ericafenyo.seniorhub.entity.UserEntity;
+import com.ericafenyo.seniorhub.entities.UserEntity;
 
 import java.util.Optional;
 
@@ -36,6 +36,10 @@ public interface UserRepository {
   Optional<UserEntity> findById(String id);
 
   Optional<UserEntity> findByEmail(String email);
+
+  boolean existsByEmail(String email);
+
+  boolean existsById(String email);
 
   void delete(String id);
 }

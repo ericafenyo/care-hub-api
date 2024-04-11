@@ -22,13 +22,15 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+package com.ericafenyo.seniorhub.exceptions.event;
 
-public final class Constants {
-  public static final String REGEX_EMAIL = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-  public static final String REGEX_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z]).{8,16}$";
+import com.ericafenyo.seniorhub.exceptions.NotFoundException;
 
-  public static final String EXTRA_VERIFICATION_CODE_KEY = "extra_verification_code";
+public class EventNotFoundException extends NotFoundException {
+  private static final String MESSAGE = "The requested event record could not be found";
+  private static final String ERROR_CODE = "event_not_found";
 
-  public static final String COOKIES_EMAIL_VERIFICATION_CODE_KEY = "verification-key";
+  public EventNotFoundException() {
+    super(MESSAGE, ERROR_CODE);
+  }
 }

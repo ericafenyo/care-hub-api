@@ -22,13 +22,29 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+package com.ericafenyo.seniorhub.implementation.utils;
 
-public final class Constants {
-  public static final String REGEX_EMAIL = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-  public static final String REGEX_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z]).{8,16}$";
+import com.ericafenyo.seniorhub.spi.TextEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 
-  public static final String EXTRA_VERIFICATION_CODE_KEY = "extra_verification_code";
+@Component
+public class BcryptTextEncoder implements TextEncoder {
 
-  public static final String COOKIES_EMAIL_VERIFICATION_CODE_KEY = "verification-key";
+  BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+  @Override
+  public String encode(String text) {
+    return encoder.encode(text);
+  }
+
+  @Override
+  public String decode(String encodedText) {
+    throw new RuntimeException("Method not implemented");
+  }
+
+  @Override
+  public boolean match(String text, String encodedText) {
+    return encoder.matches(text, encodedText);
+  }
 }

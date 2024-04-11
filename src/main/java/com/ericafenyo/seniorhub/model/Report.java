@@ -22,13 +22,28 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+package com.ericafenyo.seniorhub.model;
 
-public final class Constants {
-  public static final String REGEX_EMAIL = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-  public static final String REGEX_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z]).{8,16}$";
+import lombok.Getter;
+import lombok.Setter;
 
-  public static final String EXTRA_VERIFICATION_CODE_KEY = "extra_verification_code";
+import java.time.LocalDateTime;
 
-  public static final String COOKIES_EMAIL_VERIFICATION_CODE_KEY = "verification-key";
+/**
+ * A report is the result or outcome achieved through the execution of an action.
+ */
+@Setter
+@Getter
+public class Report {
+
+  /**
+   * The message or information associated with the report.
+   */
+  private String message;
+
+  /**
+   * The timestamp indicating when the report was generated.
+   */
+  private LocalDateTime time;
 }
+

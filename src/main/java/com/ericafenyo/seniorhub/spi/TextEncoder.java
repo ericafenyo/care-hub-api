@@ -22,13 +22,35 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+package com.ericafenyo.seniorhub.spi;
 
-public final class Constants {
-  public static final String REGEX_EMAIL = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-  public static final String REGEX_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z]).{8,16}$";
+/**
+ * An interface for text encoding and decoding operations.
+ */
+public interface TextEncoder {
 
-  public static final String EXTRA_VERIFICATION_CODE_KEY = "extra_verification_code";
+  /**
+   * Encodes the given plain text.
+   *
+   * @param text The plain text to encode.
+   * @return The encoded text.
+   */
+  String encode(String text);
 
-  public static final String COOKIES_EMAIL_VERIFICATION_CODE_KEY = "verification-key";
+  /**
+   * Decodes the given encoded text.
+   *
+   * @param encodedText The encoded text to decode.
+   * @return The decoded plain text.
+   */
+  String decode(String encodedText);
+
+  /**
+   * Checks whether the given plain text matches the encoded text after decoding.
+   *
+   * @param text        The plain text.
+   * @param encodedText The encoded text.
+   * @return {@code true} if the plain text matches the decoded result, {@code false} otherwise.
+   */
+  boolean match(String text, String encodedText);
 }

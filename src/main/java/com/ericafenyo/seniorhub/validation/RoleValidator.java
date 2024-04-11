@@ -22,6 +22,26 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.internal.daos;
+package com.ericafenyo.seniorhub.validation;
 
-public class UserDaoImpl {}
+import com.ericafenyo.seniorhub.model.Role;
+import com.ericafenyo.seniorhub.validation.constraints.UserRole;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
+public class RoleValidator implements ConstraintValidator<UserRole, String> {
+  @Override
+  public void initialize(UserRole constraintAnnotation) {
+    ConstraintValidator.super.initialize(constraintAnnotation);
+  }
+
+  @Override
+  public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
+    try {
+      Role.from(value);
+      return true;
+    } catch (IllegalArgumentException exception) {
+      return false;
+    }
+  }
+}

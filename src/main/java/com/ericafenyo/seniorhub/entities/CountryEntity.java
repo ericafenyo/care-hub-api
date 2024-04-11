@@ -49,10 +49,4 @@ public class CountryEntity {
    */
   @Column(name = "name")
   private String name;
-
-  /**
-   * The list of addresses associated with the country.
-   */
-  @OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
-  private List<AddressEntity> addresses = new ArrayList<>();
 }

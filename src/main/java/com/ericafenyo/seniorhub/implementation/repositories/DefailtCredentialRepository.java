@@ -22,21 +22,31 @@
  * SOFTWARE.
  */
 
-/**
- * This package contains the internal default implementations of the Service Provider Interface (SPI) in the application.
- *
- * <p>
- * The SPI is a design pattern that allows defining a service interface, and multiple implementations can be provided
- * for the interface. This package specifically contains default implementations that are meant to be used internally
- * within the application.
- * </p>
- *
- * <p>
- * Developers should avoid relying on the classes in this package directly unless they are working on the internal
- * implementation details of the SPI. For general usage, it is recommended to use the public API provided in other
- * packages.
- *
- * </p>
- */
+package com.ericafenyo.seniorhub.implementation.repositories;
 
-package com.ericafenyo.seniorhub.internal;
+import com.ericafenyo.seniorhub.dao.CredentialDao;
+import com.ericafenyo.seniorhub.entities.CredentialEntity;
+import com.ericafenyo.seniorhub.repository.CredentialRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public class DefailtCredentialRepository implements CredentialRepository {
+
+  private final CredentialDao dao;
+
+  public DefailtCredentialRepository(CredentialDao dao) {
+    this.dao = dao;
+  }
+
+  @Override
+  public Optional<CredentialEntity> findByUserId(Long userId) {
+    return dao.findByUserId(userId);
+  }
+
+  @Override
+  public CredentialEntity save(CredentialEntity entity) {
+    return dao.save(entity);
+  }
+}

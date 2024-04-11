@@ -24,48 +24,62 @@
 
 package com.ericafenyo.seniorhub.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * A database entity for an address with country, city, street, and postal code information.
- */
-@Entity(name = "addresses")
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+@Entity(name = "events")
 @EntityListeners(AuditingEntityListener.class)
 @Data
-public class AddressEntity {
-  /**
-   * The unique identifier for the address.
-   */
+public class EventEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
   private Long id;
 
-  /**
-   * A secondary unique identifier.
-   */
   @Column(name = "uuid")
   private String uuid;
+
+  @Column(name = "name")
+  private String name;
+
+  @Column(name = "description")
+  private String description;
+
+  @Column(name = "start_date")
+  private LocalDate startDate;
+
+  @Column(name = "start_time")
+  private LocalTime startTime;
+
+  @Column(name = "end_date")
+  private LocalDate endDate;
+
+  @Column(name = "endTime")
+  private LocalTime endTime;
+
   /**
-   * Indicates a precise street address.
+   * The date and time when the event was created.
    */
-  private String street;
+  @CreatedDate
+  @Column(name = "created_at")
+  private LocalDateTime createdAt;
+
   /**
-   * The postal code of the address.
+   * The date and time when the event was last updated.
    */
-  private String postalCode;
-  /**
-   * The city of the address.
-   */
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "city_id")
-  private CityEntity city;
-  /**
-   * The country of the address.
-   */
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "country_id")
-  private CountryEntity country;
+  @LastModifiedDate
+  @Column(name = "updated_at")
+  private LocalDateTime updatedAt;
 }

@@ -22,22 +22,25 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.internal.services;
+package com.ericafenyo.seniorhub.implementation.services;
 
 import com.ericafenyo.seniorhub.dto.UserCreationDto;
 import com.ericafenyo.seniorhub.dto.UserUpdateDto;
-import com.ericafenyo.seniorhub.entity.AddressEntity;
-import com.ericafenyo.seniorhub.entity.CityEntity;
-import com.ericafenyo.seniorhub.entity.CountryEntity;
-import com.ericafenyo.seniorhub.entity.UserEntity;
-import com.ericafenyo.seniorhub.exception.HttpException;
-import com.ericafenyo.seniorhub.exception.user.UserExistsException;
-import com.ericafenyo.seniorhub.exception.user.UserNotFoundException;
+import com.ericafenyo.seniorhub.entities.AddressEntity;
+import com.ericafenyo.seniorhub.entities.CityEntity;
+import com.ericafenyo.seniorhub.entities.CountryEntity;
+import com.ericafenyo.seniorhub.entities.CredentialEntity;
+import com.ericafenyo.seniorhub.entities.UserEntity;
+import com.ericafenyo.seniorhub.exceptions.HttpException;
+import com.ericafenyo.seniorhub.exceptions.user.UserExistsException;
+import com.ericafenyo.seniorhub.exceptions.user.UserNotFoundException;
 import com.ericafenyo.seniorhub.mapper.UserMapper;
+import com.ericafenyo.seniorhub.model.Role;
 import com.ericafenyo.seniorhub.model.User;
+import com.ericafenyo.seniorhub.repository.CredentialRepository;
 import com.ericafenyo.seniorhub.repository.UserRepository;
-import com.ericafenyo.seniorhub.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ericafenyo.seniorhub.services.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -47,17 +50,21 @@ import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
+  private final UserRepository userRepository;
+  private final CredentialRepository credentialRepository;
+  private final UserMapper mapper;
 
-  @Autowired
-  private UserRepository repository;
-  @Autowired
-  private UserMapper mapper;
+  public UserServiceImpl(UserRepository userRepository, CredentialRepository credentialRepository, UserMapper mapper) {
+    this.userRepository = userRepository;
+    this.credentialRepository = credentialRepository;
+    this.mapper = mapper;
+  }
 
   @Override
   public List<User> getUsers() {
     List<User> users = new ArrayList<>();
 
-    var entities = repository.findAll();
+    var entities = userRepository.findAll();
     for (UserEntity entity : entities) {
       users.add(mapper.apply(entity));
     }
@@ -67,7 +74,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User getUserById(String id) throws UserNotFoundException {
-    Optional<UserEntity> user = repository.findById(id);
+    Optional<UserEntity> user = userRepository.findById(id);
 
     if (user.isEmpty()) {
       throw new UserNotFoundException();
@@ -76,43 +83,48 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User createUser(UserCreationDto dto) throws HttpException {
-    // Get the current user by email
-    Optional<UserEntity> user = repository.findByEmail(dto.getEmail());
-
+  public User createUser(UserCreationDto dto, Role role) throws HttpException {
     // Throw error if the user already exists
-    if (user.isPresent()) {
+    boolean isPresent = userRepository.existsByEmail(dto.getEmail());
+    if (isPresent) {
       throw new UserExistsException();
     }
 
-    var entity = new UserEntity();
-    entity.setFirstName(dto.getFirstName());
-    entity.setLastName(dto.getLastName());
-    entity.setEmail(dto.getEmail());
-    entity.setUuid(UUID.randomUUID().toString());
+    var user = new UserEntity();
+    user.setFirstName(dto.getFirstName());
+    user.setLastName(dto.getLastName());
+    user.setEmail(dto.getEmail());
+    user.setUuid(UUID.randomUUID().toString());
 
-    CityEntity city = new CityEntity();
+    var city = new CityEntity();
     city.setName(dto.getAddress().getCity());
 
-    CountryEntity country = new CountryEntity();
+    var country = new CountryEntity();
     country.setName(dto.getAddress().getCountry());
 
-    AddressEntity address = new AddressEntity();
+    var address = new AddressEntity();
     address.setStreet(dto.getAddress().getStreet());
     address.setUuid(UUID.randomUUID().toString());
     address.setPostalCode(dto.getAddress().getPostalCode());
     address.setCity(city);
     address.setCountry(country);
-    address.setUser(entity);
 
-    entity.setAddress(address);
+    user.setAddress(address);
 
-    return mapper.apply(repository.save(entity));
+    var savedUser = userRepository.save(user);
+
+    var credential = new CredentialEntity();
+    String hashedPassword = new BCryptPasswordEncoder().encode(dto.getPassword());
+    credential.setPassword(hashedPassword);
+    credential.setUser(savedUser);
+    credentialRepository.save(credential);
+
+    return mapper.apply(userRepository.save(user));
   }
 
   @Override
   public User updateUser(String id, UserUpdateDto dto) {
-    UserEntity user = repository.findById(id).get();
+    UserEntity user = userRepository.findById(id).get();
 
     AddressEntity address = user.getAddress();
     CityEntity city = address.getCity();
@@ -130,13 +142,14 @@ public class UserServiceImpl implements UserService {
     user.setLastName(dto.getLastName());
     user.setAddress(address);
 
-    UserEntity savedUser = repository.save(user);
+    UserEntity savedUser = userRepository.save(user);
 
     return mapper.apply(savedUser);
   }
 
   @Override
   public void deleteUser(String id) {
-    repository.delete(id);
+    userRepository.delete(id);
   }
+
 }

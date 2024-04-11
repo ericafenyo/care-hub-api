@@ -22,13 +22,26 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+package com.ericafenyo.seniorhub.mapper;
 
-public final class Constants {
-  public static final String REGEX_EMAIL = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-  public static final String REGEX_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z]).{8,16}$";
+import com.ericafenyo.seniorhub.entities.EventEntity;
+import com.ericafenyo.seniorhub.model.Event;
+import org.springframework.stereotype.Component;
 
-  public static final String EXTRA_VERIFICATION_CODE_KEY = "extra_verification_code";
-
-  public static final String COOKIES_EMAIL_VERIFICATION_CODE_KEY = "verification-key";
+@Component
+public class EventMapper implements Mapper<EventEntity, Event> {
+  @Override
+  public Event apply(EventEntity entity) {
+    var event = new Event();
+    event.setId(entity.getUuid());
+    event.setName(entity.getName());
+    event.setDescription(entity.getDescription());
+    event.setStartDate(entity.getStartDate());
+    event.setStartTime(entity.getStartTime());
+    event.setEndDate(entity.getEndDate());
+    event.setEndTime(entity.getEndTime());
+    event.setCreatedAt(entity.getCreatedAt());
+    event.setUpdatedAt(entity.getUpdatedAt());
+    return event;
+  }
 }
