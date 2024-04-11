@@ -24,7 +24,7 @@
 
 package com.ericafenyo.seniorhub.dao;
 
-import com.ericafenyo.seniorhub.entity.CityEntity;
+import com.ericafenyo.seniorhub.entities.CityEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 

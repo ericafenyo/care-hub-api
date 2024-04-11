@@ -24,9 +24,10 @@
 
 package com.ericafenyo.seniorhub.dao;
 
-import com.ericafenyo.seniorhub.entity.RoleEntity;
+import com.ericafenyo.seniorhub.entities.RoleEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface RoleDao extends CrudRepository<RoleEntity, Long> { }
+public interface RoleDao extends JpaRepository<RoleEntity, Long> { }

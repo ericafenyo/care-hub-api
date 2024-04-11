@@ -24,9 +24,13 @@
 
 package com.ericafenyo.seniorhub.dao;
 
-import com.ericafenyo.seniorhub.entities.AddressEntity;
+import com.ericafenyo.seniorhub.entities.EventEntity;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Component
-public interface AddressDao extends CrudRepository<AddressEntity, Long> { }
+import java.util.Optional;
+
+@Repository
+public interface EventDao extends CrudRepository<EventEntity, Long> {
+  Optional<EventEntity> findByUuid(String uuid);
+}

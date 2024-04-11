@@ -24,9 +24,11 @@
 
 package com.ericafenyo.seniorhub.dao;
 
-import com.ericafenyo.seniorhub.entities.AddressEntity;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Component;
+import com.ericafenyo.seniorhub.entities.CredentialEntity;
 
-@Component
-public interface AddressDao extends CrudRepository<AddressEntity, Long> { }
+import java.util.Optional;
+
+public interface CredentialDao {
+  Optional<CredentialEntity> findByUserId(Long userId);
+  CredentialEntity save(CredentialEntity entity);
+}

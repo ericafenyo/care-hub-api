@@ -24,9 +24,20 @@
 
 package com.ericafenyo.seniorhub.dao;
 
-import com.ericafenyo.seniorhub.entities.AddressEntity;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Component;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
-@Component
-public interface AddressDao extends CrudRepository<AddressEntity, Long> { }
+import java.util.Optional;
+
+@Transactional()
+public abstract class AbstractDao<T> {
+
+  @PersistenceContext
+  private EntityManager manager;
+
+
+  public Optional<T> findOne() {
+    return Optional.empty();
+  }
+}
