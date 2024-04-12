@@ -22,38 +22,29 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.controllers;
+package com.ericafenyo.seniorhub.services;
 
-import com.ericafenyo.seniorhub.dto.BasicAuthenticateRequest;
-import com.ericafenyo.seniorhub.model.Tokens;
-import com.ericafenyo.seniorhub.repository.CredentialRepository;
-import lombok.AllArgsConstructor;
+
+import com.ericafenyo.seniorhub.exceptions.account.InvalidCredentialsException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
-@RestController()
-@AllArgsConstructor()
-public class AuthenticationController {
+@Service
+@RequiredArgsConstructor
+public class EmailPasswordAuthenticationService {
   private final AuthenticationManager authenticationManager;
-  private final CredentialRepository credentialRepository;
 
-  @PostMapping("/authenticate")
-  public Tokens authenticate(@RequestBody BasicAuthenticateRequest request) {
-
-    Authentication authentication = UsernamePasswordAuthenticationToken
-        .authenticated(request.getEmail(), request.getPassword(), null);
-
-    authenticationManager.authenticate(authentication);
-
-    return Tokens.builder()
-        .refreshToken("")
-        .accessToken("")
-        .build();
+  public void authenticate(String email, String password) throws InvalidCredentialsException {
+    try {
+      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+    } catch (AuthenticationException exception) {
+      // TODO: Log error for reporting
+      throw new InvalidCredentialsException(exception);
+    }
   }
+
 }
+

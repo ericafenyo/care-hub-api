@@ -22,17 +22,18 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exceptions;
+package com.ericafenyo.seniorhub;
 
-import org.springframework.http.HttpStatus;
 
-public class UnauthorizedException extends HttpException{
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-  public UnauthorizedException(String message, String code) {
-    super(HttpStatus.UNAUTHORIZED, message, code);
-  }
-
-  public UnauthorizedException(String message, String code, Throwable cause) {
-    super(HttpStatus.UNAUTHORIZED, message, code, cause);
-  }
+@Component
+@ConfigurationProperties(prefix = "seniorhub.env")
+@Getter
+@Setter
+public class EnvironmentVariables {
+  private String jwtSecretKey;
 }

@@ -22,8 +22,11 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exceptions;
+package com.ericafenyo.seniorhub.exceptions.handlers;
 
+import com.ericafenyo.seniorhub.exceptions.HttpException;
+import com.ericafenyo.seniorhub.exceptions.HttpExceptionResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -44,10 +47,11 @@ public class HttpExceptionHandler {
    * @return A {@link ResponseEntity} containing an {@link HttpExceptionResponse} with relevant information.
    */
   @ExceptionHandler(value = {HttpException.class})
-  ResponseEntity<Object> handle(HttpException exception) {
+  ResponseEntity<Object> handle(HttpException exception, HttpServletRequest request) {
     HttpExceptionResponse response = new HttpExceptionResponse();
     response.setStatus(exception.getStatus().value());
     response.setMessage(exception.getMessage());
+    response.setPath(request.getRequestURI());
     response.setCode(exception.getCode());
     response.setTimestamp(LocalDateTime.now(ZoneOffset.UTC));
 

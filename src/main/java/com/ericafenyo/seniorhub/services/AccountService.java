@@ -47,7 +47,11 @@ public class AccountService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    var userResult = userRepository.findByEmail(username);
+    return getAccount(username);
+  }
+
+  public Account getAccount(String email) {
+    var userResult = userRepository.findByEmail(email);
 
     if (userResult.isEmpty()) {
       throw new UsernameNotFoundException("");

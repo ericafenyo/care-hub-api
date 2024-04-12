@@ -24,6 +24,7 @@
 
 package com.ericafenyo.seniorhub.filters;
 
+import com.ericafenyo.seniorhub.model.Account;
 import com.ericafenyo.seniorhub.services.AccountService;
 import com.ericafenyo.seniorhub.services.JwtAuthenticationService;
 import jakarta.servlet.FilterChain;
@@ -31,19 +32,21 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import org.springframework.http.HttpHeaders;
-
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-  public static final String BEARER_AUTH_SCHEME = "bearer";
-  public static final int BEARER_AUTH_SCHEME_LAST_INDEX = 7;
+  // The additional space at the end is required. Do not delete.
+  public static final String BEARER_AUTH_SCHEME = "bearer ";
 
   private final JwtAuthenticationService jwtAuthenticationService;
   private final AccountService accountService;
@@ -56,15 +59,42 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   ) throws ServletException, IOException {
     String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-    if (!hasValidBearerAuthSchema(header)) {
-      filterChain.doFilter(request, response);
-      return;
+    if (isNotAuthenticated() && hasValidBearerAuthSchema(header)) {
+      String token = header.substring(BEARER_AUTH_SCHEME.length());
+
+      String email = jwtAuthenticationService.extractEmail(token);
+
+      Account account = accountService.getAccount(email);
+      if (account == null) {
+        filterChain.doFilter(request, response);
+        return;
+      }
+
+      boolean isValid = jwtAuthenticationService.verify(token, account);
+
+      if (isValid) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+            new UsernamePasswordAuthenticationToken(
+                account, null, account.getAuthorities()
+            );
+
+        authenticationToken.setDetails(
+            new WebAuthenticationDetailsSource().buildDetails(request)
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+      }
     }
 
-    String token = header.substring(BEARER_AUTH_SCHEME_LAST_INDEX);
+    filterChain.doFilter(request, response);
+  }
+
+  private boolean isNotAuthenticated() {
+    var authentication = SecurityContextHolder.getContext().getAuthentication();
+    return authentication == null || !authentication.isAuthenticated();
   }
 
   private static boolean hasValidBearerAuthSchema(String header) {
-    return (header != null) && header.toLowerCase().startsWith("%s ".formatted(BEARER_AUTH_SCHEME));
+    return (header != null) && header.toLowerCase().startsWith(BEARER_AUTH_SCHEME);
   }
 }

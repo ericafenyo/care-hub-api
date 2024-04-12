@@ -26,13 +26,19 @@ package com.ericafenyo.seniorhub.controllers;
 
 import com.ericafenyo.seniorhub.Constants;
 import com.ericafenyo.seniorhub.api.Tuple;
+import com.ericafenyo.seniorhub.dto.BasicAuthenticateRequest;
 import com.ericafenyo.seniorhub.dto.VerifyEmailDto;
+import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.model.Report;
+import com.ericafenyo.seniorhub.model.Tokens;
+import com.ericafenyo.seniorhub.services.AccountService;
+import com.ericafenyo.seniorhub.services.EmailPasswordAuthenticationService;
+import com.ericafenyo.seniorhub.services.JwtAuthenticationService;
 import com.ericafenyo.seniorhub.services.MailService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,10 +46,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "*")
+@AllArgsConstructor()
 public class AccountController {
+  private final MailService service;
+  private final JwtAuthenticationService jwtAuthenticationService;
+  private final EmailPasswordAuthenticationService emailPasswordAuthenticationService;
+  private final AccountService accountService;
 
-  @Autowired
-  private MailService service;
+  @PostMapping("/authenticate")
+  public Tokens authenticate(@RequestBody BasicAuthenticateRequest request) throws HttpException {
+    emailPasswordAuthenticationService.authenticate(request.getEmail(), request.getPassword());
+
+    // Generate token
+    var account = accountService.getAccount(request.getEmail());
+    String token = jwtAuthenticationService.sign(account);
+
+    return Tokens.builder()
+        .refreshToken("")
+        .accessToken(token)
+        .build();
+  }
 
   @PostMapping("/accounts/verify-email")
   public Report sendVerificationCode(@RequestBody @Valid VerifyEmailDto verifyEmailDto, HttpServletResponse response) {

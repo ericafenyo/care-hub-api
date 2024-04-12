@@ -22,8 +22,10 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exceptions;
+package com.ericafenyo.seniorhub.exceptions.handlers;
 
+import com.ericafenyo.seniorhub.exceptions.HttpExceptionResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -56,7 +58,7 @@ public class FieldsValidationExceptionHandler {
    * @return ResponseEntity with a standardized error response.
    */
   @ExceptionHandler(value = MethodArgumentNotValidException.class)
-  public ResponseEntity<Object> handle(MethodArgumentNotValidException exception) {
+  public ResponseEntity<Object> handle(MethodArgumentNotValidException exception, HttpServletRequest request) {
     HttpExceptionResponse response = new HttpExceptionResponse();
     List<Object> objects = new ArrayList<>();
 
@@ -86,6 +88,7 @@ public class FieldsValidationExceptionHandler {
     });
 
     response.setStatus(HttpStatus.BAD_REQUEST.value());
+    response.setPath(request.getRequestURI());
     response.setMessage(objects);
     response.setCode(ERROR_CODE);
     response.setTimestamp(LocalDateTime.now(ZoneOffset.UTC));

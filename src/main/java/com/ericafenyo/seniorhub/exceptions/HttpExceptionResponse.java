@@ -50,8 +50,12 @@ public class HttpExceptionResponse {
   private String code;
 
   /**
+   * The HTTP request url called when the error was produced
+   */
+  private String path;
+
+  /**
    * The timestamp when the exception response was created.
    */
   private LocalDateTime timestamp;
 }
-

@@ -25,28 +25,30 @@
 package com.ericafenyo.seniorhub.services;
 
 
-import com.ericafenyo.seniorhub.Environment;
+import com.ericafenyo.seniorhub.EnvironmentVariables;
 import com.ericafenyo.seniorhub.model.Account;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
 public class JwtAuthenticationService {
-  public static final String EMAIL_KEY = "email";
-  public static final String JWT_SECRET_KEY = "JWT_SECRET_KEY";
+  private static final String EMAIL_KEY = "email";
 
-  private final Environment environment;
+  @Value("seniorhub.env.jwt-secret-key")
+  private String JWT_SECRET_KEY = "JWT_SECRET_KEY";
+
+  private final EnvironmentVariables environment;
 
   public <T> T extract(String token, Function<Claims, T> resolver) {
     Claims claims = extract(token);
@@ -55,35 +57,66 @@ public class JwtAuthenticationService {
 
   private Claims extract(String token) {
     return Jwts.parser()
-        .setSigningKey(environment.getJwtSecretKey())
+        .setSigningKey(JWT_SECRET_KEY)
         .parseClaimsJws(token)
         .getBody();
   }
 
-  public void sign(Account account) {
+  public String sign(Account account) {
     Instant issuedAt = Instant.now();
     Instant expiration = issuedAt.plus(24, ChronoUnit.HOURS);
 
-    Jwts.builder()
+    return Jwts.builder()
         .claim(EMAIL_KEY, account.getEmail())
         .setSubject("auth|%s".formatted(account.getId()))
         .setIssuer("http://localhost/senoir-hub")
         .setIssuedAt(Date.from(issuedAt))
         .setExpiration(Date.from(expiration))
-        .setAudience("aud")
-        .signWith(SignatureAlgorithm.HS256, "secret")
+//        .setAudience("aud")
+        .signWith(SignatureAlgorithm.HS256, JWT_SECRET_KEY)
         .compact();
   }
 
-  public void verify(String token, Account account) {
-    var isEa = hasEqualEmails(token, account);
+  /**
+   * Checks if the token is valid.
+   *
+   * @param token   The token to be verified.
+   * @param account The store user account.
+   * @return true if the token is valid, false otherwise.
+   */
+  public boolean verify(String token, Account account) {
+    System.out.println(environment.getJwtSecretKey());
+    var claims = extract(token);
+    var expiresAt = claims.getExpiration();
+    var hasEqualUserIds = claims.getSubject().equals("auth|%s".formatted(account.getId()));
+
+    // Check if the token is blank, expired, or will expire soon
+    boolean invalidToken = !hasEqualUserIds || token.isBlank() || hasExpired(expiresAt) || willExpire(expiresAt, Duration.ofMinutes(1));
+
+    return !invalidToken;
   }
 
-  private boolean hasEqualEmails(String token, Account account) {
-    return account.getEmail().equalsIgnoreCase(extractEmail(token));
+
+  private boolean hasExpired(Date expiredAt) {
+    return expiredAt.after(new Date());
   }
 
-  private String extractEmail(String token) {
+  /**
+   * Checks (given the required minimum time to live), if the expiration time can satisfy that value or not.
+   *
+   * @param expiresAt the expiration time.
+   * @param minTtl    the time to live required.
+   * @return whether the value will become expired within the given min offset to live or not.
+   */
+  private boolean willExpire(Date expiresAt, Duration minTtl) {
+    Date now = new Date();
+    // Calculate the minimum expiration time
+    Date minExpirationTime = new Date(now.getTime() + minTtl.toMillis());
+
+    return expiresAt.before(minExpirationTime);
+  }
+
+  public String extractEmail(String token) {
     return extract(token, (claims -> claims.get(EMAIL_KEY, String.class)));
   }
 }

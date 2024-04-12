@@ -22,18 +22,19 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+package com.ericafenyo.seniorhub.exceptions.account;
 
+import com.ericafenyo.seniorhub.exceptions.UnauthorizedException;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+public class InvalidCredentialsException extends UnauthorizedException {
+  private static final String MESSAGE = "The provided email or password is incorrect";
+  private static final String ERROR_CODE = "incorrect_email_password";
 
-@Component
-@ConfigurationProperties(prefix = "seniorhub.env")
-@Getter
-@Setter
-public class Environment {
-  private String jwtSecretKey;
+  public InvalidCredentialsException() {
+    super(MESSAGE, ERROR_CODE);
+  }
+
+  public InvalidCredentialsException(Throwable cause) {
+    super(MESSAGE, ERROR_CODE, cause);
+  }
 }
