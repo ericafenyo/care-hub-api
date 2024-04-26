@@ -33,7 +33,6 @@ import lombok.Getter;
 public enum Role {
   SENIOR("senior"),
   CARETAKER("caretaker"),
-  ACTIVITY_COORDINATOR("activity-coordinator"),
   ADMINISTRATOR("administrator");
 
   private final String slug;

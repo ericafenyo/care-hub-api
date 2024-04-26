@@ -30,12 +30,13 @@ import com.ericafenyo.seniorhub.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Repository
+@Transactional
 public class UserRepositoryImpl implements UserRepository {
   @PersistenceContext
   private EntityManager manager;
@@ -58,25 +59,20 @@ public class UserRepositoryImpl implements UserRepository {
 
   @Override
   public Optional<UserEntity> findById(String id) {
-    var rr = userDao.findById(1L);
-
-    return rr;
-//    TypedQuery<UserEntity> query = manager.createQuery("SELECT e FROM users as e WHERE uuid=:uuid", UserEntity.class)
-//        .setParameter("uuid", id);
-//
-//    return query.getResultStream().findFirst();
+    return userDao.findByUuid(id);
   }
 
   @Override
   public Optional<UserEntity> findByEmail(String email) {
-    TypedQuery<UserEntity> query = manager.createQuery("SELECT e FROM users as e WHERE email=:email", UserEntity.class)
-        .setParameter("email", email);
-
-    Optional<UserEntity> first = query.getResultStream().findFirst();
-
-   var t = first.get();
-
-    return first;
+    return userDao.findByEmail(email);
+//    TypedQuery<UserEntity> query = manager.createQuery("SELECT e FROM users as e WHERE email=:email", UserEntity.class)
+//        .setParameter("email", email);
+//
+//    Optional<UserEntity> first = query.getResultStream().findFirst();
+//
+//   var t = first.get();
+//
+//    return first;
   }
 
   @Override
@@ -90,7 +86,6 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  @Transactional
   public void delete(String id) {
     int updated = manager.createQuery("DELETE FROM users as e WHERE e.uuid=:uuid")
         .setParameter("uuid", id)

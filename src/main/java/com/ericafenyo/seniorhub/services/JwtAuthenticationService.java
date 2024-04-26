@@ -31,7 +31,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -45,9 +44,6 @@ import java.util.function.Function;
 public class JwtAuthenticationService {
   private static final String EMAIL_KEY = "email";
 
-  @Value("seniorhub.env.jwt-secret-key")
-  private String JWT_SECRET_KEY = "JWT_SECRET_KEY";
-
   private final EnvironmentVariables environment;
 
   public <T> T extract(String token, Function<Claims, T> resolver) {
@@ -57,7 +53,7 @@ public class JwtAuthenticationService {
 
   private Claims extract(String token) {
     return Jwts.parser()
-        .setSigningKey(JWT_SECRET_KEY)
+        .setSigningKey(environment.getJwtSecretKey())
         .parseClaimsJws(token)
         .getBody();
   }
@@ -73,7 +69,7 @@ public class JwtAuthenticationService {
         .setIssuedAt(Date.from(issuedAt))
         .setExpiration(Date.from(expiration))
 //        .setAudience("aud")
-        .signWith(SignatureAlgorithm.HS256, JWT_SECRET_KEY)
+        .signWith(SignatureAlgorithm.HS256, environment.getJwtSecretKey())
         .compact();
   }
 
@@ -98,7 +94,7 @@ public class JwtAuthenticationService {
 
 
   private boolean hasExpired(Date expiredAt) {
-    return expiredAt.after(new Date());
+    return expiredAt.before(new Date());
   }
 
   /**

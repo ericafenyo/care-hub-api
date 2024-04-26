@@ -24,6 +24,7 @@
 
 package com.ericafenyo.seniorhub.filters;
 
+import com.ericafenyo.seniorhub.exceptions.UnauthorizedException;
 import com.ericafenyo.seniorhub.model.Account;
 import com.ericafenyo.seniorhub.services.AccountService;
 import com.ericafenyo.seniorhub.services.JwtAuthenticationService;

@@ -66,6 +66,11 @@ public class User {
   private LocalDateTime updatedAt;
 
   /**
+   * The role assigned to the user
+   */
+  private Role role;
+
+  /**
    * The address where the user leaves.
    */
   private Address address;

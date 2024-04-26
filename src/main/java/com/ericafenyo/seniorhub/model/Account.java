@@ -30,9 +30,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 
 @Data
 @Builder
@@ -40,13 +39,11 @@ public class Account implements UserDetails {
   private String id;
   private String email;
   private String password;
-  private List<Role> roles = new ArrayList<>();
+  private Role role;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    var authorities = new ArrayList<SimpleGrantedAuthority>();
-    roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.name())));
-    return authorities;
+    return Collections.singletonList(new SimpleGrantedAuthority(this.role.name()));
   }
 
   @Override

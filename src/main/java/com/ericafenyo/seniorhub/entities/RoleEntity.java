@@ -84,7 +84,7 @@ public class RoleEntity {
   /**
    * The users having this role.
    */
-  @ManyToMany(mappedBy = "roles")
+  @OneToMany(mappedBy = "role")
   private List<UserEntity> users = new ArrayList<>();
 
   /**

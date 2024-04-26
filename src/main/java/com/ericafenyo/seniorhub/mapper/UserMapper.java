@@ -57,6 +57,7 @@ public class UserMapper implements Mapper<UserEntity, User> {
     user.setPhotoUrl(entity.getPhotoUrl());
     user.setCreatedAt(entity.getCreatedAt());
     user.setUpdatedAt(entity.getUpdatedAt());
+    user.setRole(entity.getRole().getName());
 
     var addressEntity = Optional.ofNullable(entity.getAddress());
 

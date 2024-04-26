@@ -57,7 +57,6 @@ public class AccountService implements UserDetailsService {
       throw new UsernameNotFoundException("");
     }
     var user = userResult.get();
-    List<Role> roles = user.getRoles().stream().map(RoleEntity::getName).toList();
 
     Optional<CredentialEntity> credentialResult = credentialRepository.findByUserId(user.getId());
 
@@ -71,7 +70,7 @@ public class AccountService implements UserDetailsService {
         .id(user.getUuid())
         .email(user.getEmail())
         .password(credential.getPassword())
-        .roles(roles)
+        .role(user.getRole().getName())
         .build();
   }
 }
