@@ -53,14 +53,6 @@
             <column name="updated_at" value="now()"/>
         </insert>
 
-        <!-- Inserts an activity coordinator role-->
-        <insert tableName="roles">
-            <column name="name" value="Activity Coordinator"/>
-            <column name="slug" value="activity-coordinator"/>
-            <column name="description" value="Organizers creating events for seniors to stay active and connected"/>
-            <column name="created_at" value="now()"/>
-            <column name="updated_at" value="now()"/>
-        </insert>
 
         <!-- Inserts an administrator role -->
         <insert tableName="roles">

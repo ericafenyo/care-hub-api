@@ -81,7 +81,6 @@ public class JwtAuthenticationService {
    * @return true if the token is valid, false otherwise.
    */
   public boolean verify(String token, Account account) {
-    System.out.println(environment.getJwtSecretKey());
     var claims = extract(token);
     var expiresAt = claims.getExpiration();
     var hasEqualUserIds = claims.getSubject().equals("auth|%s".formatted(account.getId()));

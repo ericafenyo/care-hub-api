@@ -27,23 +27,28 @@ package com.ericafenyo.seniorhub.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 /**
  * A report is the result or outcome achieved through the execution of an action.
  */
-@Setter
 @Getter
 public class Report {
 
   /**
    * The message or information associated with the report.
    */
-  private String message;
+  private final String message;
 
   /**
    * The timestamp indicating when the report was generated.
    */
-  private LocalDateTime time;
+  private final Instant timestamp;
+
+  public Report(String message) {
+    this.message = message;
+    this.timestamp = Instant.now();
+  }
 }
 

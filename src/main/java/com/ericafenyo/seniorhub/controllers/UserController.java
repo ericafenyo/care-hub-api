@@ -24,8 +24,10 @@
 
 package com.ericafenyo.seniorhub.controllers;
 
+import com.ericafenyo.seniorhub.dto.InvitationRequest;
 import com.ericafenyo.seniorhub.dto.UserCreationDto;
 import com.ericafenyo.seniorhub.dto.UserUpdateDto;
+import com.ericafenyo.seniorhub.model.Report;
 import com.ericafenyo.seniorhub.model.Role;
 import com.ericafenyo.seniorhub.model.User;
 import com.ericafenyo.seniorhub.services.UserService;
@@ -72,5 +74,13 @@ public class UserController {
   @DeleteMapping("/{id}")
   public void deleteUser(@PathVariable String id) {
     service.deleteUser(id);
+  }
+
+  @PostMapping("/{id}/invitations")
+  public Report inviteUser(
+      @PathVariable String id,
+      @Valid @RequestBody InvitationRequest request
+  ) {
+    return service.inviteUser(id, request);
   }
 }

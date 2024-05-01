@@ -25,9 +25,15 @@
 package com.ericafenyo.seniorhub.services;
 
 import com.ericafenyo.seniorhub.api.Tuple;
+import com.ericafenyo.seniorhub.model.Mail;
+import com.ericafenyo.seniorhub.model.Mail.Context;
 import com.ericafenyo.seniorhub.model.Report;
 
 
 public interface MailService {
+  void send(Mail mail);
+
   Tuple<Report, String> sendVerificationCode(String email);
+
+  Report sendInvitation(String email, Context context);
 }

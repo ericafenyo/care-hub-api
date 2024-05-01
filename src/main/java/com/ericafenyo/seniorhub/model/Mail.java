@@ -27,6 +27,8 @@ package com.ericafenyo.seniorhub.model;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.HashMap;
+
 @Builder
 @Getter()
 public class Mail {
@@ -36,4 +38,6 @@ public class Mail {
   String body;
   String bcc;
   String cc;
+
+  public static class Context extends HashMap<String, Object> { }
 }

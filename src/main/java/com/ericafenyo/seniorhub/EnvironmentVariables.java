@@ -31,9 +31,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "seniorhub.env")
+@ConfigurationProperties(prefix = "seniorhub")
 @Getter
 @Setter
 public class EnvironmentVariables {
   private String jwtSecretKey;
+  private String mailSender;
+  private String baseUrl;
 }

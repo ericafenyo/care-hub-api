@@ -81,11 +81,11 @@ public class RoleEntity {
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
 
-  /**
-   * The users having this role.
-   */
-  @OneToMany(mappedBy = "role")
-  private List<UserEntity> users = new ArrayList<>();
+//  /**
+//   * The users having this role.
+//   */
+//  @OneToMany(mappedBy = "role")
+//  private List<UserEntity> users = new ArrayList<>();
 
   /**
    * The actions or operations that users with this role are allowed to perform.

@@ -24,12 +24,9 @@
 
 package com.ericafenyo.seniorhub.model;
 
-import lombok.Builder;
 import lombok.Data;
 
-import java.net.URL;
-import java.time.LocalDateTime;
-import java.util.UUID;
+import java.time.Instant;
 
 /**
  * A user domain model representing an individual who interacts with the application.
@@ -59,11 +56,11 @@ public class User {
   /**
    * The date and time when the user was created.
    */
-  private LocalDateTime createdAt;
+  private Instant createdAt;
   /**
    * The date and time when the user was last updated.
    */
-  private LocalDateTime updatedAt;
+  private Instant updatedAt;
 
   /**
    * The role assigned to the user

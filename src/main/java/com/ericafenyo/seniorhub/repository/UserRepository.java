@@ -25,21 +25,13 @@
 package com.ericafenyo.seniorhub.repository;
 
 import com.ericafenyo.seniorhub.entities.UserEntity;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-public interface UserRepository {
-  UserEntity save(UserEntity entity);
+@Repository
+public interface UserRepository extends AbstractRepository<UserEntity> {
+    Optional<UserEntity> findByEmail(String email);
 
-  Iterable<UserEntity> findAll();
-
-  Optional<UserEntity> findById(String id);
-
-  Optional<UserEntity> findByEmail(String email);
-
-  boolean existsByEmail(String email);
-
-  boolean existsById(String email);
-
-  void delete(String id);
+    boolean existsByEmail(String email);
 }
