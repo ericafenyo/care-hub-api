@@ -26,43 +26,43 @@ package com.ericafenyo.seniorhub.mapper;
 
 import com.ericafenyo.seniorhub.entities.UserEntity;
 import com.ericafenyo.seniorhub.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Maps a {@link UserEntity} to a {@link User}.
  */
 @Component
-public class UserMapper implements Mapper<UserEntity, User> {
+@RequiredArgsConstructor
+public class UserMapper implements Function<UserEntity, User> {
+    private final AddressMapper addressMapper;
 
-  @Autowired
-  private AddressMapper addressMapper;
+    /**
+     * Converts a {@link UserEntity} to a {@link User}.
+     *
+     * @param entity The input user entity.
+     * @return The mapped user.
+     */
+    @Override
+    public User apply(UserEntity entity) {
+        var user = new User();
 
-  /**
-   * Converts a {@link UserEntity} to a {@link User}.
-   *
-   * @param entity The input user entity.
-   * @return The mapped user.
-   */
-  @Override
-  public User apply(UserEntity entity) {
-    var user = new User();
+        user.setId(entity.getUuid());
+        user.setFirstName(entity.getFirstName());
+        user.setLastName(entity.getLastName());
+        user.setEmail(entity.getEmail());
+        user.setPhotoUrl(entity.getPhotoUrl());
+        user.setCreatedAt(entity.getCreatedAt());
+        user.setUpdatedAt(entity.getUpdatedAt());
+        user.setRole(entity.getRole().getName());
 
-    user.setId(entity.getUuid());
-    user.setFirstName(entity.getFirstName());
-    user.setLastName(entity.getLastName());
-    user.setEmail(entity.getEmail());
-    user.setPhotoUrl(entity.getPhotoUrl());
-    user.setCreatedAt(entity.getCreatedAt());
-    user.setUpdatedAt(entity.getUpdatedAt());
-    user.setRole(entity.getRole().getName());
+        var addressEntity = Optional.ofNullable(entity.getAddress());
 
-    var addressEntity = Optional.ofNullable(entity.getAddress());
+        addressEntity.ifPresent(address -> user.setAddress(addressMapper.apply(address)));
 
-    addressEntity.ifPresent(address -> user.setAddress(addressMapper.apply(address)));
-
-    return user;
-  }
+        return user;
+    }
 }

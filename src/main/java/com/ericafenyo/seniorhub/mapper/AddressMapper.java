@@ -30,11 +30,13 @@ import com.ericafenyo.seniorhub.model.Address;
 import com.ericafenyo.seniorhub.model.User;
 import org.springframework.stereotype.Component;
 
+import java.util.function.Function;
+
 /**
  * Maps a {@link AddressEntity} to a {@link Address}.
  */
 @Component
-public class AddressMapper implements Mapper<AddressEntity, Address> {
+public class AddressMapper implements Function<AddressEntity, Address> {
 
   /**
    * Converts a {@link UserEntity} to a {@link User}.

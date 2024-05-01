@@ -28,8 +28,10 @@ import com.ericafenyo.seniorhub.entities.EventEntity;
 import com.ericafenyo.seniorhub.model.Event;
 import org.springframework.stereotype.Component;
 
+import java.util.function.Function;
+
 @Component
-public class EventMapper implements Mapper<EventEntity, Event> {
+public class EventMapper implements Function<EventEntity, Event> {
   @Override
   public Event apply(EventEntity entity) {
     var event = new Event();
