@@ -24,32 +24,28 @@
 
 package com.ericafenyo.seniorhub.dto;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class InvitationRequest {
-  private InvitationRequest.Invitee invitee;
-  private InvitationRequest.Inviter inviter;
-
-  @Setter
-  @Getter
-  @Valid
-  public static class Invitee {
-    @Email()
-    String email;
-  }
-
-
-  @Setter
-  @Getter
-  @Valid
-  public static class Inviter {
+    /**
+     * The email address of the person being invited.
+     */
     @NotBlank
-    private String id;
-  }
+    private String email;
+
+    /**
+     * The identifier of the person sending the invitation.
+     */
+    @NotBlank
+    private String inviterId;
+
+    /**
+     * The identifier of the senior associated with the invitation.
+     */
+    @NotBlank
+    private String seniorId;
 }

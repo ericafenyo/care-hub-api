@@ -24,9 +24,10 @@
 
 package com.ericafenyo.seniorhub.exceptions.handlers;
 
-import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.exceptions.HttpExceptionResponse;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,22 +39,22 @@ import java.time.ZoneOffset;
  * Global exception handler for HTTP exceptions. Annotated with {@code @ControllerAdvice} to allow centralized handling of exceptions across multiple controllers.
  */
 @ControllerAdvice
-public class HttpExceptionHandler {
+public class ExpiredJwTExceptionHandler {
 
-  /**
-   * Handles instances of {@code HttpException} and generates a standardized response.
-   *
-   * @param exception The HTTP exception to be handled.
-   * @return A {@link ResponseEntity} containing an {@link HttpExceptionResponse} with relevant information.
-   */
-  @ExceptionHandler(value = {HttpException.class})
-  ResponseEntity<Object> handle(HttpException exception, HttpServletRequest request) {
-    HttpExceptionResponse response = new HttpExceptionResponse();
-    response.setStatus(exception.getStatus().value());
-    response.setMessage(exception.getMessage());
-    response.setPath(request.getRequestURI());
-    response.setCode(exception.getCode());
-    return new ResponseEntity<>(response, exception.getStatus());
-  }
+    /**
+     * Handles instances of {@code HttpException} and generates a standardized response.
+     *
+     * @param exception The HTTP exception to be handled.
+     * @return A {@link ResponseEntity} containing an {@link HttpExceptionResponse} with relevant information.
+     */
+    @ExceptionHandler(value = {ExpiredJwtException.class})
+    ResponseEntity<Object> handle(ExpiredJwtException exception, HttpServletRequest request) {
+        HttpExceptionResponse response = new HttpExceptionResponse();
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setMessage(exception.getMessage());
+        response.setPath(request.getRequestURI());
+        response.setCode("jwt_expired");
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
 }
 

@@ -28,6 +28,8 @@ import com.ericafenyo.seniorhub.dto.InvitationRequest;
 import com.ericafenyo.seniorhub.dto.UserCreationDto;
 import com.ericafenyo.seniorhub.dto.UserUpdateDto;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
+import com.ericafenyo.seniorhub.exceptions.invitation.InvitationException;
+import com.ericafenyo.seniorhub.exceptions.invitation.InviterNotFoundException;
 import com.ericafenyo.seniorhub.model.Report;
 import com.ericafenyo.seniorhub.model.Role;
 import com.ericafenyo.seniorhub.model.User;
@@ -45,6 +47,4 @@ public interface UserService {
   User updateUser(String id, UserUpdateDto updateUserDto);
 
   void deleteUser(String id);
-
-  Report inviteUser(String id, InvitationRequest request);
 }

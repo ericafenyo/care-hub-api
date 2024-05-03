@@ -27,6 +27,7 @@ package com.ericafenyo.seniorhub.controllers;
 import com.ericafenyo.seniorhub.dto.InvitationRequest;
 import com.ericafenyo.seniorhub.dto.UserCreationDto;
 import com.ericafenyo.seniorhub.dto.UserUpdateDto;
+import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.model.Report;
 import com.ericafenyo.seniorhub.model.Role;
 import com.ericafenyo.seniorhub.model.User;
@@ -42,45 +43,37 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-  private final UserService service;
+    private final UserService service;
 
-  public UserController(UserService service) {
-    this.service = service;
-  }
+    public UserController(UserService service) {
+        this.service = service;
+    }
 
-  @GetMapping()
-  public List<User> getUsers() {
-    return service.getUsers();
-  }
+    @GetMapping()
+    public List<User> getUsers() {
+        return service.getUsers();
+    }
 
-  @GetMapping("/{id}")
-  public User getUserById(@PathVariable String id) throws Exception {
-    return service.getUserById(id);
-  }
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable String id) throws Exception {
+        return service.getUserById(id);
+    }
 
-  @PostMapping()
-  public Object createUser(
-      @RequestBody UserCreationDto userCreationDto,
-      @RequestParam("role") @UserRole String slug
-  ) throws Exception {
-    return service.createUser(userCreationDto, Role.from(slug));
-  }
+    @PostMapping()
+    public Object createUser(
+            @RequestBody UserCreationDto userCreationDto,
+            @RequestParam("role") @UserRole String slug
+    ) throws Exception {
+        return service.createUser(userCreationDto, Role.from(slug));
+    }
 
-  @PutMapping("/{id}")
-  public User updateUser(@PathVariable String id, @RequestBody @Valid UserUpdateDto userUpdateDto) {
-    return service.updateUser(id, userUpdateDto);
-  }
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable String id, @RequestBody @Valid UserUpdateDto userUpdateDto) {
+        return service.updateUser(id, userUpdateDto);
+    }
 
-  @DeleteMapping("/{id}")
-  public void deleteUser(@PathVariable String id) {
-    service.deleteUser(id);
-  }
-
-  @PostMapping("/{id}/invitations")
-  public Report inviteUser(
-      @PathVariable String id,
-      @Valid @RequestBody InvitationRequest request
-  ) {
-    return service.inviteUser(id, request);
-  }
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable String id) {
+        service.deleteUser(id);
+    }
 }

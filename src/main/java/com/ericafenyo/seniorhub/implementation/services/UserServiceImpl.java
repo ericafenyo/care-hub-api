@@ -35,10 +35,14 @@ import com.ericafenyo.seniorhub.entities.CredentialEntity;
 import com.ericafenyo.seniorhub.entities.InvitationEntity;
 import com.ericafenyo.seniorhub.entities.UserEntity;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
+import com.ericafenyo.seniorhub.exceptions.invitation.InvitationException;
+import com.ericafenyo.seniorhub.exceptions.invitation.InviterNotFoundException;
+import com.ericafenyo.seniorhub.exceptions.invitation.SeniorNotFoundException;
 import com.ericafenyo.seniorhub.exceptions.user.UserExistsException;
 import com.ericafenyo.seniorhub.exceptions.user.UserNotFoundException;
 import com.ericafenyo.seniorhub.mapper.UserMapper;
 import com.ericafenyo.seniorhub.model.Mail;
+import com.ericafenyo.seniorhub.model.Mail.Context;
 import com.ericafenyo.seniorhub.model.Report;
 import com.ericafenyo.seniorhub.model.Role;
 import com.ericafenyo.seniorhub.model.User;
@@ -60,9 +64,6 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final CredentialRepository credentialRepository;
-    private final MailService mailService;
-    private final EnvironmentVariables environment;
-    private final InvitationRepository invitationRepository;
     private final UserMapper mapper;
 
     @Override
@@ -155,44 +156,5 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(String id) {
         userRepository.deleteById(id);
-    }
-
-    @Override
-    public Report inviteUser(String id, InvitationRequest request) {
-        // Get the inviter
-        var inviter = userRepository.findById(request.getInviter().getId());
-        var senior = userRepository.findById(id);
-
-        if (inviter.isEmpty() || senior.isEmpty()) {
-            // Throw forbidden
-            throw new RuntimeException(new HttpException(HttpStatus.FORBIDDEN, "", ""));
-        }
-
-        var recipientEmail = request.getInvitee().getEmail();
-        String token = Hashing.randomSHA256();
-//        var invitation = new InvitationEntity()
-//                .setToken(token)
-//                .setEmail(recipientEmail)
-//                .setRole(Role.CARETAKER)
-//                .setSenior(senior.get());
-
-
-//        var saved = invitationRepository.save(invitation);
-//        var fetched = invitationRepository.findById("3fd4c50e-8f54-4c20-974a-c2bfd6b607d0");
-        var fetched = invitationRepository.existsById("3fd4c50e-8f54-4c20-974a-c2bfd6b607d0");
-        System.out.println(fetched);
-
-//        System.out.println("saved: " + saved);
-
-//        var baseUrl = environment.getBaseUrl();
-
-//        var link = "%s?token=%s".formatted(baseUrl, token);
-//        var context = new Mail.Context();
-//        context.put("name", "John");
-//        context.put("link", link);
-//
-        return null;
-
-//        return mailService.sendInvitation(request.getInvitee().getEmail(), context);
     }
 }

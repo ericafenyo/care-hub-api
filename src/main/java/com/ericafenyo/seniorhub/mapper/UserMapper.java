@@ -25,6 +25,7 @@
 package com.ericafenyo.seniorhub.mapper;
 
 import com.ericafenyo.seniorhub.entities.UserEntity;
+import com.ericafenyo.seniorhub.model.Role;
 import com.ericafenyo.seniorhub.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -48,16 +49,15 @@ public class UserMapper implements Function<UserEntity, User> {
      */
     @Override
     public User apply(UserEntity entity) {
-        var user = new User();
-
-        user.setId(entity.getUuid());
-        user.setFirstName(entity.getFirstName());
-        user.setLastName(entity.getLastName());
-        user.setEmail(entity.getEmail());
-        user.setPhotoUrl(entity.getPhotoUrl());
-        user.setCreatedAt(entity.getCreatedAt());
-        user.setUpdatedAt(entity.getUpdatedAt());
-        user.setRole(entity.getRole().getName());
+        var user = new User()
+                .setId(entity.getUuid())
+                .setFirstName(entity.getFirstName())
+                .setLastName(entity.getLastName())
+                .setEmail(entity.getEmail())
+                .setPhotoUrl(entity.getPhotoUrl())
+                .setCreatedAt(entity.getCreatedAt())
+                .setUpdatedAt(entity.getUpdatedAt())
+                .setRole(Role.valueOf(entity.getRole().getName()));
 
         var addressEntity = Optional.ofNullable(entity.getAddress());
 

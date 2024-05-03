@@ -24,62 +24,64 @@
 
 package com.ericafenyo.seniorhub.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Instant;
 
 /**
  * Represents an invitation to add a caretaker to a senior account.
  */
-@Data
+@Getter
+@Setter
 public class Invitation {
-  /**
-   * The unique identifier of the invitation
-   */
-  private String id;
+    /**
+     * The unique identifier of the invitation
+     */
+    private String id;
 
-  /**
-   * The token associated with the invitation
-   */
-  private String token;
+    /**
+     * The token associated with the invitation
+     */
+    private String token;
 
-  /**
-   * The email address of the recipient
-   */
-  private String email;
+    /**
+     * The email address of the recipient
+     */
+    private String email;
 
-  /**
-   * Role to be assigned to the recipient upon acceptance
-   */
-  private String role;
+    /**
+     * Role to be assigned to the recipient upon acceptance
+     */
+    private String role;
 
-  /**
-   * The status of the invitation
-   */
-  private Status status;
+    /**
+     * The status of the invitation
+     */
+    private Status status;
 
-  /**
-   * The date and time indicating when the invitation was created
-   */
-  private Instant createdAt;
+    /**
+     * The date and time indicating when the invitation was created
+     */
+    private Instant createdAt;
 
-  /**
-   * The timestamp indicating when the invitation expires
-   */
-  private Instant expiresAt;
+    /**
+     * The timestamp indicating when the invitation expires
+     */
+    private Instant expiresAt;
 
-  /**
-   * The timestamp indicating when the invitation was used
-   */
-  private Instant usedAt;
+    /**
+     * The timestamp indicating when the invitation was used
+     */
+    private Instant usedAt;
 
-  /**
-   * The senior account to which the caretaker will be added
-   */
-  private User senior;
+    /**
+     * The senior account to which the caretaker will be added
+     */
+    private User senior;
 
-  /**
-   * The status of an invitation
-   */
-  public enum Status {PENDING, USED, EXPIRED}
+    /**
+     * The status of an invitation
+     */
+    public enum Status {PENDING, ACCEPTED}
 }

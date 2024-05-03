@@ -48,7 +48,6 @@ import java.time.Instant;
 @EntityListeners(AuditingEntityListener.class)
 @Data
 public class UserEntity {
-
     /**
      * The unique identifier for the user.
      */

@@ -22,23 +22,24 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+package com.ericafenyo.seniorhub.mapper;
 
+import com.ericafenyo.seniorhub.entities.InvitationEntity;
+import com.ericafenyo.seniorhub.model.Invitation;
+import org.springframework.stereotype.Controller;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import java.util.function.Function;
 
-import java.time.temporal.TemporalAmount;
-
-@Component
-@ConfigurationProperties(prefix = "seniorhub")
-@Getter
-@Setter
-public class EnvironmentVariables {
-    private String jwtSecretKey;
-    private String mailSender;
-    private String baseUrl;
-    private Long invitationExpirySeconds;
+@Controller
+public class InvitationMapper implements Function<InvitationEntity, Invitation> {
+    @Override
+    public Invitation apply(InvitationEntity entity) {
+        var invitation = new Invitation();
+        invitation.setId(entity.getUuid());
+        invitation.setCreatedAt(entity.getCreatedAt());
+        invitation.setExpiresAt(entity.getExpiresAt());
+        invitation.setUsedAt(entity.getUsedAt());
+        invitation.setExpiresAt(entity.getExpiresAt());
+        return invitation;
+    }
 }

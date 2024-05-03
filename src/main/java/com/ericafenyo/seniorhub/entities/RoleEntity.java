@@ -24,77 +24,77 @@
 
 package com.ericafenyo.seniorhub.entities;
 
-import com.ericafenyo.seniorhub.model.Role;
-import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "roles")
 @EntityListeners(AuditingEntityListener.class)
-@Data
+@Getter @Setter
 public class RoleEntity {
+    /**
+     * The unique identifier for the role.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  /**
-   * The unique identifier for the role.
-   */
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    /**
+     * The name of the role
+     */
+    @Column(name = "name")
+    private String name;
 
-  /**
-   * The name of the role
-   */
-  @Enumerated(EnumType.STRING)
-  @Column(name = "name")
-  private Role name;
+    /**
+     * Human-readable name of the role
+     */
+    @Column(name = "slug")
+    private String slug;
 
-  /**
-   * Human-readable name of the role
-   */
-  @Column(name = "slug")
-  private String slug;
+    /**
+     * A brief description or explanation of the role.
+     */
+    @Column(name = "description")
+    private String description;
 
-  /**
-   * A brief description or explanation of the role.
-   */
-  @Column(name = "description")
-  private String description;
+    /**
+     * The date and time when the role was created.
+     */
+    @CreatedDate
+    @Column(name = "created_at")
+    private Instant createdAt;
 
-  /**
-   * The date and time when the role was created.
-   */
-  @CreatedDate
-  @Column(name = "created_at")
-  private LocalDateTime createdAt;
+    /**
+     * The date and time when the role was last updated.
+     */
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private Instant updatedAt;
 
-  /**
-   * The date and time when the role was last updated.
-   */
-  @LastModifiedDate
-  @Column(name = "updated_at")
-  private LocalDateTime updatedAt;
-
-//  /**
-//   * The users having this role.
-//   */
-//  @OneToMany(mappedBy = "role")
-//  private List<UserEntity> users = new ArrayList<>();
-
-  /**
-   * The actions or operations that users with this role are allowed to perform.
-   */
-  @ManyToMany()
-  @JoinTable(
-      name = "role_permission",
-      joinColumns = @JoinColumn(name = "role_id")
-      , inverseJoinColumns = @JoinColumn(name = "permission_id")
-  )
-  private List<PermissionEntity> permissions = new ArrayList<>();
+    /**
+     * The actions or operations that users with this role are allowed to perform.
+     */
+    @ManyToMany()
+    @JoinTable(
+            name = "role_permission",
+            joinColumns = @JoinColumn(name = "role_id")
+            , inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private List<PermissionEntity> permissions = new ArrayList<>();
 }

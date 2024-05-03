@@ -22,23 +22,19 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+package com.ericafenyo.seniorhub.exceptions.invitation;
 
+import org.springframework.http.HttpStatus;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+public class InvitationExpiredException extends InvitationException {
+    private static final String MESSAGE = "The invitation has expired";
+    private static final String ERROR_CODE = "invitation_expired";
 
-import java.time.temporal.TemporalAmount;
+    public InvitationExpiredException() {
+        super(HttpStatus.UNPROCESSABLE_ENTITY, MESSAGE, ERROR_CODE);
+    }
 
-@Component
-@ConfigurationProperties(prefix = "seniorhub")
-@Getter
-@Setter
-public class EnvironmentVariables {
-    private String jwtSecretKey;
-    private String mailSender;
-    private String baseUrl;
-    private Long invitationExpirySeconds;
+    public InvitationExpiredException(Throwable cause) {
+        super(HttpStatus.NOT_FOUND, MESSAGE, ERROR_CODE, cause);
+    }
 }

@@ -22,23 +22,16 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
-
+package com.ericafenyo.seniorhub.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
-import java.time.temporal.TemporalAmount;
+import java.io.Serializable;
 
-@Component
-@ConfigurationProperties(prefix = "seniorhub")
 @Getter
 @Setter
-public class EnvironmentVariables {
-    private String jwtSecretKey;
-    private String mailSender;
-    private String baseUrl;
-    private Long invitationExpirySeconds;
+public class CaretakerSeniorIds implements Serializable {
+    private Long caretaker;
+    private Long senior;
 }

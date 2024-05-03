@@ -91,8 +91,6 @@ public class FieldsValidationExceptionHandler {
     response.setPath(request.getRequestURI());
     response.setMessage(objects);
     response.setCode(ERROR_CODE);
-    response.setTimestamp(LocalDateTime.now(ZoneOffset.UTC));
-
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 }

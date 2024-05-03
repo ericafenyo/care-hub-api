@@ -25,10 +25,8 @@
 package com.ericafenyo.seniorhub.model;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 /**
  * A report is the result or outcome achieved through the execution of an action.

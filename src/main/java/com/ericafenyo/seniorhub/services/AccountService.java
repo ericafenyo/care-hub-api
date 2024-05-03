@@ -24,8 +24,6 @@
 
 package com.ericafenyo.seniorhub.services;
 
-import com.ericafenyo.seniorhub.entities.CredentialEntity;
-import com.ericafenyo.seniorhub.entities.RoleEntity;
 import com.ericafenyo.seniorhub.model.Account;
 import com.ericafenyo.seniorhub.model.Role;
 import com.ericafenyo.seniorhub.repository.CredentialRepository;
@@ -36,41 +34,30 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @AllArgsConstructor
 public class AccountService implements UserDetailsService {
-  private final UserRepository userRepository;
-  private final CredentialRepository credentialRepository;
+    private final UserRepository userRepository;
+    private final CredentialRepository credentialRepository;
 
-  @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    return getAccount(username);
-  }
-
-  public Account getAccount(String email) {
-    var userResult = userRepository.findByEmail(email);
-
-    if (userResult.isEmpty()) {
-      throw new UsernameNotFoundException("");
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return getAccount(username);
     }
-    var user = userResult.get();
 
-    Optional<CredentialEntity> credentialResult = credentialRepository.findByUserId(user.getId());
+    public Account getAccount(String email) {
+        var user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Username '" + email + "' not found"));
 
-    if (credentialResult.isEmpty()) {
-      throw new UsernameNotFoundException("");
+        var credential = credentialRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new UsernameNotFoundException("Credential for username '" + email + "' not found"));
+
+        var role = Role.valueOf(user.getRole().getName());
+
+        return new Account()
+                .setId(user.getUuid())
+                .setEmail(user.getEmail())
+                .setPassword(credential.getPassword())
+                .setRole(role);
     }
-    var credential = credentialResult.get();
-
-    return Account
-        .builder()
-        .id(user.getUuid())
-        .email(user.getEmail())
-        .password(credential.getPassword())
-        .role(user.getRole().getName())
-        .build();
-  }
 }

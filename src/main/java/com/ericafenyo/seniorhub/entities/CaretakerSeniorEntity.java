@@ -26,61 +26,34 @@ package com.ericafenyo.seniorhub.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
-import java.time.Instant;
 
-/**
- * Entity class representing user credentials.
- *
- * <p>The {@code CredentialEntity} class is mapped to the "credentials" table in the database.
- */
-@Entity(name = "credentials")
-@EntityListeners(AuditingEntityListener.class)
-@Data
-public class CredentialEntity {
+@Entity(name = "caretaker_senior")
+@IdClass(CaretakerSeniorIds.class)
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"caretaker_id", "senior_id"})})
+@Getter
+@Setter
+@Accessors(chain = true)
+public class CaretakerSeniorEntity {
+    @Id
+    @ManyToOne()
+    @JoinColumn(name = "caretaker_id")
+    private UserEntity caretaker;
 
-  /**
-   * The unique identifier for the credential.
-   */
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
-
-  /**
-   * The password associated with the credential.
-   */
-  @Column(name = "password")
-  private String password;
-
-  /**
-   * The user associated with the credential.
-   */
-  @OneToOne
-  @JoinColumn(name = "user_id")
-  private UserEntity user;
-
-  /**
-   * The date and time when the credential was created.
-   */
-  @CreatedDate
-  @Column(name = "created_at")
-  private Instant createdAt;
-
-  /**
-   * The date and time when the credential was last updated.
-   */
-  @LastModifiedDate
-  @Column(name = "updated_at")
-  private Instant updatedAt;
+    @Id
+    @ManyToOne()
+    @JoinColumn(name = "senior_id")
+    private UserEntity senior;
 }

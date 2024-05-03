@@ -31,7 +31,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -41,6 +40,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
@@ -76,30 +77,31 @@ public class InvitationEntity {
     private String token;
 
     /**
-     * The email address of the recipient
+     * The email address of the invitation recipient
      */
     @Column(name = "email")
     private String email;
 
     /**
-     * Role to be assigned to the recipient upon acceptance
-     */
-    @Column(name = "role")
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
-    /**
      * The status of the invitation
      */
     @Column(name = "status")
-    private Invitation.Status status;
+    @Enumerated(EnumType.STRING)
+    private Invitation.Status status = Invitation.Status.PENDING;
 
     /**
-     * The date and time indicating when the invitation was created
+     * The date and time when the invitation was created
      */
-
+    @CreatedDate
     @Column(name = "created_at")
     private Instant createdAt;
+
+    /**
+     * The date and time when the invitation was last updated.
+     */
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private Instant updatedAt;
 
     /**
      * The timestamp indicating when the invitation expires
@@ -116,7 +118,14 @@ public class InvitationEntity {
     /**
      * The senior account to which the caretaker will be added
      */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     @JoinColumn(name = "senior_id")
     private UserEntity senior;
+
+    /**
+     * The user who sent the invitation
+     */
+    @ManyToOne()
+    @JoinColumn(name = "inviter_id")
+    private UserEntity inviter;
 }

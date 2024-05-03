@@ -22,23 +22,13 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+package com.ericafenyo.seniorhub.util;
 
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.data.jpa.domain.Specification;
 
-import java.time.temporal.TemporalAmount;
-
-@Component
-@ConfigurationProperties(prefix = "seniorhub")
-@Getter
-@Setter
-public class EnvironmentVariables {
-    private String jwtSecretKey;
-    private String mailSender;
-    private String baseUrl;
-    private Long invitationExpirySeconds;
+public class EntitySpecifications{
+    public static <T> Specification<T> email(String value) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("email"), value);
+    }
 }

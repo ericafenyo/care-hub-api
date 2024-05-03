@@ -22,23 +22,18 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+package com.ericafenyo.seniorhub.exceptions.invitation;
 
+import com.ericafenyo.seniorhub.exceptions.HttpException;
+import org.springframework.http.HttpStatus;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+public class InvitationException extends HttpException {
 
-import java.time.temporal.TemporalAmount;
+    public InvitationException(HttpStatus status, String message, String code) {
+        super(status, message, code);
+    }
 
-@Component
-@ConfigurationProperties(prefix = "seniorhub")
-@Getter
-@Setter
-public class EnvironmentVariables {
-    private String jwtSecretKey;
-    private String mailSender;
-    private String baseUrl;
-    private Long invitationExpirySeconds;
+    public InvitationException(HttpStatus status, String message, String code, Throwable cause) {
+        super(status, message, code, cause);
+    }
 }

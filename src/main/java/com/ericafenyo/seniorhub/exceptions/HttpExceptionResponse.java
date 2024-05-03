@@ -26,7 +26,7 @@ package com.ericafenyo.seniorhub.exceptions;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * Represents a response structure for HTTP exceptions.
@@ -57,5 +57,5 @@ public class HttpExceptionResponse {
   /**
    * The timestamp when the exception response was created.
    */
-  private LocalDateTime timestamp;
+  private Instant timestamp = Instant.now();
 }

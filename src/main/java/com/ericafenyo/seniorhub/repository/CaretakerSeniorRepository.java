@@ -22,23 +22,30 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+package com.ericafenyo.seniorhub.repository;
 
+import com.ericafenyo.seniorhub.entities.CaretakerSeniorEntity;
+import org.springframework.data.repository.Repository;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
-
-import java.time.temporal.TemporalAmount;
-
-@Component
-@ConfigurationProperties(prefix = "seniorhub")
-@Getter
-@Setter
-public class EnvironmentVariables {
-    private String jwtSecretKey;
-    private String mailSender;
-    private String baseUrl;
-    private Long invitationExpirySeconds;
+/**
+ * This is a Spring Data repository for the CaretakerSeniorEntity.
+ * It provides the mechanism for storage, retrieval, and search,
+ * database operations for the CaretakerSeniorEntity.
+ * <p>
+ * Its parent class is a Spring Data Repository interface which is a central repository marker interface.
+ *
+ * @author Eric Afenyo
+ * @version 1.0
+ * @since 2024-01-01
+ */
+@org.springframework.stereotype.Repository
+public interface CaretakerSeniorRepository extends Repository<CaretakerSeniorEntity, Void> {
+    /**
+     * This method is used to save a CaretakerSeniorEntity into the database.
+     * It takes a CaretakerSeniorEntity as a parameter and returns the saved entity.
+     *
+     * @param entity This is a parameter of type CaretakerSeniorEntity to be saved in the database.
+     * @return CaretakerSeniorEntity This returns the saved CaretakerSeniorEntity.
+     */
+    CaretakerSeniorEntity save(CaretakerSeniorEntity entity);
 }

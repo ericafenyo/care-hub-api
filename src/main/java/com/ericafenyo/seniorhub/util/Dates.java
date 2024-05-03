@@ -22,23 +22,21 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+package com.ericafenyo.seniorhub.util;
 
+import java.time.Duration;
+import java.util.Date;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+public class Dates {
+    private static boolean willExpire(Date expiresAt, Duration minTtl) {
+        Date now = new Date();
+        // Calculate the minimum expiration time
+        Date minExpirationTime = new Date(now.getTime() + minTtl.toMillis());
 
-import java.time.temporal.TemporalAmount;
+        return expiresAt.before(minExpirationTime);
+    }
 
-@Component
-@ConfigurationProperties(prefix = "seniorhub")
-@Getter
-@Setter
-public class EnvironmentVariables {
-    private String jwtSecretKey;
-    private String mailSender;
-    private String baseUrl;
-    private Long invitationExpirySeconds;
+    private static boolean hasExpire(Date expiredAt) {
+        return expiredAt.before(new Date());
+    }
 }

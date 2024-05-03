@@ -25,13 +25,18 @@
 package com.ericafenyo.seniorhub.model;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.time.Instant;
 
 /**
  * A user domain model representing an individual who interacts with the application.
  */
-@Data
+@Getter
+@Setter
+@Accessors(chain = true)
 public class User {
   /**
    * The unique identifier for the user.

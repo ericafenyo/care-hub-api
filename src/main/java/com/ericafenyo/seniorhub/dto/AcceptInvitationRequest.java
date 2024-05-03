@@ -22,23 +22,19 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+package com.ericafenyo.seniorhub.dto;
 
-
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
-import java.time.temporal.TemporalAmount;
 
-@Component
-@ConfigurationProperties(prefix = "seniorhub")
-@Getter
 @Setter
-public class EnvironmentVariables {
-    private String jwtSecretKey;
-    private String mailSender;
-    private String baseUrl;
-    private Long invitationExpirySeconds;
+@Getter
+public class AcceptInvitationRequest {
+    /**
+     * The token associated with the invitation request.
+     */
+    @NotBlank
+    private String token;
 }

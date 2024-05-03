@@ -24,6 +24,7 @@
 
 package com.ericafenyo.seniorhub.repository;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
