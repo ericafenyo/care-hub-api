@@ -1,6 +1,7 @@
 # Senior Hub API
 
-This is a Spring Framework project serving as the backend for my [Senior Hub Application](https://github.com/ericafenyo/senior-hub)
+This is a Spring Boot project serving as the backend for
+my [Senior Hub Application](https://github.com/ericafenyo/senior-hub)
 
 ## Documentation
 
@@ -13,7 +14,7 @@ Prerequisite
 - Java 17
 - Docker and Docker Compose.
 
-Clone the repository:
+Clone the repository and navigate to the project directory:
 
 ```sh
 git clone [repository_url]
@@ -26,11 +27,28 @@ Install Dependencies:
 ./mvnw clean install
 ```
 
+Start both the database and SMTP server using Docker Compose:
+
+```sh
+docker-compose up
+```
+
 Run the Application:
 
 ```sh
 java -jar target/seniorhub-0.0.1-SNAPSHOT.jar
 ```
+
+## Configuration
+The application's configuration properties are stored in the application.properties file.
+
+Certain data, such as user roles and permissions, are automatically stored in the database using Liquibase. 
+After launching the application, you can disable this functionality by setting the following property in the application.properties file:
+
+```properties
+spring.liquibase.enabled=false
+```
+This property disables Liquibase upon application startup.
 
 ## License
 
