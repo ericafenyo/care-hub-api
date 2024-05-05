@@ -27,12 +27,13 @@ package com.ericafenyo.seniorhub.exceptions;
 import org.springframework.http.HttpStatus;
 
 public class InternalServerErrorException extends HttpException {
+    private static final String ERROR_CODE = "internal_server_error";
 
-  public InternalServerErrorException(HttpStatus status, String message, String code) {
-    super(status, message, code);
-  }
+    public InternalServerErrorException(String message) {
+        super(HttpStatus.INTERNAL_SERVER_ERROR, message, ERROR_CODE);
+    }
 
-  public InternalServerErrorException(HttpStatus status, String message, String code, Throwable cause) {
-    super(status, message, code, cause);
-  }
+    public InternalServerErrorException(String message, Throwable cause) {
+        super(HttpStatus.INTERNAL_SERVER_ERROR, message, ERROR_CODE, cause);
+    }
 }

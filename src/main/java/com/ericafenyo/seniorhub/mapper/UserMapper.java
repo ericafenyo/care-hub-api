@@ -49,19 +49,21 @@ public class UserMapper implements Function<UserEntity, User> {
      */
     @Override
     public User apply(UserEntity entity) {
-        var user = new User()
-                .setId(entity.getUuid())
-                .setFirstName(entity.getFirstName())
-                .setLastName(entity.getLastName())
-                .setEmail(entity.getEmail())
-                .setPhotoUrl(entity.getPhotoUrl())
-                .setCreatedAt(entity.getCreatedAt())
-                .setUpdatedAt(entity.getUpdatedAt())
-                .setRole(Role.valueOf(entity.getRole().getName()));
+        var user = new User();
+        user.setId(entity.getUuid());
+        user.setFirstName(entity.getFirstName());
+        user.setLastName(entity.getLastName());
+        user.setBirthDate(entity.getBirthDate());
+        user.setEmail(entity.getEmail());
+        user.setPhotoUrl(entity.getPhotoUrl());
+        user.setCreatedAt(entity.getCreatedAt());
+        user.setUpdatedAt(entity.getUpdatedAt());
 
-        var addressEntity = Optional.ofNullable(entity.getAddress());
+        Optional.ofNullable(entity.getRole())
+                .ifPresent(role -> user.setRole(Role.valueOf(role.getName())));
 
-        addressEntity.ifPresent(address -> user.setAddress(addressMapper.apply(address)));
+        Optional.ofNullable(entity.getAddress())
+                .ifPresent(address -> user.setAddress(addressMapper.apply(address)));
 
         return user;
     }

@@ -22,29 +22,15 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.services;
+package com.ericafenyo.seniorhub.repository;
 
-import com.ericafenyo.seniorhub.dto.InvitationRequest;
-import com.ericafenyo.seniorhub.dto.UserCreationDto;
-import com.ericafenyo.seniorhub.dto.UserUpdateDto;
-import com.ericafenyo.seniorhub.exceptions.HttpException;
-import com.ericafenyo.seniorhub.exceptions.invitation.InvitationException;
-import com.ericafenyo.seniorhub.exceptions.invitation.InviterNotFoundException;
-import com.ericafenyo.seniorhub.model.Report;
-import com.ericafenyo.seniorhub.model.Role;
-import com.ericafenyo.seniorhub.model.User;
+import com.ericafenyo.seniorhub.entities.RoleEntity;
+import com.ericafenyo.seniorhub.entities.UserEntity;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
-
-public interface UserService {
-  List<User> getUsers();
-
-  User getUserById(String id) throws HttpException;
-
-  User createUser(UserCreationDto userCreationDto, String roleSlug) throws HttpException;
-
-  User updateUser(String id, UserUpdateDto updateUserDto);
-
-  void deleteUser(String id);
+@Repository
+public interface RoleRepository extends AbstractRepository<RoleEntity> {
+    Optional<RoleEntity> findBySlug(String slug);
 }

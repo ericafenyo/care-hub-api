@@ -24,6 +24,7 @@
 
 package com.ericafenyo.seniorhub.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -38,6 +39,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.util.UUID;
 
 /**
  * Entity class representing user credentials.
@@ -49,38 +51,46 @@ import java.time.Instant;
 @Data
 public class CredentialEntity {
 
-  /**
-   * The unique identifier for the credential.
-   */
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    /**
+     * The unique identifier for the credential.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  /**
-   * The password associated with the credential.
-   */
-  @Column(name = "password")
-  private String password;
+    /**
+     * The universally unique identifier for the entity.
+     * <p>
+     * This is the actual id revealed publicly, the primary id is kept internally.
+     */
+    @Column(name = "uuid", unique = true)
+    private String uuid = UUID.randomUUID().toString();
 
-  /**
-   * The user associated with the credential.
-   */
-  @OneToOne
-  @JoinColumn(name = "user_id")
-  private UserEntity user;
+    /**
+     * The password associated with the credential.
+     */
+    @Column(name = "password")
+    private String password;
 
-  /**
-   * The date and time when the credential was created.
-   */
-  @CreatedDate
-  @Column(name = "created_at")
-  private Instant createdAt;
+    /**
+     * The user associated with the credential.
+     */
+    @OneToOne()
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
-  /**
-   * The date and time when the credential was last updated.
-   */
-  @LastModifiedDate
-  @Column(name = "updated_at")
-  private Instant updatedAt;
+    /**
+     * The date and time when the credential was created.
+     */
+    @CreatedDate
+    @Column(name = "created_at")
+    private Instant createdAt;
+
+    /**
+     * The date and time when the credential was last updated.
+     */
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private Instant updatedAt;
 }

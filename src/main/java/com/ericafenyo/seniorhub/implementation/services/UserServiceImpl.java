@@ -24,47 +24,86 @@
 
 package com.ericafenyo.seniorhub.implementation.services;
 
-import com.ericafenyo.seniorhub.EnvironmentVariables;
-import com.ericafenyo.seniorhub.dto.InvitationRequest;
 import com.ericafenyo.seniorhub.dto.UserCreationDto;
 import com.ericafenyo.seniorhub.dto.UserUpdateDto;
 import com.ericafenyo.seniorhub.entities.AddressEntity;
 import com.ericafenyo.seniorhub.entities.CityEntity;
 import com.ericafenyo.seniorhub.entities.CountryEntity;
 import com.ericafenyo.seniorhub.entities.CredentialEntity;
-import com.ericafenyo.seniorhub.entities.InvitationEntity;
 import com.ericafenyo.seniorhub.entities.UserEntity;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
-import com.ericafenyo.seniorhub.exceptions.invitation.InvitationException;
-import com.ericafenyo.seniorhub.exceptions.invitation.InviterNotFoundException;
-import com.ericafenyo.seniorhub.exceptions.invitation.SeniorNotFoundException;
+import com.ericafenyo.seniorhub.exceptions.InternalServerErrorException;
 import com.ericafenyo.seniorhub.exceptions.user.UserExistsException;
 import com.ericafenyo.seniorhub.exceptions.user.UserNotFoundException;
 import com.ericafenyo.seniorhub.mapper.UserMapper;
-import com.ericafenyo.seniorhub.model.Mail;
-import com.ericafenyo.seniorhub.model.Mail.Context;
-import com.ericafenyo.seniorhub.model.Report;
-import com.ericafenyo.seniorhub.model.Role;
 import com.ericafenyo.seniorhub.model.User;
 import com.ericafenyo.seniorhub.repository.CredentialRepository;
-import com.ericafenyo.seniorhub.repository.InvitationRepository;
+import com.ericafenyo.seniorhub.repository.RoleRepository;
 import com.ericafenyo.seniorhub.repository.UserRepository;
-import com.ericafenyo.seniorhub.services.MailService;
 import com.ericafenyo.seniorhub.services.UserService;
-import com.ericafenyo.seniorhub.util.Hashing;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final CredentialRepository credentialRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
     private final UserMapper mapper;
+
+    @Override
+    @Transactional
+    public User createUser(UserCreationDto dto, String roleSlug) throws HttpException {
+        // Throw error if the user already exists
+        boolean isPresent = userRepository.existsByEmail(dto.getEmail());
+        if (isPresent) {
+            throw new UserExistsException();
+        }
+
+        // Create a new city entity
+        var city = new CityEntity().setName(dto.getAddress().getCity());
+
+        // Create a new country entity
+        var country = new CountryEntity().setName(dto.getAddress().getCountry());
+
+        // Create a new address entity
+        var address = new AddressEntity();
+        address.setStreet(dto.getAddress().getStreet());
+        address.setPostalCode(dto.getAddress().getPostalCode());
+        address.setCity(city);
+        address.setCountry(country);
+
+        // Find the role entity by slug
+        var role = roleRepository.findBySlug(roleSlug)
+                .orElseThrow(() -> new InternalServerErrorException("Role not found"));
+
+        // Create and save a new user entity
+        var user = new UserEntity();
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setBirthDate(dto.getBirthdate());
+        user.setEmail(dto.getEmail());
+        user.setAddress(address);
+        user.setRole(role);
+        var savedUser = userRepository.save(user);
+
+        // Create and save new credential entity
+        var credential = new CredentialEntity();
+        String hashedPassword = passwordEncoder.encode(dto.getPassword());
+        credential.setPassword(hashedPassword);
+        credential.setUser(savedUser);
+        credentialRepository.save(credential);
+
+        return mapper.apply(savedUser);
+    }
 
     @Override
     public List<User> getUsers() {
@@ -88,45 +127,6 @@ public class UserServiceImpl implements UserService {
         return mapper.apply(user.get());
     }
 
-    @Override
-    public User createUser(UserCreationDto dto, Role role) throws HttpException {
-        // Throw error if the user already exists
-        boolean isPresent = userRepository.existsByEmail(dto.getEmail());
-        if (isPresent) {
-            throw new UserExistsException();
-        }
-
-        var user = new UserEntity();
-        user.setFirstName(dto.getFirstName());
-        user.setLastName(dto.getLastName());
-        user.setEmail(dto.getEmail());
-        user.setUuid(UUID.randomUUID().toString());
-
-        var city = new CityEntity();
-        city.setName(dto.getAddress().getCity());
-
-        var country = new CountryEntity();
-        country.setName(dto.getAddress().getCountry());
-
-        var address = new AddressEntity();
-        address.setStreet(dto.getAddress().getStreet());
-        address.setUuid(UUID.randomUUID().toString());
-        address.setPostalCode(dto.getAddress().getPostalCode());
-        address.setCity(city);
-        address.setCountry(country);
-
-        user.setAddress(address);
-
-        var savedUser = userRepository.save(user);
-
-        var credential = new CredentialEntity();
-        String hashedPassword = new BCryptPasswordEncoder().encode(dto.getPassword());
-        credential.setPassword(hashedPassword);
-        credential.setUser(savedUser);
-        credentialRepository.save(credential);
-
-        return mapper.apply(userRepository.save(user));
-    }
 
     @Override
     public User updateUser(String id, UserUpdateDto dto) {

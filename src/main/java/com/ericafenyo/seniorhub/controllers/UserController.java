@@ -60,11 +60,11 @@ public class UserController {
     }
 
     @PostMapping()
-    public Object createUser(
+    public User createUser(
             @RequestBody UserCreationDto userCreationDto,
-            @RequestParam("role") @UserRole String slug
+            @RequestParam("role") @Valid @UserRole String slug
     ) throws Exception {
-        return service.createUser(userCreationDto, Role.from(slug));
+        return service.createUser(userCreationDto, slug);
     }
 
     @PutMapping("/{id}")

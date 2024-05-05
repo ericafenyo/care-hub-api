@@ -40,20 +40,20 @@ import java.time.ZoneOffset;
 @ControllerAdvice
 public class HttpExceptionHandler {
 
-  /**
-   * Handles instances of {@code HttpException} and generates a standardized response.
-   *
-   * @param exception The HTTP exception to be handled.
-   * @return A {@link ResponseEntity} containing an {@link HttpExceptionResponse} with relevant information.
-   */
-  @ExceptionHandler(value = {HttpException.class})
-  ResponseEntity<Object> handle(HttpException exception, HttpServletRequest request) {
-    HttpExceptionResponse response = new HttpExceptionResponse();
-    response.setStatus(exception.getStatus().value());
-    response.setMessage(exception.getMessage());
-    response.setPath(request.getRequestURI());
-    response.setCode(exception.getCode());
-    return new ResponseEntity<>(response, exception.getStatus());
-  }
+    /**
+     * Handles instances of {@code HttpException} and generates a standardized response.
+     *
+     * @param exception The HTTP exception to be handled.
+     * @return A {@link ResponseEntity} containing an {@link HttpExceptionResponse} with relevant information.
+     */
+    @ExceptionHandler(value = {HttpException.class})
+    ResponseEntity<Object> handle(HttpException exception, HttpServletRequest request) {
+        HttpExceptionResponse response = new HttpExceptionResponse();
+        response.setStatus(exception.getStatus().value());
+        response.setMessage(exception.getMessage());
+        response.setPath(request.getRequestURI());
+        response.setCode(exception.getCode());
+        return new ResponseEntity<>(response, exception.getStatus());
+    }
 }
 

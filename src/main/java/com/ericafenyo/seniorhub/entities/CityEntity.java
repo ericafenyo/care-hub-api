@@ -31,6 +31,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -38,19 +41,21 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  */
 @Entity(name = "cities")
 @EntityListeners(AuditingEntityListener.class)
-@Data
+@Getter
+@Setter
+@Accessors(chain = true)
 public class CityEntity {
-  /**
-   * The unique identifier for the city.
-   */
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    /**
+     * The unique identifier for the city.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  /**
-   * The name of the city.
-   */
-  @Column(name = "name")
-  private String name;
+    /**
+     * The name of the city.
+     */
+    @Column(name = "name")
+    private String name;
 }

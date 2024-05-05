@@ -26,6 +26,9 @@ package com.ericafenyo.seniorhub.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +37,9 @@ import java.util.List;
  * A database entity representing a country.
  */
 @Entity(name = "countries")
-@Data
+@Getter
+@Setter
+@Accessors(chain = true)
 public class CountryEntity {
   /**
    * The unique identifier for the country.

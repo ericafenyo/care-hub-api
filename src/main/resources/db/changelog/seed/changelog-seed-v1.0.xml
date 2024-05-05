@@ -37,7 +37,7 @@
 
         <!-- Inserts a senior role-->
         <insert tableName="roles">
-            <column name="name" value="Senior"/>
+            <column name="name" value="SENIOR"/>
             <column name="slug" value="senior"/>
             <column name="description" value="Elderly seeking social connections and activities"/>
             <column name="created_at" value="now()"/>
@@ -46,17 +46,16 @@
 
         <!-- Inserts a caretaker role-->
         <insert tableName="roles">
-            <column name="name" value="Caretaker"/>
+            <column name="name" value="CARETAKER"/>
             <column name="slug" value="caretaker"/>
             <column name="description" value="Dedicated professionals providing compassionate care to seniors"/>
             <column name="created_at" value="now()"/>
             <column name="updated_at" value="now()"/>
         </insert>
 
-
         <!-- Inserts an administrator role -->
         <insert tableName="roles">
-            <column name="name" value="Administrator"/>
+            <column name="name" value="ADMINISTRATOR"/>
             <column name="slug" value="administrator"/>
             <column name="description" value="Individuals responsible for managing the application and the users"/>
             <column name="created_at" value="now()"/>

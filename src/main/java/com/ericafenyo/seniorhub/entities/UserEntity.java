@@ -28,25 +28,30 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.util.UUID;
 
 /**
  * A database entity representing an individual or entity who interacts with the application.
  */
 @Entity(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-@Data
+@Getter
+@Setter
 public class UserEntity {
     /**
      * The unique identifier for the user.
@@ -57,10 +62,12 @@ public class UserEntity {
     private Long id;
 
     /**
-     * A candidate unique identifier.
+     * The universally unique identifier for the entity.
+     * <p>
+     * This is the actual id revealed publicly, the primary id is kept internally.
      */
     @Column(name = "uuid", unique = true)
-    private String uuid;
+    private String uuid = UUID.randomUUID().toString();
 
     /**
      * The first name of the user.
@@ -73,6 +80,12 @@ public class UserEntity {
      */
     @Column(name = "last_name", length = 50)
     private String lastName;
+
+    /**
+     * The date of birth of the user.
+     */
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
 
     /**
      * The email address of the user.
@@ -107,7 +120,7 @@ public class UserEntity {
     @JoinColumn(name = "address_id")
     private AddressEntity address;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private RoleEntity role;
 }

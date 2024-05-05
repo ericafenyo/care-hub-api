@@ -36,6 +36,8 @@ import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.UUID;
+
 /**
  * A database entity for an address with country, city, street, and postal code information.
  */
@@ -43,37 +45,40 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @Data
 public class AddressEntity {
-  /**
-   * The unique identifier for the address.
-   */
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    /**
+     * The unique identifier for the address.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  /**
-   * A secondary unique identifier.
-   */
-  @Column(name = "uuid")
-  private String uuid;
-  /**
-   * Indicates a precise street address.
-   */
-  private String street;
-  /**
-   * The postal code of the address.
-   */
-  private String postalCode;
-  /**
-   * The city of the address.
-   */
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "city_id")
-  private CityEntity city;
-  /**
-   * The country of the address.
-   */
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "country_id")
-  private CountryEntity country;
+    /**
+     * The universally unique identifier for the entity.
+     * <p>
+     * This is the actual id revealed publicly, the primary id is kept internally.
+     */
+    @Column(name = "uuid", unique = true)
+    private String uuid = UUID.randomUUID().toString();
+    ;
+    /**
+     * Indicates a precise street address.
+     */
+    private String street;
+    /**
+     * The postal code of the address.
+     */
+    private String postalCode;
+    /**
+     * The city of the address.
+     */
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "city_id")
+    private CityEntity city;
+    /**
+     * The country of the address.
+     */
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "country_id")
+    private CountryEntity country;
 }

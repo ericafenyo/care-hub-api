@@ -24,12 +24,12 @@
 
 package com.ericafenyo.seniorhub.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 /**
  * A user domain model representing an individual who interacts with the application.
@@ -50,6 +50,12 @@ public class User {
    * The last name of the user.
    */
   private String lastName;
+
+  /**
+   * The date of birth of the user.
+   */
+  private LocalDate birthDate;
+
   /**
    * The email address of the user.
    */

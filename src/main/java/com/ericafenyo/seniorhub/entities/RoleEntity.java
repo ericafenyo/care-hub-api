@@ -42,6 +42,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity(name = "roles")
 @EntityListeners(AuditingEntityListener.class)
@@ -54,6 +55,14 @@ public class RoleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    /**
+     * The universally unique identifier for the entity.
+     * <p>
+     * This is the actual id revealed publicly, the primary id is kept internally.
+     */
+    @Column(name = "uuid", unique = true)
+    private String uuid = UUID.randomUUID().toString();
 
     /**
      * The name of the role
