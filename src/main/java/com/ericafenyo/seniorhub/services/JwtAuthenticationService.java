@@ -42,76 +42,78 @@ import java.util.function.Function;
 @Service
 @RequiredArgsConstructor
 public class JwtAuthenticationService {
-  private static final String EMAIL_KEY = "email";
+    private static final String EMAIL_KEY = "email";
+    private static final String ROLE_KEY = "role";
 
-  private final EnvironmentVariables environment;
+    private final EnvironmentVariables environment;
 
-  public <T> T extract(String token, Function<Claims, T> resolver) {
-    Claims claims = extract(token);
-    return resolver.apply(claims);
-  }
+    public <T> T extract(String token, Function<Claims, T> resolver) {
+        Claims claims = extract(token);
+        return resolver.apply(claims);
+    }
 
-  private Claims extract(String token) {
-    return Jwts.parser()
-        .setSigningKey(environment.getJwtSecretKey())
-        .parseClaimsJws(token)
-        .getBody();
-  }
+    private Claims extract(String token) {
+        return Jwts.parser()
+                .setSigningKey(environment.getJwtSecretKey())
+                .parseClaimsJws(token)
+                .getBody();
+    }
 
-  public String sign(Account account) {
-    Instant issuedAt = Instant.now();
-    Instant expiration = issuedAt.plus(24, ChronoUnit.HOURS);
+    public String sign(Account account) {
+        Instant issuedAt = Instant.now();
+        Instant expiration = issuedAt.plus(24, ChronoUnit.HOURS);
 
-    return Jwts.builder()
-        .claim(EMAIL_KEY, account.getEmail())
-        .setSubject("auth|%s".formatted(account.getId()))
-        .setIssuer("http://localhost/senoir-hub")
-        .setIssuedAt(Date.from(issuedAt))
-        .setExpiration(Date.from(expiration))
+        return Jwts.builder()
+                .claim(EMAIL_KEY, account.getEmail())
+                .claim(ROLE_KEY, account.getRole())
+                .setSubject("auth|%s".formatted(account.getId()))
+                .setIssuer("http://localhost/senoir-hub")
+                .setIssuedAt(Date.from(issuedAt))
+                .setExpiration(Date.from(expiration))
 //        .setAudience("aud")
-        .signWith(SignatureAlgorithm.HS256, environment.getJwtSecretKey())
-        .compact();
-  }
+                .signWith(SignatureAlgorithm.HS256, environment.getJwtSecretKey())
+                .compact();
+    }
 
-  /**
-   * Checks if the token is valid.
-   *
-   * @param token   The token to be verified.
-   * @param account The store user account.
-   * @return true if the token is valid, false otherwise.
-   */
-  public boolean verify(String token, Account account) {
-    var claims = extract(token);
-    var expiresAt = claims.getExpiration();
-    var hasEqualUserIds = claims.getSubject().equals("auth|%s".formatted(account.getId()));
+    /**
+     * Checks if the token is valid.
+     *
+     * @param token   The token to be verified.
+     * @param account The store user account.
+     * @return true if the token is valid, false otherwise.
+     */
+    public boolean verify(String token, Account account) {
+        var claims = extract(token);
+        var expiresAt = claims.getExpiration();
+        var hasEqualUserIds = claims.getSubject().equals("auth|%s".formatted(account.getId()));
 
-    // Check if the token is blank, expired, or will expire soon
-    boolean invalidToken = !hasEqualUserIds || token.isBlank() || hasExpired(expiresAt) || willExpire(expiresAt, Duration.ofMinutes(1));
+        // Check if the token is blank, expired, or will expire soon
+        boolean invalidToken = !hasEqualUserIds || token.isBlank() || hasExpired(expiresAt) || willExpire(expiresAt, Duration.ofMinutes(1));
 
-    return !invalidToken;
-  }
+        return !invalidToken;
+    }
 
 
-  private boolean hasExpired(Date expiredAt) {
-    return expiredAt.before(new Date());
-  }
+    private boolean hasExpired(Date expiredAt) {
+        return expiredAt.before(new Date());
+    }
 
-  /**
-   * Checks (given the required minimum time to live), if the expiration time can satisfy that value or not.
-   *
-   * @param expiresAt the expiration time.
-   * @param minTtl    the time to live required.
-   * @return whether the value will become expired within the given min offset to live or not.
-   */
-  private boolean willExpire(Date expiresAt, Duration minTtl) {
-    Date now = new Date();
-    // Calculate the minimum expiration time
-    Date minExpirationTime = new Date(now.getTime() + minTtl.toMillis());
+    /**
+     * Checks (given the required minimum time to live), if the expiration time can satisfy that value or not.
+     *
+     * @param expiresAt the expiration time.
+     * @param minTtl    the time to live required.
+     * @return whether the value will become expired within the given min offset to live or not.
+     */
+    private boolean willExpire(Date expiresAt, Duration minTtl) {
+        Date now = new Date();
+        // Calculate the minimum expiration time
+        Date minExpirationTime = new Date(now.getTime() + minTtl.toMillis());
 
-    return expiresAt.before(minExpirationTime);
-  }
+        return expiresAt.before(minExpirationTime);
+    }
 
-  public String extractEmail(String token) {
-    return extract(token, (claims -> claims.get(EMAIL_KEY, String.class)));
-  }
+    public String extractEmail(String token) {
+        return extract(token, (claims -> claims.get(EMAIL_KEY, String.class)));
+    }
 }

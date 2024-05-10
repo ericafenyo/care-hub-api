@@ -24,7 +24,7 @@
 
 package com.ericafenyo.seniorhub.validation;
 
-import com.ericafenyo.seniorhub.model.Role;
+import com.ericafenyo.seniorhub.model.SealedRole;
 import com.ericafenyo.seniorhub.validation.constraints.UserRole;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -38,7 +38,7 @@ public class RoleValidator implements ConstraintValidator<UserRole, String> {
   @Override
   public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
     try {
-      Role.from(value);
+      SealedRole.from(value);
       return true;
     } catch (IllegalArgumentException exception) {
       return false;

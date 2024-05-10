@@ -76,7 +76,7 @@ public class User {
   /**
    * The role assigned to the user
    */
-  private Role role;
+  private SealedRole role;
 
   /**
    * The address where the user leaves.

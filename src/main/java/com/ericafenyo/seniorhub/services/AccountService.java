@@ -24,8 +24,8 @@
 
 package com.ericafenyo.seniorhub.services;
 
+import com.ericafenyo.seniorhub.mapper.RoleMapper;
 import com.ericafenyo.seniorhub.model.Account;
-import com.ericafenyo.seniorhub.model.Role;
 import com.ericafenyo.seniorhub.repository.CredentialRepository;
 import com.ericafenyo.seniorhub.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -39,6 +39,7 @@ import org.springframework.stereotype.Service;
 public class AccountService implements UserDetailsService {
     private final UserRepository userRepository;
     private final CredentialRepository credentialRepository;
+    private final RoleMapper roleMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -52,7 +53,7 @@ public class AccountService implements UserDetailsService {
         var credential = credentialRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new UsernameNotFoundException("Credential for username '" + email + "' not found"));
 
-        var role = Role.valueOf(user.getRole().getName());
+        var role = roleMapper.apply(user.getRole());
 
         return new Account()
                 .setId(user.getUuid())

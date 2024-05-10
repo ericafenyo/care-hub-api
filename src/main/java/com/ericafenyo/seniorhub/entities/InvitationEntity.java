@@ -25,7 +25,6 @@
 package com.ericafenyo.seniorhub.entities;
 
 import com.ericafenyo.seniorhub.model.Invitation;
-import com.ericafenyo.seniorhub.model.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;

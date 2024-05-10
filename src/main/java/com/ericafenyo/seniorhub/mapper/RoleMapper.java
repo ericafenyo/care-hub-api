@@ -22,24 +22,35 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.services;
+package com.ericafenyo.seniorhub.mapper;
 
-import com.ericafenyo.seniorhub.dto.UserCreationDto;
-import com.ericafenyo.seniorhub.dto.UserUpdateDto;
-import com.ericafenyo.seniorhub.exceptions.HttpException;
-import com.ericafenyo.seniorhub.model.User;
+import com.ericafenyo.seniorhub.entities.AddressEntity;
+import com.ericafenyo.seniorhub.entities.RoleEntity;
+import com.ericafenyo.seniorhub.model.Address;
+import com.ericafenyo.seniorhub.model.Role;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.function.Function;
 
+/**
+ * Maps a {@link AddressEntity} to a {@link Address}.
+ */
+@Component
+public class RoleMapper implements Function<RoleEntity, Role> {
 
-public interface UserService {
-  List<User> getUsers();
-
-  User getUserById(String id) throws HttpException;
-
-  User createUser(UserCreationDto userCreationDto, String roleSlug) throws HttpException;
-
-  User updateUser(String id, UserUpdateDto updateUserDto);
-
-  void deleteUser(String id);
+    /**
+     * Converts a {@link RoleEntity} to a {@link Role}.
+     *
+     * @param entity The input role entity.
+     * @return The mapped role object.
+     */
+    @Override
+    public Role apply(RoleEntity entity) {
+        var role = new Role();
+        role.setId(entity.getUuid());
+        role.setName(entity.getName());
+        role.setSlug(entity.getSlug());
+        role.setDescription(entity.getDescription());
+        return role;
+    }
 }

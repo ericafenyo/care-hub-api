@@ -32,11 +32,14 @@
       http://www.liquibase.org/xml/ns/pro
       http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
 
+    <property name="uuid" value="uuid()" dbms="mysql"/>
+
     <changeSet id="1" author="Eric">
         <comment>Inserts data into the roles database table</comment>
 
         <!-- Inserts a senior role-->
         <insert tableName="roles">
+            <column name="uuid" value="9b4c53a6-c2df-4320-a327-b30e83e29fd0"/>
             <column name="name" value="SENIOR"/>
             <column name="slug" value="senior"/>
             <column name="description" value="Elderly seeking social connections and activities"/>
@@ -46,6 +49,7 @@
 
         <!-- Inserts a caretaker role-->
         <insert tableName="roles">
+            <column name="uuid" value="6418a79a-5b35-4b19-81c0-bc8a7205e53a"/>
             <column name="name" value="CARETAKER"/>
             <column name="slug" value="caretaker"/>
             <column name="description" value="Dedicated professionals providing compassionate care to seniors"/>
@@ -55,6 +59,7 @@
 
         <!-- Inserts an administrator role -->
         <insert tableName="roles">
+            <column name="uuid" value="5b685243-b842-48cf-9abc-ed6008263029"/>
             <column name="name" value="ADMINISTRATOR"/>
             <column name="slug" value="administrator"/>
             <column name="description" value="Individuals responsible for managing the application and the users"/>

@@ -25,7 +25,7 @@
 package com.ericafenyo.seniorhub.mapper;
 
 import com.ericafenyo.seniorhub.entities.UserEntity;
-import com.ericafenyo.seniorhub.model.Role;
+import com.ericafenyo.seniorhub.model.SealedRole;
 import com.ericafenyo.seniorhub.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -60,7 +60,7 @@ public class UserMapper implements Function<UserEntity, User> {
         user.setUpdatedAt(entity.getUpdatedAt());
 
         Optional.ofNullable(entity.getRole())
-                .ifPresent(role -> user.setRole(Role.valueOf(role.getName())));
+                .ifPresent(role -> user.setRole(SealedRole.valueOf(role.getName())));
 
         Optional.ofNullable(entity.getAddress())
                 .ifPresent(address -> user.setAddress(addressMapper.apply(address)));

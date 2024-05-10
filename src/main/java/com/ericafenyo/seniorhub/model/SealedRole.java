@@ -22,24 +22,44 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.services;
+package com.ericafenyo.seniorhub.model;
 
-import com.ericafenyo.seniorhub.dto.UserCreationDto;
-import com.ericafenyo.seniorhub.dto.UserUpdateDto;
-import com.ericafenyo.seniorhub.exceptions.HttpException;
-import com.ericafenyo.seniorhub.model.User;
+import lombok.Getter;
 
-import java.util.List;
+/**
+ * Enum representing different roles in the application.
+ */
+@Getter
+public enum SealedRole {
+  SENIOR("senior"),
+  CARETAKER("caretaker"),
+  ADMINISTRATOR("administrator");
 
+  private final String slug;
 
-public interface UserService {
-  List<User> getUsers();
+  /**
+   * Constructor for Role enum.
+   *
+   * @param slug The URL-friendly slug associated with the role.
+   */
+  SealedRole(String slug) {
+    this.slug = slug;
+  }
 
-  User getUserById(String id) throws HttpException;
-
-  User createUser(UserCreationDto userCreationDto, String roleSlug) throws HttpException;
-
-  User updateUser(String id, UserUpdateDto updateUserDto);
-
-  void deleteUser(String id);
+  /**
+   * Retrieves the Role enum based on the given slug.
+   *
+   * @param slug The slug to match.
+   * @return The corresponding Role enum.
+   * @throws IllegalArgumentException If no role is found for the given slug.
+   */
+  public static SealedRole from(String slug) {
+    for (SealedRole role : SealedRole.values()) {
+      if (role.slug.equals(slug)) {
+        return role;
+      }
+    }
+    throw new IllegalArgumentException("No role found for slug: " + slug);
+  }
 }
+

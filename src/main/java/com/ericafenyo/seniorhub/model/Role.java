@@ -25,41 +25,28 @@
 package com.ericafenyo.seniorhub.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
-/**
- * Enum representing different roles in the application.
- */
 @Getter
-public enum Role {
-  SENIOR("senior"),
-  CARETAKER("caretaker"),
-  ADMINISTRATOR("administrator");
+@Setter
+public class Role {
+    /**
+     * The unique identifier for the role.
+     */
+    private String id;
 
-  private final String slug;
+    /**
+     * The name of the role
+     */
+    private String name;
 
-  /**
-   * Constructor for Role enum.
-   *
-   * @param slug The URL-friendly slug associated with the role.
-   */
-  Role(String slug) {
-    this.slug = slug;
-  }
+    /**
+     * Human-readable name of the role
+     */
+    private String slug;
 
-  /**
-   * Retrieves the Role enum based on the given slug.
-   *
-   * @param slug The slug to match.
-   * @return The corresponding Role enum.
-   * @throws IllegalArgumentException If no role is found for the given slug.
-   */
-  public static Role from(String slug) {
-    for (Role role : Role.values()) {
-      if (role.slug.equals(slug)) {
-        return role;
-      }
-    }
-    throw new IllegalArgumentException("No role found for slug: " + slug);
-  }
+    /**
+     * A brief description or explanation of the role.
+     */
+    private String description;
 }
-
