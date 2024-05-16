@@ -32,7 +32,6 @@
       http://www.liquibase.org/xml/ns/pro
       http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
 
-    <property name="uuid" value="uuid()" dbms="mysql"/>
 
     <changeSet id="1" author="Eric">
         <comment>Inserts data into the roles database table</comment>

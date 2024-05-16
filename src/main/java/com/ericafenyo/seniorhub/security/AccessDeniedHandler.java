@@ -22,47 +22,34 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exceptions;
+package com.ericafenyo.seniorhub.security;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.ericafenyo.seniorhub.exceptions.HttpExceptionResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.stereotype.Component;
 
-import java.time.Instant;
+import java.io.IOException;
 
-/**
- * Represents a response structure for HTTP exceptions.
- */
-@Getter
-@Setter
-public class HttpExceptionResponse {
-
-    /**
-     * A descriptive message providing additional information about the exception.
-     */
-    private Object message;
-
-    /**
-     * A unique error code associated with the exception.
-     */
-    private String code;
-
-    /**
-     * The HTTP request url called when the error was produced
-     */
-    private String path;
-
-    /**
-     * The timestamp when the exception response was created.
-     */
-    private Instant timestamp = Instant.now();
+@Component
+public class AccessDeniedHandler implements org.springframework.security.web.access.AccessDeniedHandler {
+    private static final String ERROR_CODE = "access_denied";
 
     @Override
-    public String toString() {
-        return "{" +
-                "\"message\":\"" + message + "\"," +
-                "\"code\":\"" + code + "\"," +
-                "\"path\":\"" + path + "\"," +
-                "\"timestamp\":\"" + timestamp + "\"" +
-                "}";
+    public void handle(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AccessDeniedException exception
+    ) throws IOException {
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        HttpExceptionResponse body = new HttpExceptionResponse();
+        body.setPath(request.getRequestURI());
+        body.setMessage(exception.getMessage());
+        body.setCode(ERROR_CODE);
+
+        response.getWriter().write(body.toString());
     }
 }

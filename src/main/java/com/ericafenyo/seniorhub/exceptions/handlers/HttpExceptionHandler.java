@@ -49,7 +49,6 @@ public class HttpExceptionHandler {
     @ExceptionHandler(value = {HttpException.class})
     ResponseEntity<Object> handle(HttpException exception, HttpServletRequest request) {
         HttpExceptionResponse response = new HttpExceptionResponse();
-        response.setStatus(exception.getStatus().value());
         response.setMessage(exception.getMessage());
         response.setPath(request.getRequestURI());
         response.setCode(exception.getCode());

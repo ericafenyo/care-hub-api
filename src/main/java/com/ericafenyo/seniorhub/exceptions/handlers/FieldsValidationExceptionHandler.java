@@ -34,9 +34,8 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -47,6 +46,7 @@ import java.util.Map;
  * Global exception handler for handling validation errors in request payloads.
  */
 @ControllerAdvice
+@ResponseStatus(HttpStatus.BAD_REQUEST)
 public class FieldsValidationExceptionHandler {
 
   private static final String ERROR_CODE = "validation_error";
@@ -87,7 +87,6 @@ public class FieldsValidationExceptionHandler {
       objects.add(entry);
     });
 
-    response.setStatus(HttpStatus.BAD_REQUEST.value());
     response.setPath(request.getRequestURI());
     response.setMessage(objects);
     response.setCode(ERROR_CODE);

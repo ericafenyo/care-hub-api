@@ -70,7 +70,6 @@ public class JwtAuthenticationService {
                 .setIssuer("http://localhost/senoir-hub")
                 .setIssuedAt(Date.from(issuedAt))
                 .setExpiration(Date.from(expiration))
-//        .setAudience("aud")
                 .signWith(SignatureAlgorithm.HS256, environment.getJwtSecretKey())
                 .compact();
     }
