@@ -36,6 +36,7 @@ import java.io.IOException;
 @Component
 public class AccessDeniedHandler implements org.springframework.security.web.access.AccessDeniedHandler {
     private static final String ERROR_CODE = "access_denied";
+    private static final String ERROR_MESSAGE = "Access denied due to insufficient permissions";
 
     @Override
     public void handle(
@@ -47,7 +48,7 @@ public class AccessDeniedHandler implements org.springframework.security.web.acc
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         HttpExceptionResponse body = new HttpExceptionResponse();
         body.setPath(request.getRequestURI());
-        body.setMessage(exception.getMessage());
+        body.setMessage(ERROR_MESSAGE);
         body.setCode(ERROR_CODE);
 
         response.getWriter().write(body.toString());
