@@ -24,7 +24,6 @@
 
 package com.ericafenyo.seniorhub.entities;
 
-import com.ericafenyo.seniorhub.model.Team;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -34,7 +33,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -42,16 +40,15 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Entity(name = "tasks")
+@Entity(name = "teams")
 @EntityListeners(AuditingEntityListener.class)
 @Setter
 @Getter
-public class TaskEntity {
+public class TeamEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -60,29 +57,19 @@ public class TaskEntity {
     @Column(name = "uuid", unique = true)
     private String uuid = UUID.randomUUID().toString();
 
-    @Column(name = "title")
-    private String title;
+    @Column(name = "name", nullable = false, unique = true, length = 50)
+    private String name;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false, length = 80)
     private String description;
-
-    @Column(name = "completed")
-    private Boolean completed;
-
-    @Column(name = "due_date")
-    private LocalDateTime dueDate;
 
     @ManyToMany()
     @JoinTable(
-            name = "task_user",
-            joinColumns = @JoinColumn(name = "task_id"),
+            name = "team_user",
+            joinColumns = @JoinColumn(name = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<UserEntity> assignees = new ArrayList<>();
-
-    @ManyToOne()
-    @JoinColumn(name = "team_id")
-    private TeamEntity team;
+    private List<UserEntity> members = new ArrayList<>();
 
     @CreatedDate
     @Column(name = "created_at")

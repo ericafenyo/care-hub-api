@@ -25,7 +25,6 @@
 package com.ericafenyo.seniorhub.entities;
 
 import com.ericafenyo.seniorhub.model.Team;
-import com.ericafenyo.seniorhub.model.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -42,7 +41,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-
+import java.util.UUID;
 
 @Entity(name = "appointments")
 @EntityListeners(AuditingEntityListener.class)
@@ -53,6 +52,9 @@ public class AppointmentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @Column(name = "uuid", unique = true)
+    private String uuid = UUID.randomUUID().toString();
 
     @Column(name = "title")
     private String title;
@@ -79,9 +81,9 @@ public class AppointmentEntity {
 
     @ManyToOne()
     @JoinColumn(name = "team_id")
-    private Team team;
+    private TeamEntity team;
 
     @ManyToOne()
     @JoinColumn(name = "author_id")
-    private User author;
+    private UserEntity author;
 }

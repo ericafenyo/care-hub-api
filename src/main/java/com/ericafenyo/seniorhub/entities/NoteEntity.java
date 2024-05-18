@@ -24,8 +24,6 @@
 
 package com.ericafenyo.seniorhub.entities;
 
-import com.ericafenyo.seniorhub.model.Team;
-import com.ericafenyo.seniorhub.model.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -41,6 +39,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity(name = "notes")
 @EntityListeners(AuditingEntityListener.class)
@@ -52,11 +51,22 @@ public class NoteEntity {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "uuid", unique = true)
+    private String uuid = UUID.randomUUID().toString();
+
     @Column(name = "title")
     private String title;
 
     @Column(name = "content")
     private String content;
+
+    @ManyToOne()
+    @JoinColumn(name = "team_id")
+    private TeamEntity team;
+
+    @ManyToOne()
+    @JoinColumn(name = "author_id")
+    private UserEntity author;
 
     @CreatedDate
     @Column(name = "created_at")
@@ -65,12 +75,4 @@ public class NoteEntity {
     @LastModifiedDate
     @Column(name = "updated_at")
     private Instant updatedAt;
-
-    @ManyToOne()
-    @JoinColumn(name = "team_id")
-    private Team team;
-
-    @ManyToOne()
-    @JoinColumn(name = "author_id")
-    private User author;
 }
