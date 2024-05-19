@@ -33,6 +33,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -54,7 +55,7 @@ public class TeamEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "uuid", unique = true)
+    @Column(name = "uuid", nullable = false, unique = true, length = 36)
     private String uuid = UUID.randomUUID().toString();
 
     @Column(name = "name", nullable = false, unique = true, length = 50)
@@ -62,6 +63,10 @@ public class TeamEntity {
 
     @Column(name = "description", nullable = false, length = 80)
     private String description;
+
+    @ManyToOne()
+    @JoinColumn(name = "creator_id", nullable = false)
+    private UserEntity creator;
 
     @ManyToMany()
     @JoinTable(
@@ -72,10 +77,10 @@ public class TeamEntity {
     private List<UserEntity> members = new ArrayList<>();
 
     @CreatedDate
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
     @LastModifiedDate
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 }

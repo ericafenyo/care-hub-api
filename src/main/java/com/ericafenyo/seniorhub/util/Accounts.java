@@ -22,22 +22,25 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.dto;
+package com.ericafenyo.seniorhub.util;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import com.ericafenyo.seniorhub.model.Account;
+import org.springframework.security.core.Authentication;
 
-@Getter
-@Setter
-public class CreateTeamRequest {
-    @NotBlank
-    @Size(max = 50)
-    private String name;
+import java.util.Optional;
 
-    @NotBlank
-    @Size(max = 80)
-    private String description;
+public class Accounts {
+    public static Account from(Authentication authentication) {
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof Account) {
+            return (Account) principal;
+        }
+        return null;
+    }
+
+    public static String extractUserId(Authentication authentication) {
+        return Optional.ofNullable(from(authentication))
+                .map(account -> account.getId())
+                .orElse(null);
+    }
 }

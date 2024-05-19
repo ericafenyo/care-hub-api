@@ -41,22 +41,29 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeamServiceImpl implements TeamService {
     private final TeamRepository teamRepository;
+    private final UserRepository userRepository;
+    private final TeamMapper mapper;
+    private final Messages messages;
 
     @Override
-    public Team createTeam(CreateTeamRequest request) throws HttpException {
+    public Team createTeam(
+            CreateTeamRequest request,
+            String creatorId
+    ) throws HttpException {
         var exists = teamRepository.existsByName(request.getName());
 
         if (exists) {
-            throw new NotFoundException("Team with name " + request.getName() + " already exists", "not-found");
+            throw new ConflictException("Team with name " + request.getName() + " already exists", "not-found");
         }
+
+        var creator = userRepository.findById(creatorId)
+                .orElseThrow(() -> new NotFoundException("Creator with id " + creatorId + " not found", "creator-not-found"));
 
         var team = new TeamEntity();
         team.setName(request.getName());
         team.setDescription(request.getDescription());
-        teamRepository.save(team);
-
-        System.out.println(team);
-        return null;
+        team.setCreator(creator);
+        return mapper.apply(teamRepository.save(team));
     }
 
     @Override

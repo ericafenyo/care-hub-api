@@ -27,7 +27,7 @@ package com.ericafenyo.seniorhub.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import java.time.Instant;
 
 @Setter
 @Getter
@@ -35,5 +35,6 @@ public class Team {
     private String id;
     private String name;
     private String description;
-    private List<User> members;
+    private Instant createdAt;
+    private Instant updatedAt;
 }

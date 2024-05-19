@@ -32,11 +32,11 @@ import com.ericafenyo.seniorhub.model.Team;
 import java.util.List;
 
 public interface TeamService {
-    Team createTeam(CreateTeamRequest request) throws HttpException;
+    Team createTeam(CreateTeamRequest request, String creatorId) throws HttpException;
 
     List<Team> getTeams();
 
-    Team getTeamById(String id);
+    Team getTeamById(String id) throws HttpException ;
 
     Team updateTeam(String id, UpdateTeamRequest userUpdateDto);
 

@@ -22,22 +22,35 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.dto;
+package com.ericafenyo.seniorhub.mapper;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import com.ericafenyo.seniorhub.entities.TeamEntity;
+import com.ericafenyo.seniorhub.model.Team;
+import org.springframework.stereotype.Component;
 
-@Getter
-@Setter
-public class CreateTeamRequest {
-    @NotBlank
-    @Size(max = 50)
-    private String name;
+import java.util.function.Function;
 
-    @NotBlank
-    @Size(max = 80)
-    private String description;
+/**
+ * Maps a {@link TeamEntity} to a {@link Team}.
+ */
+@Component
+public class TeamMapper implements Function<TeamEntity, Team> {
+
+    /**
+     * Converts a {@link TeamEntity} to a {@link Team}.
+     *
+     * @param entity The input team entity.
+     * @return The mapped team.
+     */
+    @Override
+    public Team apply(TeamEntity entity) {
+        var team = new Team();
+        team.setId(entity.getUuid());
+        team.setName(entity.getName());
+        team.setDescription(entity.getDescription());
+        team.setCreatedAt(entity.getCreatedAt());
+        team.setUpdatedAt(entity.getUpdatedAt());
+
+        return team;
+    }
 }
