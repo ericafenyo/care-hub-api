@@ -41,4 +41,6 @@ public interface TeamService {
     Team updateTeam(String id, UpdateTeamRequest userUpdateDto);
 
     void deleteTeam(String id);
+
+    List<Team> getUserTeams(Long id) throws HttpException;
 }

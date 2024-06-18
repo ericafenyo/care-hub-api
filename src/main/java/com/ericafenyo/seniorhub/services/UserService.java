@@ -24,22 +24,28 @@
 
 package com.ericafenyo.seniorhub.services;
 
+import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
 import com.ericafenyo.seniorhub.dto.UserCreationDto;
 import com.ericafenyo.seniorhub.dto.UserUpdateDto;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
+import com.ericafenyo.seniorhub.model.Team;
 import com.ericafenyo.seniorhub.model.User;
 
 import java.util.List;
 
 
 public interface UserService {
-  List<User> getUsers();
+    List<User> getUsers();
 
-  User getUserById(String id) throws HttpException;
+    User getUserById(String id) throws HttpException;
 
-  User createUser(UserCreationDto userCreationDto, String roleSlug) throws HttpException;
+    User createUser(UserCreationDto userCreationDto, String roleSlug) throws HttpException;
 
-  User updateUser(String id, UserUpdateDto updateUserDto);
+    User updateUser(String id, UserUpdateDto updateUserDto);
 
-  void deleteUser(String id);
+    void deleteUser(String id);
+
+    List<Team> getUserTeams(String id) throws HttpException;
+
+    Team createTeam(String id, CreateTeamRequest request) throws HttpException;
 }

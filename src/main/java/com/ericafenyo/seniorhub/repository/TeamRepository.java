@@ -27,11 +27,15 @@ package com.ericafenyo.seniorhub.repository;
 import com.ericafenyo.seniorhub.entities.TeamEntity;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface TeamRepository extends AbstractRepository<TeamEntity> {
-    long countByName(String name);
-
     default boolean existsByName(String name) {
         return countByName(name) > 0;
     }
+
+    long countByName(String name);
+
+    List<TeamEntity> findAllByCreatorId(Long id);
 }

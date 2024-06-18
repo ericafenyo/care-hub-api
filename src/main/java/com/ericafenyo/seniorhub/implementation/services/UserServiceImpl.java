@@ -24,6 +24,8 @@
 
 package com.ericafenyo.seniorhub.implementation.services;
 
+import com.ericafenyo.seniorhub.Messages;
+import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
 import com.ericafenyo.seniorhub.dto.UserCreationDto;
 import com.ericafenyo.seniorhub.dto.UserUpdateDto;
 import com.ericafenyo.seniorhub.entities.AddressEntity;
@@ -33,21 +35,26 @@ import com.ericafenyo.seniorhub.entities.CredentialEntity;
 import com.ericafenyo.seniorhub.entities.UserEntity;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.exceptions.InternalServerErrorException;
+import com.ericafenyo.seniorhub.exceptions.NotFoundException;
 import com.ericafenyo.seniorhub.exceptions.user.UserExistsException;
 import com.ericafenyo.seniorhub.exceptions.user.UserNotFoundException;
 import com.ericafenyo.seniorhub.mapper.UserMapper;
+import com.ericafenyo.seniorhub.model.Team;
 import com.ericafenyo.seniorhub.model.User;
 import com.ericafenyo.seniorhub.repository.CredentialRepository;
 import com.ericafenyo.seniorhub.repository.RoleRepository;
 import com.ericafenyo.seniorhub.repository.UserRepository;
+import com.ericafenyo.seniorhub.services.TeamService;
 import com.ericafenyo.seniorhub.services.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -58,6 +65,9 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper mapper;
+    private final Messages messages;
+
+    private final TeamService teamService;
 
     @Override
     @Transactional
@@ -155,6 +165,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(String id) {
-        userRepository.deleteById(id);
+        userRepository.findById(id).ifPresent(team -> userRepository.deleteById(id));
+    }
+
+
+    @Override
+    public Team createTeam(String id, CreateTeamRequest request) throws HttpException {
+        return teamService.createTeam(request, id);
+    }
+
+    @Override
+    public List<Team> getUserTeams(String id) throws HttpException {
+        // Find the current user using the provided id
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(
+                        messages.format(Messages.ERROR_RESOURCE_NOTFOUND, "User", id),
+                        messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "user")
+                ));
+
+        return teamService.getUserTeams(user.getId());
     }
 }

@@ -24,13 +24,17 @@
 
 package com.ericafenyo.seniorhub.implementation.services;
 
+import com.ericafenyo.seniorhub.Messages;
 import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
 import com.ericafenyo.seniorhub.dto.UpdateTeamRequest;
 import com.ericafenyo.seniorhub.entities.TeamEntity;
+import com.ericafenyo.seniorhub.exceptions.ConflictException;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.exceptions.NotFoundException;
+import com.ericafenyo.seniorhub.mapper.TeamMapper;
 import com.ericafenyo.seniorhub.model.Team;
 import com.ericafenyo.seniorhub.repository.TeamRepository;
+import com.ericafenyo.seniorhub.repository.UserRepository;
 import com.ericafenyo.seniorhub.services.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -68,21 +72,40 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public List<Team> getTeams() {
-        return List.of();
+        return teamRepository.findAll().stream()
+                .map(mapper)
+                .toList();
     }
 
     @Override
-    public Team getTeamById(String id) {
-        return null;
+    public Team getTeamById(String id) throws HttpException {
+        var team = teamRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Team with id not found", ""));
+
+        return mapper.apply(team);
     }
 
     @Override
     public Team updateTeam(String id, UpdateTeamRequest userUpdateDto) {
-        return null;
+        var team = teamRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user id"));
+
+        team.setName(userUpdateDto.getName());
+        team.setDescription(userUpdateDto.getDescription());
+
+        return mapper.apply(teamRepository.save(team));
     }
 
     @Override
     public void deleteTeam(String id) {
 
+    }
+
+    @Override
+    public List<Team> getUserTeams(Long id) throws HttpException {
+        return teamRepository.findAllByCreatorId(id)
+                .stream()
+                .map(mapper)
+                .toList();
     }
 }

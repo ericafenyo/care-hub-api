@@ -24,13 +24,25 @@
 
 package com.ericafenyo.seniorhub.controllers;
 
+import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
 import com.ericafenyo.seniorhub.dto.UserCreationDto;
 import com.ericafenyo.seniorhub.dto.UserUpdateDto;
+import com.ericafenyo.seniorhub.exceptions.HttpException;
+import com.ericafenyo.seniorhub.model.Team;
 import com.ericafenyo.seniorhub.model.User;
 import com.ericafenyo.seniorhub.services.UserService;
 import com.ericafenyo.seniorhub.validation.constraints.UserRole;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -71,5 +83,16 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable String id) {
         service.deleteUser(id);
+    }
+
+    // Team sub-resources
+    @PostMapping("/{id}/teams")
+    public Team createTeam(@PathVariable String id, @RequestBody CreateTeamRequest request) throws HttpException {
+        return service.createTeam(id, request);
+    }
+
+    @GetMapping("/{id}/teams")
+    public List<Team> getUserTeams(@PathVariable String id) throws HttpException {
+        return service.getUserTeams(id);
     }
 }
