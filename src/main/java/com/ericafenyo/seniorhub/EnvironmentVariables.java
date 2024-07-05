@@ -30,10 +30,8 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.time.temporal.TemporalAmount;
-
 @Component
-@ConfigurationProperties(prefix = "seniorhub")
+@ConfigurationProperties(prefix = "seniorhub.env")
 @Getter
 @Setter
 public class EnvironmentVariables {

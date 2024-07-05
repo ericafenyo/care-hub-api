@@ -25,7 +25,7 @@
 package com.ericafenyo.seniorhub.services;
 
 import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
-import com.ericafenyo.seniorhub.dto.UserCreationDto;
+import com.ericafenyo.seniorhub.dto.CreateUserRequest;
 import com.ericafenyo.seniorhub.dto.UserUpdateDto;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.model.Team;
@@ -39,7 +39,7 @@ public interface UserService {
 
     User getUserById(String id) throws HttpException;
 
-    User createUser(UserCreationDto userCreationDto, String roleSlug) throws HttpException;
+    User createUser(CreateUserRequest userCreationDto) throws HttpException;
 
     User updateUser(String id, UserUpdateDto updateUserDto);
 

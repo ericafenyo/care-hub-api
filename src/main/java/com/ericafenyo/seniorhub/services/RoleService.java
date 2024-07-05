@@ -22,59 +22,18 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.model;
+package com.ericafenyo.seniorhub.services;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
+import com.ericafenyo.seniorhub.model.Role;
 
-import java.time.Instant;
-import java.time.LocalDate;
+import java.util.List;
 
 /**
- * A user domain model representing an individual who interacts with the application.
+ * An interface that defines a contract for user role-related operations.
  */
-@Getter
-@Setter
-@Accessors(chain = true)
-public class User {
+public interface RoleService {
     /**
-     * The unique identifier for the user.
+     * Returns a list of user roles.
      */
-    private String id;
-    /**
-     * The first name of the user.
-     */
-    private String firstName;
-    /**
-     * The last name of the user.
-     */
-    private String lastName;
-
-    /**
-     * The date of birth of the user.
-     */
-    private LocalDate birthDate;
-
-    /**
-     * The email address of the user.
-     */
-    private String email;
-    /**
-     * The URL pointing to the user's profile photo.
-     */
-    private String photoUrl;
-    /**
-     * The date and time when the user was created.
-     */
-    private Instant createdAt;
-    /**
-     * The date and time when the user was last updated.
-     */
-    private Instant updatedAt;
-
-    /**
-     * The address where the user leaves.
-     */
-    private Address address;
+    List<Role> getRoles();
 }

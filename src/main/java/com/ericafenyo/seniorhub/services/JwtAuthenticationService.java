@@ -54,9 +54,9 @@ public class JwtAuthenticationService {
 
     private Claims extract(String token) {
         return Jwts.parser()
-                .setSigningKey(environment.getJwtSecretKey())
-                .parseClaimsJws(token)
-                .getBody();
+            .setSigningKey(environment.getJwtSecretKey())
+            .parseClaimsJws(token)
+            .getBody();
     }
 
     public String sign(Account account) {
@@ -64,14 +64,13 @@ public class JwtAuthenticationService {
         Instant expiration = issuedAt.plus(24, ChronoUnit.HOURS);
 
         return Jwts.builder()
-                .claim(EMAIL_KEY, account.getEmail())
-                .claim(ROLE_KEY, account.getRole())
-                .setSubject("auth|%s".formatted(account.getId()))
-                .setIssuer("http://localhost/senoir-hub")
-                .setIssuedAt(Date.from(issuedAt))
-                .setExpiration(Date.from(expiration))
-                .signWith(SignatureAlgorithm.HS256, environment.getJwtSecretKey())
-                .compact();
+            .claim(EMAIL_KEY, account.getEmail())
+            .setSubject("auth|%s".formatted(account.getId()))
+            .setIssuer("http://localhost/senoir-hub")
+            .setIssuedAt(Date.from(issuedAt))
+            .setExpiration(Date.from(expiration))
+            .signWith(SignatureAlgorithm.HS256, environment.getJwtSecretKey())
+            .compact();
     }
 
     /**

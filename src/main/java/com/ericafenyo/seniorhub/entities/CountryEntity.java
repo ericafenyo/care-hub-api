@@ -24,14 +24,14 @@
 
 package com.ericafenyo.seniorhub.entities;
 
-import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A database entity representing a country.
@@ -41,17 +41,17 @@ import java.util.List;
 @Setter
 @Accessors(chain = true)
 public class CountryEntity {
-  /**
-   * The unique identifier for the country.
-   */
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    /**
+     * The unique identifier for the country.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  /**
-   * The name of the country.
-   */
-  @Column(name = "name")
-  private String name;
+    /**
+     * The name of the country.
+     */
+    @Column(name = "name")
+    private String name;
 }

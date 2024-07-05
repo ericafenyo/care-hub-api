@@ -22,59 +22,44 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.model;
+package com.ericafenyo.seniorhub.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.Instant;
 import java.time.LocalDate;
 
-/**
- * A user domain model representing an individual who interacts with the application.
- */
-@Getter
-@Setter
-@Accessors(chain = true)
-public class User {
-    /**
-     * The unique identifier for the user.
-     */
-    private String id;
-    /**
-     * The first name of the user.
-     */
+import static com.ericafenyo.seniorhub.Constants.REGEX_EMAIL;
+import static com.ericafenyo.seniorhub.Constants.REGEX_PASSWORD;
+
+@Data
+public class CreateUserRequest {
+    @NotBlank()
+    @Size(max = 50)
     private String firstName;
-    /**
-     * The last name of the user.
-     */
+
+    @NotBlank()
+    @Size(max = 50)
     private String lastName;
 
-    /**
-     * The date of birth of the user.
-     */
-    private LocalDate birthDate;
+    @NotNull()
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate birthdate;
 
-    /**
-     * The email address of the user.
-     */
+    @NotNull()
+    @Email(regexp = REGEX_EMAIL)
     private String email;
-    /**
-     * The URL pointing to the user's profile photo.
-     */
-    private String photoUrl;
-    /**
-     * The date and time when the user was created.
-     */
-    private Instant createdAt;
-    /**
-     * The date and time when the user was last updated.
-     */
-    private Instant updatedAt;
 
-    /**
-     * The address where the user leaves.
-     */
-    private Address address;
+    @Pattern(regexp = REGEX_PASSWORD, message = "must be 8-16 characters long, and contain one uppercase and one lowercase character")
+    private String password;
+
+    @Valid()
+    @NotNull
+    private AddressDto address;
 }

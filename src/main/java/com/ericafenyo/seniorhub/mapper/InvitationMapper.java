@@ -34,12 +34,14 @@ import java.util.function.Function;
 public class InvitationMapper implements Function<InvitationEntity, Invitation> {
     @Override
     public Invitation apply(InvitationEntity entity) {
-        var invitation = new Invitation();
-        invitation.setId(entity.getUuid());
-        invitation.setCreatedAt(entity.getCreatedAt());
-        invitation.setExpiresAt(entity.getExpiresAt());
-        invitation.setUsedAt(entity.getUsedAt());
-        invitation.setExpiresAt(entity.getExpiresAt());
-        return invitation;
+        return new Invitation()
+            .setId(entity.getUuid())
+            .setToken(entity.getToken())
+            .setEmail(entity.getEmail())
+            .setStatus(entity.getStatus())
+            .setCreatedAt(entity.getCreatedAt())
+            .setExpiresAt(entity.getExpiresAt())
+            .setUsedAt(entity.getUsedAt())
+            .setExpiresAt(entity.getExpiresAt());
     }
 }

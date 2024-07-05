@@ -27,6 +27,8 @@ package com.ericafenyo.seniorhub.services;
 import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
 import com.ericafenyo.seniorhub.dto.UpdateTeamRequest;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
+import com.ericafenyo.seniorhub.model.Invitation;
+import com.ericafenyo.seniorhub.model.Report;
 import com.ericafenyo.seniorhub.model.Team;
 
 import java.util.List;
@@ -36,11 +38,15 @@ public interface TeamService {
 
     List<Team> getTeams();
 
-    Team getTeamById(String id) throws HttpException ;
+    Team getTeamById(String id) throws HttpException;
 
     Team updateTeam(String id, UpdateTeamRequest userUpdateDto);
 
     void deleteTeam(String id);
 
     List<Team> getUserTeams(Long id) throws HttpException;
+
+    Report invite(String teamId, String inviterId, String role, String email) throws HttpException;
+
+    Invitation validateInvitation(String teamId);
 }

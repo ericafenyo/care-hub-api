@@ -26,9 +26,11 @@ package com.ericafenyo.seniorhub.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter
 @Setter
+@Accessors(chain = true)
 public class Role {
     /**
      * The unique identifier for the role.
