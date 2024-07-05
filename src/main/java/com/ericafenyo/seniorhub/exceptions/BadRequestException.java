@@ -26,13 +26,13 @@ package com.ericafenyo.seniorhub.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class BadRequestException extends HttpException{
+public class BadRequestException extends HttpException {
 
-  public BadRequestException(HttpStatus status, String message, String code) {
-    super(status, message, code);
-  }
+    public BadRequestException(String message, String code) {
+        super(HttpStatus.BAD_REQUEST, message, code);
+    }
 
-  public BadRequestException(HttpStatus status, String message, String code, Throwable cause) {
-    super(status, message, code, cause);
-  }
+    public BadRequestException(String message, String code, Throwable cause) {
+        super(HttpStatus.BAD_REQUEST, message, code, cause);
+    }
 }

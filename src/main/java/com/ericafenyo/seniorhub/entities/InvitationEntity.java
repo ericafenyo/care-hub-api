@@ -47,11 +47,11 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * A database entity representing an invitation to add a caretaker to a senior account.
+ * A database entity representing an invitation to add a member to a team.
  */
 @Entity(name = "invitations")
 @EntityListeners(AuditingEntityListener.class)
-@Getter @Setter @Accessors(chain = true) @ToString
+@Getter @Setter @ToString @Accessors(chain = true)
 public class InvitationEntity {
     /**
      * The unique identifier for the entity.
@@ -66,46 +66,53 @@ public class InvitationEntity {
      * <p>
      * This is the actual id revealed publicly, the primary id is kept internally.
      */
-    @Column(name = "uuid", unique = true)
+    @Column(name = "uuid", unique = true, nullable = false)
     private String uuid = UUID.randomUUID().toString();
-
-    /**
-     * The token associated with the invitation
-     */
-    @Column(name = "token", unique = true)
-    private String token;
 
     /**
      * The email address of the invitation recipient
      */
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
     /**
      * The status of the invitation
      */
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private Invitation.Status status = Invitation.Status.PENDING;
 
     /**
-     * The date and time when the invitation was created
+     * The token associated with the invitation
      */
-    @CreatedDate
-    @Column(name = "created_at")
-    private Instant createdAt;
+    @Column(name = "token", unique = true, nullable = false)
+    private String token;
 
     /**
-     * The date and time when the invitation was last updated.
+     * The role that will be assigned to the member upon acceptance
      */
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    private Instant updatedAt;
+    @ManyToOne()
+    @JoinColumn(name = "role_id", nullable = false)
+    private RoleEntity role;
 
     /**
-     * The timestamp indicating when the invitation expires
+     * The user who sent the invitation
      */
-    @Column(name = "expires_at")
+    @ManyToOne()
+    @JoinColumn(name = "inviter_id", nullable = false)
+    private UserEntity inviter;
+
+    /**
+     * The team to which the member will be added
+     */
+    @ManyToOne()
+    @JoinColumn(name = "team_id", nullable = false)
+    private TeamEntity team;
+
+    /**
+     * The timestamp indicating when the invitation should expire
+     */
+    @Column(name = "expires_at", nullable = false)
     private Instant expiresAt;
 
     /**
@@ -115,16 +122,16 @@ public class InvitationEntity {
     private Instant usedAt;
 
     /**
-     * The senior account to which the caretaker will be added
+     * The date and time when the invitation was created
      */
-    @ManyToOne()
-    @JoinColumn(name = "senior_id")
-    private UserEntity senior;
+    @CreatedDate
+    @Column(name = "created_at", nullable = false)
+    private Instant createdAt;
 
     /**
-     * The user who sent the invitation
+     * The date and time when the invitation was last updated.
      */
-    @ManyToOne()
-    @JoinColumn(name = "inviter_id")
-    private UserEntity inviter;
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = false)
+    private Instant updatedAt;
 }

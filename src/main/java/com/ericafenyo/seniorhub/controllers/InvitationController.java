@@ -25,9 +25,8 @@
 package com.ericafenyo.seniorhub.controllers;
 
 import com.ericafenyo.seniorhub.dto.AcceptInvitationRequest;
-import com.ericafenyo.seniorhub.dto.InvitationRequest;
 import com.ericafenyo.seniorhub.dto.ValidateInvitationRequest;
-import com.ericafenyo.seniorhub.exceptions.invitation.InvitationException;
+import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.model.Invitation;
 import com.ericafenyo.seniorhub.model.Report;
 import com.ericafenyo.seniorhub.services.InvitationService;
@@ -44,18 +43,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class InvitationController {
     private final InvitationService service;
 
-    @PostMapping()
-    public Report validateInvitation(@RequestBody @Valid InvitationRequest request) throws InvitationException {
-        return service.invite(request);
-    }
-
     @PostMapping("/validate")
-    public Invitation validateInvitation(@RequestBody @Valid ValidateInvitationRequest request) throws InvitationException {
+    public Invitation validateInvitation(@RequestBody @Valid ValidateInvitationRequest request) throws HttpException {
         return service.validateInvitation(request);
     }
 
     @PostMapping("/accept")
-    public void acceptInvitation(@RequestBody @Valid AcceptInvitationRequest request) throws InvitationException {
-        service.acceptInvitation(request);
+    public Report acceptInvitation(@RequestBody @Valid AcceptInvitationRequest request) throws HttpException {
+        return service.acceptInvitation(request);
     }
 }

@@ -22,59 +22,19 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.model;
+package com.ericafenyo.seniorhub.exceptions.role;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
+import com.ericafenyo.seniorhub.exceptions.BadRequestException;
 
-import java.time.Instant;
-import java.time.LocalDate;
+public class InvalidRoleException extends BadRequestException {
+    private static final String MESSAGE = "The provided role name or role slug is incorrect";
+    private static final String ERROR_CODE = "incorrect_role";
 
-/**
- * A user domain model representing an individual who interacts with the application.
- */
-@Getter
-@Setter
-@Accessors(chain = true)
-public class User {
-    /**
-     * The unique identifier for the user.
-     */
-    private String id;
-    /**
-     * The first name of the user.
-     */
-    private String firstName;
-    /**
-     * The last name of the user.
-     */
-    private String lastName;
+    public InvalidRoleException() {
+        super(MESSAGE, ERROR_CODE);
+    }
 
-    /**
-     * The date of birth of the user.
-     */
-    private LocalDate birthDate;
-
-    /**
-     * The email address of the user.
-     */
-    private String email;
-    /**
-     * The URL pointing to the user's profile photo.
-     */
-    private String photoUrl;
-    /**
-     * The date and time when the user was created.
-     */
-    private Instant createdAt;
-    /**
-     * The date and time when the user was last updated.
-     */
-    private Instant updatedAt;
-
-    /**
-     * The address where the user leaves.
-     */
-    private Address address;
+    public InvalidRoleException(Throwable cause) {
+        super(MESSAGE, ERROR_CODE, cause);
+    }
 }

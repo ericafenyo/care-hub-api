@@ -25,6 +25,7 @@
 package com.ericafenyo.seniorhub.repository;
 
 import com.ericafenyo.seniorhub.entities.InvitationEntity;
+import com.ericafenyo.seniorhub.model.Invitation;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -32,4 +33,6 @@ import java.util.Optional;
 @Repository
 public interface InvitationRepository extends AbstractRepository<InvitationEntity> {
     Optional<InvitationEntity> findByToken(String token);
+
+    Optional<InvitationEntity> findByTokenAndStatus(String token, Invitation.Status status);
 }

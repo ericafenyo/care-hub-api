@@ -24,17 +24,14 @@
 
 package com.ericafenyo.seniorhub.exceptions.invitation;
 
+import com.ericafenyo.seniorhub.exceptions.HttpException;
 import org.springframework.http.HttpStatus;
 
-public class InvitationExpiredException extends InvitationException {
+public class InvitationExpiredException extends HttpException {
     private static final String MESSAGE = "The invitation has expired";
     private static final String ERROR_CODE = "invitation_expired";
 
     public InvitationExpiredException() {
         super(HttpStatus.UNPROCESSABLE_ENTITY, MESSAGE, ERROR_CODE);
-    }
-
-    public InvitationExpiredException(Throwable cause) {
-        super(HttpStatus.NOT_FOUND, MESSAGE, ERROR_CODE, cause);
     }
 }

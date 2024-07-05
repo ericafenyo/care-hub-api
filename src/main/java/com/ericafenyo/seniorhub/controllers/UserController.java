@@ -25,14 +25,16 @@
 package com.ericafenyo.seniorhub.controllers;
 
 import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
-import com.ericafenyo.seniorhub.dto.UserCreationDto;
+import com.ericafenyo.seniorhub.dto.CreateUserRequest;
 import com.ericafenyo.seniorhub.dto.UserUpdateDto;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.model.Team;
 import com.ericafenyo.seniorhub.model.User;
 import com.ericafenyo.seniorhub.services.UserService;
-import com.ericafenyo.seniorhub.validation.constraints.UserRole;
+import com.ericafenyo.seniorhub.util.Accounts;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,58 +42,54 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
-
     private final UserService service;
 
-    public UserController(UserService service) {
-        this.service = service;
+    @PostMapping("/users")
+    public User createUser(@Valid @RequestBody CreateUserRequest request) throws Exception {
+        return service.createUser(request);
     }
 
-    @GetMapping()
+    @GetMapping("/users")
     public List<User> getUsers() {
         return service.getUsers();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     public User getUserById(@PathVariable String id) throws Exception {
         return service.getUserById(id);
     }
 
-    @PostMapping()
-    public User createUser(
-            @RequestBody UserCreationDto userCreationDto,
-            @RequestParam("role") @Valid @UserRole String slug
-    ) throws Exception {
-        return service.createUser(userCreationDto, slug);
+    @GetMapping("/user")
+    public Object getAuthenticatedUser(Authentication authentication) throws Exception {
+        String userId = Accounts.extractUserId(authentication);
+        return service.getUserById(userId);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/users/{id}")
     public User updateUser(@PathVariable String id, @RequestBody @Valid UserUpdateDto userUpdateDto) {
         return service.updateUser(id, userUpdateDto);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/users/{id}")
     public void deleteUser(@PathVariable String id) {
         service.deleteUser(id);
     }
 
     // Team sub-resources
-    @PostMapping("/{id}/teams")
+    @PostMapping("/users/{id}/teams")
     public Team createTeam(@PathVariable String id, @RequestBody CreateTeamRequest request) throws HttpException {
         return service.createTeam(id, request);
     }
 
-    @GetMapping("/{id}/teams")
+    @GetMapping("/users/{id}/teams")
     public List<Team> getUserTeams(@PathVariable String id) throws HttpException {
         return service.getUserTeams(id);
     }

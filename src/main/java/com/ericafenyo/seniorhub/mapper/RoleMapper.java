@@ -46,11 +46,10 @@ public class RoleMapper implements Function<RoleEntity, Role> {
      */
     @Override
     public Role apply(RoleEntity entity) {
-        var role = new Role();
-        role.setId(entity.getUuid());
-        role.setName(entity.getName());
-        role.setSlug(entity.getSlug());
-        role.setDescription(entity.getDescription());
-        return role;
+        return new Role()
+            .setId(entity.getUuid())
+            .setName(entity.getName())
+            .setSlug(entity.getSlug())
+            .setDescription(entity.getDescription());
     }
 }

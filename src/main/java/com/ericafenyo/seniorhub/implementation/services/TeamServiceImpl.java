@@ -24,7 +24,6 @@
 
 package com.ericafenyo.seniorhub.implementation.services;
 
-import com.ericafenyo.seniorhub.Messages;
 import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
 import com.ericafenyo.seniorhub.dto.UpdateTeamRequest;
 import com.ericafenyo.seniorhub.entities.TeamEntity;
@@ -32,9 +31,12 @@ import com.ericafenyo.seniorhub.exceptions.ConflictException;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.exceptions.NotFoundException;
 import com.ericafenyo.seniorhub.mapper.TeamMapper;
+import com.ericafenyo.seniorhub.model.Invitation;
+import com.ericafenyo.seniorhub.model.Report;
 import com.ericafenyo.seniorhub.model.Team;
 import com.ericafenyo.seniorhub.repository.TeamRepository;
 import com.ericafenyo.seniorhub.repository.UserRepository;
+import com.ericafenyo.seniorhub.services.InvitationService;
 import com.ericafenyo.seniorhub.services.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -44,15 +46,17 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TeamServiceImpl implements TeamService {
+    private final TeamMapper mapper;
+
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
-    private final TeamMapper mapper;
-    private final Messages messages;
+
+    private final InvitationService invitationService;
 
     @Override
     public Team createTeam(
-            CreateTeamRequest request,
-            String creatorId
+        CreateTeamRequest request,
+        String creatorId
     ) throws HttpException {
         var exists = teamRepository.existsByName(request.getName());
 
@@ -61,7 +65,7 @@ public class TeamServiceImpl implements TeamService {
         }
 
         var creator = userRepository.findById(creatorId)
-                .orElseThrow(() -> new NotFoundException("Creator with id " + creatorId + " not found", "creator-not-found"));
+            .orElseThrow(() -> new NotFoundException("Creator with id " + creatorId + " not found", "creator-not-found"));
 
         var team = new TeamEntity();
         team.setName(request.getName());
@@ -73,14 +77,14 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public List<Team> getTeams() {
         return teamRepository.findAll().stream()
-                .map(mapper)
-                .toList();
+            .map(mapper)
+            .toList();
     }
 
     @Override
     public Team getTeamById(String id) throws HttpException {
         var team = teamRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Team with id not found", ""));
+            .orElseThrow(() -> new NotFoundException("Team with id not found", ""));
 
         return mapper.apply(team);
     }
@@ -88,7 +92,7 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public Team updateTeam(String id, UpdateTeamRequest userUpdateDto) {
         var team = teamRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user id"));
+            .orElseThrow(() -> new IllegalArgumentException("Invalid user id"));
 
         team.setName(userUpdateDto.getName());
         team.setDescription(userUpdateDto.getDescription());
@@ -98,14 +102,24 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public void deleteTeam(String id) {
-
     }
+
 
     @Override
     public List<Team> getUserTeams(Long id) throws HttpException {
         return teamRepository.findAllByCreatorId(id)
-                .stream()
-                .map(mapper)
-                .toList();
+            .stream()
+            .map(mapper)
+            .toList();
+    }
+
+    @Override
+    public Report invite(String teamId, String inviterId, String role, String email) throws HttpException {
+        return invitationService.invite(teamId, inviterId, role, email);
+    }
+
+    @Override
+    public Invitation validateInvitation(String id) {
+        return null;
     }
 }

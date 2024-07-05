@@ -29,12 +29,35 @@ import lombok.Setter;
 
 import java.time.Instant;
 
+/**
+ * A model class representing a group of users working
+ * together to provide care and support to a loved one.
+ */
 @Setter
 @Getter
 public class Team {
+    /**
+     * The unique identifier of the team.
+     */
     private String id;
+
+    /**
+     * The name of the team.
+     */
     private String name;
+
+    /**
+     * A brief description of the team.
+     */
     private String description;
+
+    /**
+     * The timestamp indicating when the team was created.
+     */
     private Instant createdAt;
+
+    /**
+     * The timestamp indicating when the team was last updated.
+     */
     private Instant updatedAt;
 }

@@ -53,12 +53,9 @@ public class AccountService implements UserDetailsService {
         var credential = credentialRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new UsernameNotFoundException("Credential for username '" + email + "' not found"));
 
-        var role = roleMapper.apply(user.getRole());
-
         return new Account()
                 .setId(user.getUuid())
                 .setEmail(user.getEmail())
-                .setPassword(credential.getPassword())
-                .setRole(role);
+                .setPassword(credential.getPassword());
     }
 }
