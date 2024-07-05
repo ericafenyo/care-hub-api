@@ -25,8 +25,8 @@
 package com.ericafenyo.seniorhub.services;
 
 import com.ericafenyo.seniorhub.dto.AcceptInvitationRequest;
-import com.ericafenyo.seniorhub.dto.InvitationRequest;
 import com.ericafenyo.seniorhub.dto.ValidateInvitationRequest;
+import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.exceptions.invitation.InvitationException;
 import com.ericafenyo.seniorhub.model.Invitation;
 import com.ericafenyo.seniorhub.model.Report;
@@ -36,28 +36,31 @@ import com.ericafenyo.seniorhub.model.Report;
  */
 public interface InvitationService {
     /**
-     * Invites a person using the provided request.
+     * Invites a user to join a team.
      *
-     * @param request The request object containing the necessary information to invite a person.
-     * @return A {@link Report} object if the invitation is successful.
-     * @throws InvitationException If the invitation fails, an InvitationException is thrown.
+     * @param teamId    The ID of the team to which the user is being invited.
+     * @param inviterId The ID of the user sending the invitation.
+     * @param email     The email address of the person being invited.
+     * @param role      The role that the invited user will have in the team.
+     * @return A {@link Report} object containing the result of the invitation.
+     * @throws HttpException If the invitation fails, an HttpException is thrown.
      */
-    Report invite(InvitationRequest request) throws InvitationException;
+    Report invite(String teamId, String inviterId, String role, String email) throws HttpException;
 
     /**
      * Validates an invitation using the provided request.
      *
      * @param request The request object containing the necessary information to validate an invitation.
      * @return An  {@link Invitation} object if the validation is successful.
-     * @throws InvitationException If the validation fails, an InvitationException is thrown.
+     * @throws HttpException If the validation fails, an InvitationException is thrown.
      */
-    Invitation validateInvitation(ValidateInvitationRequest request) throws InvitationException;
+    Invitation validateInvitation(ValidateInvitationRequest request) throws HttpException;
 
     /**
      * Accepts an invitation using the provided request.
      *
      * @param request The request object containing the necessary information to accept an invitation.
-     * @throws InvitationException If the acceptance fails, an InvitationException is thrown.
+     * @throws HttpException If the acceptance fails, an InvitationException is thrown.
      */
-    void acceptInvitation(AcceptInvitationRequest request) throws InvitationException;
+    Report acceptInvitation(AcceptInvitationRequest request) throws HttpException;
 }

@@ -22,59 +22,21 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.model;
+package com.ericafenyo.seniorhub.controllers;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
+import com.ericafenyo.seniorhub.services.RoleService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Instant;
-import java.time.LocalDate;
+@RestController
+@RequiredArgsConstructor
+public class RoleController {
+    private final RoleService service;
 
-/**
- * A user domain model representing an individual who interacts with the application.
- */
-@Getter
-@Setter
-@Accessors(chain = true)
-public class User {
-    /**
-     * The unique identifier for the user.
-     */
-    private String id;
-    /**
-     * The first name of the user.
-     */
-    private String firstName;
-    /**
-     * The last name of the user.
-     */
-    private String lastName;
-
-    /**
-     * The date of birth of the user.
-     */
-    private LocalDate birthDate;
-
-    /**
-     * The email address of the user.
-     */
-    private String email;
-    /**
-     * The URL pointing to the user's profile photo.
-     */
-    private String photoUrl;
-    /**
-     * The date and time when the user was created.
-     */
-    private Instant createdAt;
-    /**
-     * The date and time when the user was last updated.
-     */
-    private Instant updatedAt;
-
-    /**
-     * The address where the user leaves.
-     */
-    private Address address;
+    // return a list of roles
+    @GetMapping("/roles")
+    public Object getRoles() {
+        return service.getRoles();
+    }
 }

@@ -26,14 +26,16 @@ package com.ericafenyo.seniorhub.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.time.Instant;
 
 /**
- * Represents an invitation to add a caretaker to a senior account.
+ * Represents an invitation to add a member to a care team.
  */
 @Getter
 @Setter
+@Accessors(chain = true)
 public class Invitation {
     /**
      * The unique identifier of the invitation
@@ -41,24 +43,29 @@ public class Invitation {
     private String id;
 
     /**
-     * The token associated with the invitation
-     */
-    private String token;
-
-    /**
-     * The email address of the recipient
+     * The email address of the person being invited
      */
     private String email;
 
     /**
-     * Role to be assigned to the recipient upon acceptance
+     * The token used to validate the invitation
      */
-    private String role;
+    private String token;
+
+    /**
+     * The role that will be assigned to the member upon acceptance
+     */
+    private Role role;
 
     /**
      * The status of the invitation
      */
     private Status status;
+
+    /**
+     * The team to which the member will be added
+     */
+    private Team team;
 
     /**
      * The date and time indicating when the invitation was created
@@ -76,12 +83,7 @@ public class Invitation {
     private Instant usedAt;
 
     /**
-     * The senior account to which the caretaker will be added
-     */
-    private User senior;
-
-    /**
      * The status of an invitation
      */
-    public enum Status {PENDING, ACCEPTED}
+    public enum Status {PENDING, ACCEPTED, INVALIDATED, DECLINED}
 }

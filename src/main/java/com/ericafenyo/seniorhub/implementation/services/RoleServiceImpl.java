@@ -22,43 +22,28 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.dto;
+package com.ericafenyo.seniorhub.implementation.services;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
+import com.ericafenyo.seniorhub.mapper.RoleMapper;
+import com.ericafenyo.seniorhub.model.Role;
+import com.ericafenyo.seniorhub.repository.RoleRepository;
+import com.ericafenyo.seniorhub.services.RoleService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.util.List;
 
-import static com.ericafenyo.seniorhub.Constants.REGEX_EMAIL;
-import static com.ericafenyo.seniorhub.Constants.REGEX_PASSWORD;
+@Service
+@RequiredArgsConstructor
+public class RoleServiceImpl implements RoleService {
+    private final RoleRepository repository;
+    private final RoleMapper mapper;
 
-@Data
-public class UserCreationDto {
-  @NotBlank()
-  @Size(max = 50)
-  private String firstName;
-
-  @NotBlank()
-  @Size(max = 50)
-  private String lastName;
-
-  @NotNull()
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-  private LocalDate birthdate;
-
-  @Email(regexp = REGEX_EMAIL)
-  private String email;
-
-  @Pattern(regexp = REGEX_PASSWORD, message = "must be 8-16 characters long, and contain one uppercase and one lowercase character")
-  private String password;
-
-  @Valid()
-  @NotNull
-  private AddressDto address;
+    @Override
+    public List<Role> getRoles() {
+        return repository.findAll()
+            .stream()
+            .map(mapper)
+            .toList();
+    }
 }

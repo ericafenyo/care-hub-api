@@ -26,42 +26,46 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd
-      http://www.liquibase.org/xml/ns/pro
-      http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
-
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
 
     <changeSet id="1" author="Eric">
         <comment>Inserts data into the roles database table</comment>
 
-        <!-- Inserts a senior role-->
+        <!-- Inserts an 'administrator' role -->
         <insert tableName="roles">
-            <column name="uuid" value="9b4c53a6-c2df-4320-a327-b30e83e29fd0"/>
-            <column name="name" value="SENIOR"/>
-            <column name="slug" value="senior"/>
-            <column name="description" value="Elderly seeking social connections and activities"/>
-            <column name="created_at" value="now()"/>
-            <column name="updated_at" value="now()"/>
-        </insert>
-
-        <!-- Inserts a caretaker role-->
-        <insert tableName="roles">
-            <column name="uuid" value="6418a79a-5b35-4b19-81c0-bc8a7205e53a"/>
-            <column name="name" value="CARETAKER"/>
-            <column name="slug" value="caretaker"/>
-            <column name="description" value="Dedicated professionals providing compassionate care to seniors"/>
-            <column name="created_at" value="now()"/>
-            <column name="updated_at" value="now()"/>
-        </insert>
-
-        <!-- Inserts an administrator role -->
-        <insert tableName="roles">
-            <column name="uuid" value="5b685243-b842-48cf-9abc-ed6008263029"/>
+            <column name="uuid" value="f8c9bd3a-e561-4cb7-9d95-763942388777"/>
             <column name="name" value="ADMINISTRATOR"/>
             <column name="slug" value="administrator"/>
-            <column name="description" value="Individuals responsible for managing the application and the users"/>
+            <column name="description" value="Manages all aspects within a specific team."/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="roles">
+            <column name="uuid" value="3bca1db5-37ee-4b25-a404-ff615a4d6945"/>
+            <column name="name" value="COORDINATOR"/>
+            <column name="slug" value="coordinator"/>
+            <column name="description" value="Manages care activities and schedules within a team."/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <!-- Inserts a 'consultant' role-->
+        <insert tableName="roles">
+            <column name="uuid" value="b40391c6-5f82-4740-9fb9-525d9c7e49a0"/>
+            <column name="name" value="CONSULTANT"/>
+            <column name="slug" value="consultant"/>
+            <column name="description" value="Provides expert care, advice, and guidance, with read and comment access to most resources."/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <!-- Inserts an 'aid' role-->
+        <insert tableName="roles">
+            <column name="uuid" value="6409a170-1639-4cfc-81ed-9dd7bcd007b2"/>
+            <column name="name" value="AID"/>
+            <column name="slug" value="aid"/>
+            <column name="description" value="Provides direct care with access to tasks and reminders relevant to their responsibilities."/>
             <column name="created_at" value="now()"/>
             <column name="updated_at" value="now()"/>
         </insert>
