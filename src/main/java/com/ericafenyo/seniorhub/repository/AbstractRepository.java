@@ -24,7 +24,6 @@
 
 package com.ericafenyo.seniorhub.repository;
 
-import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
@@ -49,7 +48,7 @@ public interface AbstractRepository<T> extends Repository<T, Long> {
     @Query("SELECT COUNT(e) FROM #{#entityName} as e WHERE e.uuid=?1")
     long countById(String id);
 
-    default boolean existsById(String id) {
+    default boolean exists(String id) {
         return countById(id) > 0;
     }
 }

@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
         var user = new UserEntity();
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
-        user.setBirthDate(request.getBirthdate());
+        user.setBirthDate(request.getBirthDate());
         user.setEmail(request.getEmail());
         user.setAddress(address);
         var savedUser = userRepository.save(user);

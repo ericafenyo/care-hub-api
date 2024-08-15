@@ -24,16 +24,22 @@
 
 package com.ericafenyo.seniorhub.implementation.services;
 
+import com.ericafenyo.seniorhub.Messages;
+import com.ericafenyo.seniorhub.contexts.CreateTaskContext;
 import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
 import com.ericafenyo.seniorhub.dto.UpdateTeamRequest;
+import com.ericafenyo.seniorhub.entities.TaskEntity;
 import com.ericafenyo.seniorhub.entities.TeamEntity;
 import com.ericafenyo.seniorhub.exceptions.ConflictException;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.exceptions.NotFoundException;
+import com.ericafenyo.seniorhub.mapper.TaskMapper;
 import com.ericafenyo.seniorhub.mapper.TeamMapper;
 import com.ericafenyo.seniorhub.model.Invitation;
 import com.ericafenyo.seniorhub.model.Report;
+import com.ericafenyo.seniorhub.model.Task;
 import com.ericafenyo.seniorhub.model.Team;
+import com.ericafenyo.seniorhub.repository.TaskRepository;
 import com.ericafenyo.seniorhub.repository.TeamRepository;
 import com.ericafenyo.seniorhub.repository.UserRepository;
 import com.ericafenyo.seniorhub.services.InvitationService;
@@ -47,11 +53,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeamServiceImpl implements TeamService {
     private final TeamMapper mapper;
+    private final TaskMapper taskMapper;
 
+    private final TaskRepository taskRepository;
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
 
     private final InvitationService invitationService;
+    private final Messages messages;
 
     @Override
     public Team createTeam(
@@ -121,5 +130,26 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public Invitation validateInvitation(String id) {
         return null;
+    }
+
+    @Override
+    public Task createTask(CreateTaskContext context) throws HttpException {
+        var team = teamRepository.findById(context.getTeamId()).orElseThrow(() ->
+            new NotFoundException(
+                messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "Team", context.getTeamId()),
+                messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "team")
+            )
+        );
+
+        var entity = new TaskEntity()
+            .setTitle(context.getTitle())
+            .setDescription(context.getDescription())
+            .setDueDate(context.getDueDate())
+            .setPriority(context.getPriority())
+            .setTeam(team);
+
+        TaskEntity task = taskRepository.save(entity);
+
+        return taskMapper.apply(task);
     }
 }

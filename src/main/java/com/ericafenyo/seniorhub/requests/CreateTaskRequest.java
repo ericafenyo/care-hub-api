@@ -22,44 +22,28 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.dto;
+package com.ericafenyo.seniorhub.requests;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
+import com.ericafenyo.seniorhub.model.Priority;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-import static com.ericafenyo.seniorhub.Constants.REGEX_EMAIL;
-import static com.ericafenyo.seniorhub.Constants.REGEX_PASSWORD;
-
 @Data
-public class CreateUserRequest {
-    @NotBlank()
-    @Size(max = 50)
-    private String firstName;
+public class CreateTaskRequest {
+    @NotBlank
+    private String title;
 
-    @NotBlank()
-    @Size(max = 50)
-    private String lastName;
+    @NotBlank
+    private String description;
 
     @NotNull()
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate birthDate;
+    private LocalDate dueDate;
 
     @NotNull()
-    @Email(regexp = REGEX_EMAIL)
-    private String email;
-
-    @Pattern(regexp = REGEX_PASSWORD, message = "must be 8-16 characters long, and contain one uppercase and one lowercase character")
-    private String password;
-
-    @Valid()
-    @NotNull
-    private AddressDto address;
+    private Priority priority;
 }

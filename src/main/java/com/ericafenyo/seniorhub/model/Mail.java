@@ -32,12 +32,12 @@ import java.util.HashMap;
 @Builder
 @Getter()
 public class Mail {
-  String sender;
-  String recipient;
-  String subject;
-  String body;
-  String bcc;
-  String cc;
+    private String bcc;
+    private String body;
+    private String cc;
+    private String recipient;
+    private String sender;
+    private String subject;
 
-  public static class Context extends HashMap<String, Object> { }
+    public static class Context extends HashMap<String, Object> { }
 }

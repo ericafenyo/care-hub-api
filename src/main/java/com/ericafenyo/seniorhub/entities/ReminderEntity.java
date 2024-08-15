@@ -24,23 +24,14 @@
 
 package com.ericafenyo.seniorhub.entities;
 
-import com.ericafenyo.seniorhub.model.Priority;
-import com.ericafenyo.seniorhub.model.Task;
-import com.ericafenyo.seniorhub.model.Task.Status;
-import com.ericafenyo.seniorhub.model.TaskStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedDate;
@@ -48,19 +39,14 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
-@Entity(name = "tasks")
+@Entity(name = "reminders")
 @EntityListeners(AuditingEntityListener.class)
-@Data
-@Accessors(chain = true)
-public class TaskEntity {
+@Data @Accessors(chain = true)
+public class ReminderEntity {
     /**
-     * The unique identifier for the task.
+     * The unique identifier for the reminder.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,58 +58,32 @@ public class TaskEntity {
      * <p>
      * This is the actual id revealed publicly, the primary id is kept internally.
      */
-    @Column(name = "uuid", unique = true, nullable = false)
+    @Column(name = "uuid", unique = true)
     private String uuid = UUID.randomUUID().toString();
 
-    /**
-     * The title of the task.
-     */
-    @Column(name = "title", nullable = false)
+
+    @Column(name = "title")
     private String title;
 
-    /**
-     * The short description of the task.
-     */
+
     @Column(name = "description")
     private String description;
 
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Status status = Status.PLANNED;
 
-    @Column(name = "priority", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Priority priority;
+    @Column(name = "location")
+    private String location;
 
-    @Column(name = "due_date")
-    private LocalDate dueDate;
-
-    @ManyToMany()
-    @JoinTable(
-        name = "task_user",
-        joinColumns = @JoinColumn(name = "task_id", nullable = false),
-        inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false)
-    )
-    private List<UserEntity> assignees = new ArrayList<>();
 
     @ManyToOne()
-    @JoinColumn(name = "team_id", nullable = false)
+    @JoinColumn(name = "team_id")
     private TeamEntity team;
 
-    @OneToOne()
-    @JoinColumn(name = "recurrence_id")
-    private RecurrenceEntity recurrence;
 
-    /**
-     * The timestamp at which the task was created.
-     */
     @CreatedDate
     @Column(name = "created_at")
     private Instant createdAt;
 
-    /**
-     * The timestamp at which the task was last updated.
-     */
+
     @LastModifiedDate
     @Column(name = "updated_at")
     private Instant updatedAt;
