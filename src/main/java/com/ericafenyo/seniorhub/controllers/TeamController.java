@@ -24,13 +24,16 @@
 
 package com.ericafenyo.seniorhub.controllers;
 
+import com.ericafenyo.seniorhub.contexts.CreateTaskContext;
 import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
 
 import com.ericafenyo.seniorhub.dto.InvitationRequest;
 import com.ericafenyo.seniorhub.dto.UpdateTeamRequest;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.model.Invitation;
+import com.ericafenyo.seniorhub.model.Task;
 import com.ericafenyo.seniorhub.model.Team;
+import com.ericafenyo.seniorhub.requests.CreateTaskRequest;
 import com.ericafenyo.seniorhub.services.TeamService;
 import com.ericafenyo.seniorhub.util.Accounts;
 import jakarta.validation.Valid;
@@ -96,28 +99,25 @@ public class TeamController {
         Authentication authentication
     ) throws HttpException {
         var userId = Accounts.extractUserId(authentication);
-        return service.invite(
-            teamId,
-            userId,
-            request.getRole(),
-            request.getEmail()
-        );
+        return service.invite(teamId, userId, request.getRole(), request.getEmail());
     }
 
-    @PostMapping("/teams/{id}/invitations/validate")
-    public Invitation validateInvitation(
-        @PathVariable @UUID String id,
-//            @RequestBody InvitationRequest request,
-        Authentication authentication
-    ) {
-//        var userId = Accounts.extractUserId(authentication);
-//        return service.validateInvitation(teamId);
+    // Task sub-resources
 
-        return null;
+    @PostMapping("/teams/{id}/tasks")
+    public Task createTask(
+        @PathVariable String id,
+        @RequestBody CreateTaskRequest request
+    ) throws HttpException {
+
+        var context = CreateTaskContext.builder()
+            .setTitle(request.getTitle())
+            .setDescription(request.getDescription())
+            .setDueDate(request.getDueDate())
+            .setPriority(request.getPriority())
+            .setTeamId(id)
+            .build();
+
+        return service.createTask(context);
     }
-
-//    @PostMapping("/{id}/invitations/accept")
-//    public void acceptInvitation(@PathVariable @Valid @NotBlank String id) {
-//        service.acceptInvitation(id);
-//    }
 }

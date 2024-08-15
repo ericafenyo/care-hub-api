@@ -24,11 +24,13 @@
 
 package com.ericafenyo.seniorhub.services;
 
+import com.ericafenyo.seniorhub.contexts.CreateTaskContext;
 import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
 import com.ericafenyo.seniorhub.dto.UpdateTeamRequest;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.model.Invitation;
 import com.ericafenyo.seniorhub.model.Report;
+import com.ericafenyo.seniorhub.model.Task;
 import com.ericafenyo.seniorhub.model.Team;
 
 import java.util.List;
@@ -49,4 +51,6 @@ public interface TeamService {
     Report invite(String teamId, String inviterId, String role, String email) throws HttpException;
 
     Invitation validateInvitation(String teamId);
+
+    Task createTask(CreateTaskContext context) throws HttpException;
 }

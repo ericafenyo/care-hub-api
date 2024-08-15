@@ -25,7 +25,6 @@
 package com.ericafenyo.seniorhub.mapper;
 
 import com.ericafenyo.seniorhub.entities.UserEntity;
-import com.ericafenyo.seniorhub.model.SealedRole;
 import com.ericafenyo.seniorhub.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

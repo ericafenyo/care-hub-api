@@ -67,7 +67,7 @@ public class UserController {
         return service.getUserById(id);
     }
 
-    @GetMapping("/user")
+    @GetMapping("/users/me")
     public Object getAuthenticatedUser(Authentication authentication) throws Exception {
         String userId = Accounts.extractUserId(authentication);
         return service.getUserById(userId);

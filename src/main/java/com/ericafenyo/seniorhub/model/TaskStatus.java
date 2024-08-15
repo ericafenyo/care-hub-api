@@ -24,43 +24,9 @@
 
 package com.ericafenyo.seniorhub.model;
 
-import lombok.Getter;
-
-/**
- * Enum representing different roles in the application.
- */
-@Getter
-public enum SealedRole {
-    COORDINATOR("coordinator"),
-    AID("aid"),
-    CONSULTANT("consultant"),
-    ADMINISTRATOR("administrator");
-
-    final String slug;
-
-    /**
-     * Constructor for Role enum.
-     *
-     * @param slug The URL-friendly slug associated with the role.
-     */
-    SealedRole(String slug) {
-        this.slug = slug;
-    }
-
-    /**
-     * Retrieves the Role enum based on the given slug.
-     *
-     * @param slug The slug to match.
-     * @return The corresponding Role enum.
-     * @throws IllegalArgumentException If no role is found for the given slug.
-     */
-    public static SealedRole from(String slug) {
-        for (SealedRole role : SealedRole.values()) {
-            if (role.slug.equals(slug)) {
-                return role;
-            }
-        }
-        throw new IllegalArgumentException("No role found for slug: " + slug);
-    }
+public enum TaskStatus {
+    PLANNED,
+    IN_PROGRESS,
+    COMPLETED,
+    BLOCKED,
 }
-

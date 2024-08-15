@@ -28,18 +28,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalDate;
 
 @Setter
 @Getter
+
 public class Task {
     private String id;
+    private String title;
     private String description;
-    private Boolean completed;
-    private LocalDateTime dueDate;
+    private Status status;
+    private Priority priority;
+    private LocalDate dueDate;
     private Instant createdAt;
     private Instant updatedAt;
-    private List<User> assignees;
-    private Team team;
+
+    public enum Status {PLANNED, STARTED, COMPLETED, BLOCKED}
 }

@@ -24,68 +24,48 @@
 
 package com.ericafenyo.seniorhub.entities;
 
+import com.ericafenyo.seniorhub.model.Frequency;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import lombok.experimental.Accessors;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-@Entity(name = "appointments")
+@Entity(name = "recurrences")
 @EntityListeners(AuditingEntityListener.class)
-@Data
-public class AppointmentEntity {
+@Data @Accessors(chain = true)
+public class RecurrenceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "uuid", unique = true)
-    private String uuid = UUID.randomUUID().toString();
+    @Column(name = "frequency")
+    @Enumerated(EnumType.STRING)
+    private Frequency frequency;
 
-    @Column(name = "title")
-    private String title;
+    @Column(name = "count")
+    private int count = 0;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "occurrences")
+    private int occurrences = 1;
 
-    @Column(name = "location")
-    private String location;
+    @Column(name = "day_of_week")
+    private int dayOfWeek = 1;
 
-    @Column(name = "start_date")
-    private LocalDateTime startDate;
+    @Column(name = "week_of_month")
+    private int weekOfMonth = 1;
 
-    @Column(name = "end_date")
-    private LocalDateTime endDate;
+    @Column(name = "day_of_month")
+    private int dayOfMonth = 1;
 
-    @CreatedDate
-    @Column(name = "created_at")
-    private Instant createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    private Instant updatedAt;
-
-    @ManyToOne()
-    @JoinColumn(name = "team_id")
-    private TeamEntity team;
-
-    @ManyToOne()
-    @JoinColumn(name = "author_id")
-    private UserEntity author;
-
-    @OneToOne()
-    @JoinColumn(name = "recurrence_id")
-    private RecurrenceEntity recurrence;
+    @Column(name = "month_of_year")
+    private int monthOfYear = 1;
 }
+
