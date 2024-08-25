@@ -18,8 +18,8 @@ POST /teams/{id}/tasks
 
 ### Headers
 
-`Authorization`: Bearer <access-token>  
-`Content-Type`: application/json
+**`Authorization`**: Bearer <access-token>  
+**`Content-Type`**: application/json
 
 ### Path parameters
 
@@ -50,9 +50,9 @@ The due date by which the task should be completed.
 ### Request example
 
 ```sh
-curl -L -X POST "http://localhost:8080/teams/02a36545-020d-442f-a5f6-b42708b4d24f/tasks" \
-     -H "Content-Type: application/json" \
-     -H "Authorization: Bearer <access-token>" \
+curl -L -X POST 'http://localhost:8080/teams/02a36545-020d-442f-a5f6-b42708b4d24f/tasks' \
+     -H 'Content-Type: application/json' \
+     -H 'Authorization: Bearer <access-token>' \
      -d '{
            "title": "Coordinate Weekly Wellness Check-Ins",
            "description": "Ensure that each member receives a personalized call or visit to discuss their needs, provide support, and offer resources if necessary.",
@@ -80,4 +80,5 @@ curl -L -X POST "http://localhost:8080/teams/02a36545-020d-442f-a5f6-b42708b4d24
 
 **`201` Created** - The resource was created successfully.  
 **`400` Bad Request** - The request body is invalid.  
+**`401`** Unauthorized - Expired or invalid JWT.  
 **`500` Internal Server Error** - An error occurred while processing the request.
