@@ -47,13 +47,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin(origins = "*")
 @AllArgsConstructor()
-public class AccountController {
+public class AuthenticationController {
   private final MailService service;
   private final JwtAuthenticationService jwtAuthenticationService;
   private final EmailPasswordAuthenticationService emailPasswordAuthenticationService;
   private final AccountService accountService;
 
-  @PostMapping("/authenticate")
+  @PostMapping("/auth/login")
   public Tokens authenticate(@RequestBody BasicAuthenticateRequest request) throws HttpException {
     emailPasswordAuthenticationService.authenticate(request.getEmail(), request.getPassword());
 
@@ -67,7 +67,7 @@ public class AccountController {
         .build();
   }
 
-  @PostMapping("/accounts/verify-email")
+  @PostMapping("/auth/verify-email")
   public Report sendVerificationCode(@RequestBody @Valid VerifyEmailDto verifyEmailDto, HttpServletResponse response) {
     Tuple<Report, String> result = service.sendVerificationCode(verifyEmailDto.getEmail());
 
@@ -83,7 +83,7 @@ public class AccountController {
     return result.first();
   }
 
-  @PostMapping("/accounts/verify-code")
+  @PostMapping("/auth/verify-code")
   String verifyCode() {
     return null;
   }
