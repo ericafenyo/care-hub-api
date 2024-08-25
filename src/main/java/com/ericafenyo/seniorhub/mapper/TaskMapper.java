@@ -22,35 +22,45 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub;
+package com.ericafenyo.seniorhub.mapper;
 
+import com.ericafenyo.seniorhub.entities.TaskEntity;
+import com.ericafenyo.seniorhub.model.Task;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.springframework.stereotype.Component;
 
-import java.util.Locale;
+import java.util.function.Function;
 
+/**
+ * Maps a {@link TaskMapper} to a {@link Task}.
+ */
 @Component
 @RequiredArgsConstructor
-public class Messages {
-    public static final String ERROR_RESOURCE_WITH_ID_NOTFOUND = "error.resource.with.id.not.found";
-    public static final String ERROR_REQUESTED_RESOURCE_WITH_ID_NOT_FOUND = "error.requested.resource.with.id.not.found";
-    public static final String ERROR_RESOURCE_NOTFOUND = "error.resource.not.found";
-    public static final String ERROR_REQUESTED_RESOURCE_NOT_FOUND = "error.requested.resource.not.found";
-    public static final String ERROR_RESOURCE_NOTFOUND_CODE = "error.resource.not.found.code";
+@Setter
+@Getter
+@Accessors(chain = true)
+public class TaskMapper implements Function<TaskEntity, Task> {
 
-    public static final String ERROR_RESOURCE_ALREADY_EXISTS = "error.resource.already.exists";
-    public static final String ERROR_RESOURCE_ALREADY_EXISTS_CODE = "error.resource.already.exists.code";
-
-    public static final String MESSAGE_INVITATION_ACCEPTED = "message.invitation.accepted";
-
-    private final MessageSource source;
-
-    public String get(String key) {
-        return source.getMessage(key, null, Locale.getDefault());
-    }
-
-    public String format(String key, Object... args) {
-        return source.getMessage(key, args, Locale.getDefault());
+    /**
+     * Converts a {@link TaskEntity} to a {@link Task}.
+     *
+     * @param entity The input task entity.
+     * @return The mapped task.
+     */
+    @Override
+    public Task apply(TaskEntity entity) {
+        var task = new Task();
+        task.setId(entity.getUuid());
+        task.setTitle(entity.getTitle());
+        task.setDescription(entity.getDescription());
+        task.setCreatedAt(entity.getCreatedAt());
+        task.setUpdatedAt(entity.getUpdatedAt());
+        task.setStatus(entity.getStatus());
+        task.setDueDate(entity.getDueDate());
+        task.setPriority(entity.getPriority());
+        return task;
     }
 }
