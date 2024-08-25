@@ -6,7 +6,10 @@ approach keeps the documentation organized and specific to each area of the API.
 
 ### API URL
 
-The default base URL for the API is `http://localhost:8080`.
+The default base URL for the API is:
+```txt 
+http://localhost:8080
+```
 
 ### Authentication
 
