@@ -24,36 +24,17 @@
 
 package com.ericafenyo.seniorhub.repository;
 
+import com.ericafenyo.seniorhub.entities.NoteEntity;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.NoRepositoryBean;
-import org.springframework.data.repository.Repository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
- * Interface for managing entities.
- *
- * @param <T> the specific entity type the repository manages
+ * Repository interface for managing `NoteEntity` type.
  */
-@NoRepositoryBean
-public interface AbstractRepository<T> extends Repository<T, Long> {
-    @Query("SELECT e FROM #{#entityName} as e WHERE e.uuid=?1")
-    Optional<T> findById(String id);
-
-    <E extends T> E save(E entity);
-
-    List<T> findAll();
-
-    void delete(T entity);
-
-    @Query("DELETE FROM #{#entityName} as e WHERE e.uuid=?1")
-    void deleteById(String id);
-
-    @Query("SELECT COUNT(e) FROM #{#entityName} as e WHERE e.uuid=?1")
-    long countById(String id);
-
-    default boolean exists(String id) {
-        return countById(id) > 0;
-    }
+@Repository
+public interface NoteRepository extends AbstractRepository<NoteEntity> {
+    @Query("SELECT n FROM notes n JOIN n.team t WHERE t.uuid = ?1")
+    List<NoteEntity> findByTeamId(String teamId);
 }

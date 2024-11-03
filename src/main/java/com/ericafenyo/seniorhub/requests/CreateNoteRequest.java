@@ -22,38 +22,16 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.repository;
+package com.ericafenyo.seniorhub.requests;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.NoRepositoryBean;
-import org.springframework.data.repository.Repository;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
-import java.util.List;
-import java.util.Optional;
+@Data
+public class CreateNoteRequest {
+    @NotBlank
+    private String title;
 
-/**
- * Interface for managing entities.
- *
- * @param <T> the specific entity type the repository manages
- */
-@NoRepositoryBean
-public interface AbstractRepository<T> extends Repository<T, Long> {
-    @Query("SELECT e FROM #{#entityName} as e WHERE e.uuid=?1")
-    Optional<T> findById(String id);
-
-    <E extends T> E save(E entity);
-
-    List<T> findAll();
-
-    void delete(T entity);
-
-    @Query("DELETE FROM #{#entityName} as e WHERE e.uuid=?1")
-    void deleteById(String id);
-
-    @Query("SELECT COUNT(e) FROM #{#entityName} as e WHERE e.uuid=?1")
-    long countById(String id);
-
-    default boolean exists(String id) {
-        return countById(id) > 0;
-    }
+    @NotBlank
+    private String content;
 }

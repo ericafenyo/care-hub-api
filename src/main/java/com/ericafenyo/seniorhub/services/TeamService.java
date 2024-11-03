@@ -24,11 +24,13 @@
 
 package com.ericafenyo.seniorhub.services;
 
+import com.ericafenyo.seniorhub.contexts.CreateNoteContext;
 import com.ericafenyo.seniorhub.contexts.CreateTaskContext;
 import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
 import com.ericafenyo.seniorhub.dto.UpdateTeamRequest;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.model.Invitation;
+import com.ericafenyo.seniorhub.model.Note;
 import com.ericafenyo.seniorhub.model.Report;
 import com.ericafenyo.seniorhub.model.Task;
 import com.ericafenyo.seniorhub.model.Team;
@@ -53,4 +55,8 @@ public interface TeamService {
     Invitation validateInvitation(String teamId);
 
     Task createTask(CreateTaskContext context) throws HttpException;
+
+    Note createNote(CreateNoteContext context) throws HttpException;
+
+    List<Note> getNotes(String teamId, String userId);
 }

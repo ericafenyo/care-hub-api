@@ -25,20 +25,25 @@
 package com.ericafenyo.seniorhub.implementation.services;
 
 import com.ericafenyo.seniorhub.Messages;
+import com.ericafenyo.seniorhub.contexts.CreateNoteContext;
 import com.ericafenyo.seniorhub.contexts.CreateTaskContext;
 import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
 import com.ericafenyo.seniorhub.dto.UpdateTeamRequest;
+import com.ericafenyo.seniorhub.entities.NoteEntity;
 import com.ericafenyo.seniorhub.entities.TaskEntity;
 import com.ericafenyo.seniorhub.entities.TeamEntity;
 import com.ericafenyo.seniorhub.exceptions.ConflictException;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.exceptions.NotFoundException;
+import com.ericafenyo.seniorhub.mapper.NoteMapper;
 import com.ericafenyo.seniorhub.mapper.TaskMapper;
 import com.ericafenyo.seniorhub.mapper.TeamMapper;
 import com.ericafenyo.seniorhub.model.Invitation;
+import com.ericafenyo.seniorhub.model.Note;
 import com.ericafenyo.seniorhub.model.Report;
 import com.ericafenyo.seniorhub.model.Task;
 import com.ericafenyo.seniorhub.model.Team;
+import com.ericafenyo.seniorhub.repository.NoteRepository;
 import com.ericafenyo.seniorhub.repository.TaskRepository;
 import com.ericafenyo.seniorhub.repository.TeamRepository;
 import com.ericafenyo.seniorhub.repository.UserRepository;
@@ -54,10 +59,12 @@ import java.util.List;
 public class TeamServiceImpl implements TeamService {
     private final TeamMapper mapper;
     private final TaskMapper taskMapper;
+    private final NoteMapper toNote;
 
     private final TaskRepository taskRepository;
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
+    private final NoteRepository noteRepository;
 
     private final InvitationService invitationService;
     private final Messages messages;
@@ -151,5 +158,41 @@ public class TeamServiceImpl implements TeamService {
         TaskEntity task = taskRepository.save(entity);
 
         return taskMapper.apply(task);
+    }
+
+    @Override
+    public Note createNote(CreateNoteContext context) throws HttpException {
+        var team = findById(context.getTeamId());
+        var author = userRepository.findById(context.getUserId()).orElseThrow(() ->
+            new NotFoundException(
+                messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "User", context.getTeamId()),
+                messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "user")
+            )
+        );
+
+        var entity = new NoteEntity()
+            .setTitle(context.getTitle())
+            .setContent(context.getContent())
+            .setTeam(team)
+            .setAuthor(author);
+
+        return noteRepository.save(entity).map(toNote);
+    }
+
+    @Override
+    public List<Note> getNotes(String teamId, String userId) {
+        return noteRepository.findByTeamId(teamId)
+            .stream()
+            .map(toNote)
+            .toList();
+    }
+
+    private TeamEntity findById(String teamId) throws NotFoundException {
+        return teamRepository.findById(teamId).orElseThrow(() ->
+            new NotFoundException(
+                messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "Team", teamId),
+                messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "team")
+            )
+        );
     }
 }

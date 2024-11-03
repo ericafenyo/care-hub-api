@@ -30,6 +30,4 @@ package com.ericafenyo.seniorhub.api;
  * @param <A> Type of the first value.
  * @param <B> Type of the second value.
  */
-public record Tuple<A, B>(A first, B second) {
-}
-
+public record Tuple<A, B>(A first, B second) { }

@@ -24,22 +24,23 @@
 
 package com.ericafenyo.seniorhub.controllers;
 
+import com.ericafenyo.seniorhub.contexts.CreateNoteContext;
 import com.ericafenyo.seniorhub.contexts.CreateTaskContext;
 import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
 
 import com.ericafenyo.seniorhub.dto.InvitationRequest;
 import com.ericafenyo.seniorhub.dto.UpdateTeamRequest;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
-import com.ericafenyo.seniorhub.model.Invitation;
+import com.ericafenyo.seniorhub.model.Note;
 import com.ericafenyo.seniorhub.model.Task;
 import com.ericafenyo.seniorhub.model.Team;
+import com.ericafenyo.seniorhub.requests.CreateNoteRequest;
 import com.ericafenyo.seniorhub.requests.CreateTaskRequest;
 import com.ericafenyo.seniorhub.services.TeamService;
 import com.ericafenyo.seniorhub.util.Accounts;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.UUID;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -110,6 +111,7 @@ public class TeamController {
         @RequestBody CreateTaskRequest request
     ) throws HttpException {
 
+
         var context = CreateTaskContext.builder()
             .setTitle(request.getTitle())
             .setDescription(request.getDescription())
@@ -119,5 +121,34 @@ public class TeamController {
             .build();
 
         return service.createTask(context);
+    }
+
+    // Notes sub-resources
+    @PostMapping("/teams/{id}/notes")
+    public Note createNote(
+        @PathVariable("id") String teamId,
+        @RequestBody CreateNoteRequest request,
+        Authentication authentication
+    ) throws HttpException {
+        var userId = Accounts.extractUserId(authentication);
+        var context = CreateNoteContext.builder()
+            .setTitle(request.getTitle())
+            .setContent(request.getContent())
+            .setUserId(userId)
+            .setTeamId(teamId)
+            .build();
+
+        return service.createNote(context);
+    }
+
+    @GetMapping("/teams/{id}/notes")
+    public List<Note> getNotes(
+        @PathVariable("id") String teamId,
+        Authentication authentication
+    ) throws HttpException {
+        var userId = Accounts.extractUserId(authentication);
+
+
+        return service.getNotes(teamId, userId);
     }
 }

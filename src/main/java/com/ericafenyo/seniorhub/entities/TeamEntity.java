@@ -24,6 +24,8 @@
 
 package com.ericafenyo.seniorhub.entities;
 
+import com.ericafenyo.seniorhub.api.Mappable;
+import com.ericafenyo.seniorhub.model.Team;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -44,12 +46,13 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
 @Entity(name = "teams")
 @EntityListeners(AuditingEntityListener.class)
 @Setter
 @Getter
-public class TeamEntity {
+public class TeamEntity implements Mappable<TeamEntity, Team> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -70,9 +73,9 @@ public class TeamEntity {
 
     @ManyToMany()
     @JoinTable(
-            name = "team_user",
-            joinColumns = @JoinColumn(name = "team_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+        name = "team_user",
+        joinColumns = @JoinColumn(name = "team_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<UserEntity> members = new ArrayList<>();
 
@@ -83,4 +86,9 @@ public class TeamEntity {
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
+
+    @Override
+    public Team map(Function<? super TeamEntity, ? extends Team> mapper) {
+        return mapper.apply(this);
+    }
 }

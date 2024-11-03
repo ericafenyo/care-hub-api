@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 import java.util.function.Function;
 
 /**
- * Maps a {@link AddressEntity} to a {@link Address}.
+ * Maps a {@link RoleEntity} to a {@link Role}.
  */
 @Component
 public class RoleMapper implements Function<RoleEntity, Role> {

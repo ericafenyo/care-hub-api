@@ -24,6 +24,8 @@
 
 package com.ericafenyo.seniorhub.entities;
 
+import com.ericafenyo.seniorhub.api.Mappable;
+import com.ericafenyo.seniorhub.model.Note;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -32,20 +34,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.util.UUID;
+import java.util.function.Function;
 
 @Entity(name = "notes")
 @EntityListeners(AuditingEntityListener.class)
-@Setter
-@Getter
-public class NoteEntity {
+@Data
+@Accessors(chain = true)
+public class NoteEntity implements Mappable<NoteEntity, Note> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -61,11 +64,11 @@ public class NoteEntity {
     private String content;
 
     @ManyToOne()
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "team_id", nullable = false)
     private TeamEntity team;
 
     @ManyToOne()
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
 
     @CreatedDate
@@ -75,4 +78,9 @@ public class NoteEntity {
     @LastModifiedDate
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @Override
+    public Note map(Function<? super NoteEntity, ? extends Note> mapper) {
+        return mapper.apply(this);
+    }
 }

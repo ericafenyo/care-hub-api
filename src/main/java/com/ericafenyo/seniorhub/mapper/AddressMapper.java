@@ -25,9 +25,7 @@
 package com.ericafenyo.seniorhub.mapper;
 
 import com.ericafenyo.seniorhub.entities.AddressEntity;
-import com.ericafenyo.seniorhub.entities.UserEntity;
 import com.ericafenyo.seniorhub.model.Address;
-import com.ericafenyo.seniorhub.model.User;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
@@ -39,10 +37,10 @@ import java.util.function.Function;
 public class AddressMapper implements Function<AddressEntity, Address> {
 
   /**
-   * Converts a {@link UserEntity} to a {@link User}.
+   * Converts a {@link AddressEntity} to a {@link Address}.
    *
-   * @param entity The input user entity.
-   * @return The mapped user.
+   * @param entity The input address entity.
+   * @return The mapped address.
    */
   @Override
   public Address apply(AddressEntity entity) {
