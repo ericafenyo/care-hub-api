@@ -32,12 +32,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.UUID;
 
 @Getter
 @Setter
 @Accessors(chain = true)
 public class Account implements UserDetails {
-    private String id;
+    private UUID id;
     private String email;
     private String password;
 

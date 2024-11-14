@@ -52,6 +52,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -64,7 +65,7 @@ public class TeamController {
         @RequestBody @Valid CreateTeamRequest request,
         Authentication authentication
     ) throws Exception {
-        String userId = Accounts.extractUserId(authentication);
+        UUID userId = Accounts.extractUserId(authentication);
         return service.createTeam(request, userId);
     }
 
@@ -74,20 +75,20 @@ public class TeamController {
     }
 
     @GetMapping("/teams/{id}")
-    public Team getUserById(@PathVariable @Valid @NotBlank String id) throws Exception {
+    public Team getUserById(@PathVariable @Valid @NotBlank UUID id) throws Exception {
         return service.getTeamById(id);
     }
 
     @PutMapping("/teams/{id}")
     public Team updateUser(
-        @PathVariable @Valid @NotBlank String id,
+        @PathVariable @Valid @NotBlank UUID id,
         @RequestBody @Valid UpdateTeamRequest userUpdateDto
     ) {
         return service.updateTeam(id, userUpdateDto);
     }
 
     @DeleteMapping("/teams/{id}")
-    public void deleteTeam(@PathVariable @Valid @NotBlank String id) {
+    public void deleteTeam(@PathVariable @Valid @NotBlank UUID id) {
         service.deleteTeam(id);
     }
 
@@ -95,7 +96,7 @@ public class TeamController {
 
     @PostMapping("/teams/{id}/invitations")
     public Object invite(
-        @PathVariable("id") String teamId,
+        @PathVariable("id") UUID teamId,
         @RequestBody() InvitationRequest request,
         Authentication authentication
     ) throws HttpException {
@@ -107,7 +108,7 @@ public class TeamController {
 
     @PostMapping("/teams/{id}/tasks")
     public Task createTask(
-        @PathVariable String id,
+        @PathVariable UUID id,
         @RequestBody CreateTaskRequest request
     ) throws HttpException {
 
@@ -121,34 +122,5 @@ public class TeamController {
             .build();
 
         return service.createTask(context);
-    }
-
-    // Notes sub-resources
-    @PostMapping("/teams/{id}/notes")
-    public Note createNote(
-        @PathVariable("id") String teamId,
-        @RequestBody CreateNoteRequest request,
-        Authentication authentication
-    ) throws HttpException {
-        var userId = Accounts.extractUserId(authentication);
-        var context = CreateNoteContext.builder()
-            .setTitle(request.getTitle())
-            .setContent(request.getContent())
-            .setUserId(userId)
-            .setTeamId(teamId)
-            .build();
-
-        return service.createNote(context);
-    }
-
-    @GetMapping("/teams/{id}/notes")
-    public List<Note> getNotes(
-        @PathVariable("id") String teamId,
-        Authentication authentication
-    ) throws HttpException {
-        var userId = Accounts.extractUserId(authentication);
-
-
-        return service.getNotes(teamId, userId);
     }
 }

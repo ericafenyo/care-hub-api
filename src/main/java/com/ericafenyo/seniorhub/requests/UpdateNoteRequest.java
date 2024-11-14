@@ -22,11 +22,12 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.dao;
+package com.ericafenyo.seniorhub.requests;
 
-import com.ericafenyo.seniorhub.entities.AddressEntity;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Component;
+import lombok.Data;
 
-@Component
-public interface AddressDao extends CrudRepository<AddressEntity, Long> { }
+@Data
+public class UpdateNoteRequest {
+    private String title;
+    private String content;
+}

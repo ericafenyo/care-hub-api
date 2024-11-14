@@ -32,20 +32,21 @@ import com.ericafenyo.seniorhub.model.Team;
 import com.ericafenyo.seniorhub.model.User;
 
 import java.util.List;
+import java.util.UUID;
 
 
 public interface UserService {
     List<User> getUsers();
 
-    User getUserById(String id) throws HttpException;
+    User getUserById(UUID id) throws HttpException;
 
     User createUser(CreateUserRequest userCreationDto) throws HttpException;
 
-    User updateUser(String id, UserUpdateDto updateUserDto);
+    User updateUser(UUID id, UserUpdateDto updateUserDto);
 
-    void deleteUser(String id);
+    void deleteUser(UUID id);
 
-    List<Team> getUserTeams(String id) throws HttpException;
+    List<Team> getUserTeams(UUID id) throws HttpException;
 
-    Team createTeam(String id, CreateTeamRequest request) throws HttpException;
+    Team createTeam(UUID id, CreateTeamRequest request) throws HttpException;
 }

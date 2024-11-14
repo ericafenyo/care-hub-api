@@ -54,20 +54,12 @@ import java.util.UUID;
 @Getter @Setter @ToString @Accessors(chain = true)
 public class InvitationEntity {
     /**
-     * The unique identifier for the entity.
+     * The unique identifier for the invitation.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
-
-    /**
-     * The universally unique identifier for the entity.
-     * <p>
-     * This is the actual id revealed publicly, the primary id is kept internally.
-     */
-    @Column(name = "uuid", unique = true, nullable = false)
-    private String uuid = UUID.randomUUID().toString();
+    private UUID id;
 
     /**
      * The email address of the invitation recipient
@@ -122,14 +114,14 @@ public class InvitationEntity {
     private Instant usedAt;
 
     /**
-     * The date and time when the invitation was created
+     * The timestamp indicating when the invitation was created
      */
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
     /**
-     * The date and time when the invitation was last updated.
+     * The timestamp indicating when the invitation was last updated.
      */
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)

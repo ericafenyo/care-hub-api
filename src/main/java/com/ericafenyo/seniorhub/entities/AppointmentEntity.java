@@ -47,12 +47,9 @@ import java.util.UUID;
 @Data
 public class AppointmentEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
-
-    @Column(name = "uuid", unique = true)
-    private String uuid = UUID.randomUUID().toString();
+    private UUID id;
 
     @Column(name = "title")
     private String title;

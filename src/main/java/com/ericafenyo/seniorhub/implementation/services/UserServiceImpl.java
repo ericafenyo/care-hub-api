@@ -52,6 +52,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -90,7 +91,6 @@ public class UserServiceImpl implements UserService {
         address.setCity(city);
         address.setCountry(country);
 
-
         // Create and save a new user entity
         var user = new UserEntity();
         user.setFirstName(request.getFirstName());
@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(String id) throws UserNotFoundException {
+    public User getUserById(UUID id) throws UserNotFoundException {
         Optional<UserEntity> user = userRepository.findById(id);
 
         if (user.isEmpty()) {
@@ -132,9 +132,8 @@ public class UserServiceImpl implements UserService {
         return mapper.apply(user.get());
     }
 
-
     @Override
-    public User updateUser(String id, UserUpdateDto dto) {
+    public User updateUser(UUID id, UserUpdateDto dto) {
         UserEntity user = userRepository.findById(id).get();
 
         AddressEntity address = user.getAddress();
@@ -159,18 +158,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(String id) {
-        userRepository.findById(id).ifPresent(team -> userRepository.deleteById(id));
+    public void deleteUser(UUID id) {
+        userRepository.findById(id).ifPresent(team -> userRepository.delete(team));
     }
 
-
     @Override
-    public Team createTeam(String id, CreateTeamRequest request) throws HttpException {
+    public Team createTeam(UUID id, CreateTeamRequest request) throws HttpException {
         return teamService.createTeam(request, id);
     }
 
     @Override
-    public List<Team> getUserTeams(String id) throws HttpException {
+    public List<Team> getUserTeams(UUID id) throws HttpException {
         // Find the current user using the provided id
         var user = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException(

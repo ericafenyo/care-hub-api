@@ -49,41 +49,47 @@ public class ReminderEntity {
      * The unique identifier for the reminder.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
+    private UUID id;
 
     /**
-     * The universally unique identifier for the entity.
-     * <p>
-     * This is the actual id revealed publicly, the primary id is kept internally.
+     * The title of the reminder
      */
-    @Column(name = "uuid", unique = true)
-    private String uuid = UUID.randomUUID().toString();
-
-
     @Column(name = "title")
     private String title;
 
-
+    /**
+     * A brief description of the reminder
+     */
     @Column(name = "description")
     private String description;
 
-
+    /**
+     * The location or place where the user is reminded to go.
+     */
     @Column(name = "location")
     private String location;
 
-
+    /**
+     * The team to which the reminder belongs.
+     */
     @ManyToOne()
     @JoinColumn(name = "team_id")
     private TeamEntity team;
 
 
+    /**
+     * The timestamp when the reminder was created.
+     */
     @CreatedDate
     @Column(name = "created_at")
     private Instant createdAt;
 
 
+    /**
+     * The timestamp when the reminder was last updated.
+     */
     @LastModifiedDate
     @Column(name = "updated_at")
     private Instant updatedAt;

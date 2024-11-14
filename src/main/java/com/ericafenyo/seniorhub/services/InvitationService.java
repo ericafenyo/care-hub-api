@@ -27,9 +27,10 @@ package com.ericafenyo.seniorhub.services;
 import com.ericafenyo.seniorhub.dto.AcceptInvitationRequest;
 import com.ericafenyo.seniorhub.dto.ValidateInvitationRequest;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
-import com.ericafenyo.seniorhub.exceptions.invitation.InvitationException;
 import com.ericafenyo.seniorhub.model.Invitation;
 import com.ericafenyo.seniorhub.model.Report;
+
+import java.util.UUID;
 
 /**
  * This interface defines the contract for invitation-related operations.
@@ -45,7 +46,7 @@ public interface InvitationService {
      * @return A {@link Report} object containing the result of the invitation.
      * @throws HttpException If the invitation fails, an HttpException is thrown.
      */
-    Report invite(String teamId, String inviterId, String role, String email) throws HttpException;
+    Report invite(UUID teamId, UUID inviterId, String role, String email) throws HttpException;
 
     /**
      * Validates an invitation using the provided request.

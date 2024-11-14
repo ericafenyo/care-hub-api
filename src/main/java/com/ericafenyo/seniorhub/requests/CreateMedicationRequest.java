@@ -22,13 +22,17 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.dao;
+package com.ericafenyo.seniorhub.requests;
 
-import com.ericafenyo.seniorhub.entities.CredentialEntity;
+import lombok.Data;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
 
-public interface CredentialDao {
-  Optional<CredentialEntity> findByUserId(Long userId);
-  CredentialEntity save(CredentialEntity entity);
+@Data
+public class CreateMedicationRequest {
+    private String name;
+    private String dosage;
+    private String frequency;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 }

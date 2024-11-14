@@ -29,6 +29,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -39,12 +40,12 @@ import java.util.Map;
 
 //@Component
 //@WebFilter("/auth/login")
+@RequiredArgsConstructor
 public class BasicAuthFilter extends OncePerRequestFilter {
   public static final String EXPECTED_REQUEST_URI = "/auth/login";
   public static final String EXPECTED_HTTP_METHOD = HttpMethod.POST.name();
 
-  @Autowired
-  private ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper;
 
   @Override
   protected void doFilterInternal(

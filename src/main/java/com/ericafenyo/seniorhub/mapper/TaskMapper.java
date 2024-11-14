@@ -53,7 +53,7 @@ public class TaskMapper implements Function<TaskEntity, Task> {
     @Override
     public Task apply(TaskEntity entity) {
         var task = new Task();
-        task.setId(entity.getUuid());
+        task.setId(entity.getId());
         task.setTitle(entity.getTitle());
         task.setDescription(entity.getDescription());
         task.setCreatedAt(entity.getCreatedAt());

@@ -22,15 +22,33 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.dao;
+package com.ericafenyo.seniorhub.services;
 
-import com.ericafenyo.seniorhub.entities.EventEntity;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import com.ericafenyo.seniorhub.exceptions.HttpException;
+import com.ericafenyo.seniorhub.model.Medication;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
-@Repository
-public interface EventDao extends CrudRepository<EventEntity, Long> {
-  Optional<EventEntity> findByUuid(String uuid);
+/**
+ * Service interface for managing medications.
+ */
+public interface MedicationService {
+    Medication logMedication(
+        String name,
+        String dosage,
+        String frequency,
+        LocalDateTime startDate,
+        LocalDateTime endDate,
+        UUID teamId
+    ) throws HttpException;
+
+    List<Medication> getMedications(UUID teamId) throws HttpException;
+
+    Medication getMedication(UUID teamId, UUID MedicationId) throws HttpException;
+
+    Medication updateMedication(UUID teamId, UUID MedicationId, String title, String content) throws HttpException;
+
+    void deleteMedication(UUID teamId, UUID MedicationId) throws HttpException;
 }

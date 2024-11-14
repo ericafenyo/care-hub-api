@@ -24,20 +24,17 @@
 
 package com.ericafenyo.seniorhub.controllers;
 
-import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
-import com.ericafenyo.seniorhub.dto.CreateUserRequest;
-import com.ericafenyo.seniorhub.dto.UserUpdateDto;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
-import com.ericafenyo.seniorhub.model.Team;
-import com.ericafenyo.seniorhub.model.User;
-import com.ericafenyo.seniorhub.services.UserService;
-import com.ericafenyo.seniorhub.util.Accounts;
-import jakarta.validation.Valid;
+import com.ericafenyo.seniorhub.model.Note;
+import com.ericafenyo.seniorhub.requests.CreateNoteRequest;
+import com.ericafenyo.seniorhub.requests.UpdateNoteRequest;
+import com.ericafenyo.seniorhub.services.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -50,48 +47,45 @@ import java.util.UUID;
 @RestController
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
-public class UserController {
-    private final UserService service;
+public class NoteController {
+    private final NoteService service;
 
-    @PostMapping("/users")
-    public User createUser(@Valid @RequestBody CreateUserRequest request) throws Exception {
-        return service.createUser(request);
+    // Notes sub-resources
+    @PostMapping("/teams/{teamId}/notes")
+    public Note createNote(
+        @PathVariable("teamId") UUID teamId,
+        @RequestBody CreateNoteRequest request
+    ) throws HttpException {
+        return service.createNote(request.getTitle(), request.getContent(), teamId);
     }
 
-    @GetMapping("/users")
-    public List<User> getUsers() {
-        return service.getUsers();
+    @GetMapping("/teams/{teamId}/notes")
+    public List<Note> getNotes(
+        @PathVariable("teamId") UUID teamId,
+        Authentication authentication
+    ) throws HttpException {
+        return service.getNotes(teamId);
     }
 
-    @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable UUID id) throws Exception {
-        return service.getUserById(id);
+    // Get note by id
+    @GetMapping("/teams/{teamId}/notes/{noteId}")
+    public Note getNoteById(@PathVariable() UUID teamId, @PathVariable() UUID noteId) throws HttpException {
+        return service.getNote(teamId, noteId);
     }
 
-    @GetMapping("/users/me")
-    public Object getAuthenticatedUser(Authentication authentication) throws Exception {
-        UUID userId = Accounts.extractUserId(authentication);
-        return service.getUserById(userId);
+    // Update note
+    @PatchMapping("/teams/{teamId}/notes/{noteId}")
+    public Note updateNote(
+        @PathVariable("teamId") UUID teamId,
+        @PathVariable("noteId") UUID noteId,
+        @RequestBody() UpdateNoteRequest request
+    ) throws HttpException {
+        return service.updateNote(teamId, noteId, request.getTitle(), request.getContent());
     }
 
-    @PutMapping("/users/{id}")
-    public User updateUser(@PathVariable UUID id, @RequestBody @Valid UserUpdateDto userUpdateDto) {
-        return service.updateUser(id, userUpdateDto);
-    }
-
-    @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable UUID id) {
-        service.deleteUser(id);
-    }
-
-    // Team sub-resources
-    @PostMapping("/users/{id}/teams")
-    public Team createTeam(@PathVariable UUID id, @RequestBody CreateTeamRequest request) throws HttpException {
-        return service.createTeam(id, request);
-    }
-
-    @GetMapping("/users/{id}/teams")
-    public List<Team> getUserTeams(@PathVariable UUID id) throws HttpException {
-        return service.getUserTeams(id);
+    // Delete a note by id
+    @DeleteMapping("/teams/{teamId}/notes/{noteId}")
+    public void deleteNote(@PathVariable() UUID teamId, @PathVariable() UUID noteId) throws HttpException {
+        service.deleteNote(teamId, noteId);
     }
 }

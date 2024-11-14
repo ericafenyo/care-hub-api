@@ -26,7 +26,7 @@ public class NoteMapper implements Function<NoteEntity, Note> {
     @Override
     public Note apply(NoteEntity entity) {
         var note = new Note()
-            .setId(entity.getUuid())
+            .setId(entity.getId())
             .setTitle(entity.getTitle())
             .setContent(entity.getContent())
             .setCreatedAt(entity.getCreatedAt())

@@ -22,31 +22,25 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.implementation.repositories;
+package com.ericafenyo.seniorhub.repository;
 
-import com.ericafenyo.seniorhub.dao.CredentialDao;
-import com.ericafenyo.seniorhub.entities.CredentialEntity;
-import com.ericafenyo.seniorhub.repository.CredentialRepository;
+import com.ericafenyo.seniorhub.entities.MedicationEntity;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.UUID;
 
+/**
+ * Repository for performing database operations on a {@link MedicationEntity}.
+ */
 @Repository
-public class DefailtCredentialRepository implements CredentialRepository {
-
-  private final CredentialDao dao;
-
-  public DefailtCredentialRepository(CredentialDao dao) {
-    this.dao = dao;
-  }
-
-  @Override
-  public Optional<CredentialEntity> findByUserId(Long userId) {
-    return dao.findByUserId(userId);
-  }
-
-  @Override
-  public CredentialEntity save(CredentialEntity entity) {
-    return dao.save(entity);
-  }
+public interface MedicationRepository extends AbstractRepository<MedicationEntity> {
+    /**
+     * Find all medications by team id and by user id.
+     *
+     * @param teamId the team id
+     * @param userId the user id
+     * @return the list of medications
+     */
+    List<MedicationEntity> findByTeamIdAndUserId(UUID teamId, UUID userId);
 }

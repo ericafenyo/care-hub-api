@@ -39,46 +39,50 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity(name = "permissions")
 @EntityListeners(AuditingEntityListener.class)
 @Data
 public class PermissionEntity {
+    /**
+     * The unique identifier for the permission.
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id")
+    private UUID id;
 
-  /**
-   * The unique identifier for the permission.
-   */
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+    /**
+     * The name of the permission
+     */
+    @Column(name = "name")
+    private String name;
 
-  /**
-   * The name of the permission
-   */
-  @Column(name = "name")
-  private String name;
+    /**
+     * A brief description or explanation of the permission.
+     */
+    @Column(name = "description")
+    private String description;
 
-  /**
-   * A brief description or explanation of the permission.
-   */
-  @Column(name = "description")
-  private String description;
+    /**
+     * The roles that have this permission.
+     */
+    @ManyToMany(mappedBy = "permissions")
+    private List<RoleEntity> roles = new ArrayList<>();
 
-  /**
-   * The date and time when the permission was created.
-   */
-  @CreatedDate
-  @Column(name = "created_at")
-  private Instant createdAt;
+    /**
+     * The timestamp when the permission was created.
+     */
+    @CreatedDate
+    @Column(name = "created_at")
+    private Instant createdAt;
 
-  /**!
-   * The date and time when the permission was last updated.
-   */
-  @LastModifiedDate
-  @Column(name = "updated_at")
-  private Instant updatedAt;
+    /**
+     * The timestamp when the permission was last updated.
+     */
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private Instant updatedAt;
 
-  @ManyToMany(mappedBy = "permissions")
-  private List<RoleEntity> roles = new ArrayList<>();
 }

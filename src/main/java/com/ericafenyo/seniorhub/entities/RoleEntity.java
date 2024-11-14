@@ -52,17 +52,9 @@ public class RoleEntity {
      * The unique identifier for the role.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
-
-    /**
-     * The universally unique identifier for the entity.
-     * <p>
-     * This is the actual id revealed publicly, the primary id is kept internally.
-     */
-    @Column(name = "uuid", unique = true)
-    private String uuid = UUID.randomUUID().toString();
+    private UUID id;
 
     /**
      * The name of the role
@@ -83,27 +75,27 @@ public class RoleEntity {
     private String description;
 
     /**
-     * The date and time when the role was created.
+     * The actions or operations that users with this role are allowed to perform.
+     */
+    @ManyToMany()
+    @JoinTable(
+        name = "role_permission",
+        joinColumns = @JoinColumn(name = "role_id")
+        , inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private List<PermissionEntity> permissions = new ArrayList<>();
+
+    /**
+     * The timestamp indicating when the role was created.
      */
     @CreatedDate
     @Column(name = "created_at")
     private Instant createdAt;
 
     /**
-     * The date and time when the role was last updated.
+     * The timestamp indicating when the role was last updated.
      */
     @LastModifiedDate
     @Column(name = "updated_at")
     private Instant updatedAt;
-
-    /**
-     * The actions or operations that users with this role are allowed to perform.
-     */
-    @ManyToMany()
-    @JoinTable(
-            name = "role_permission",
-            joinColumns = @JoinColumn(name = "role_id")
-            , inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
-    private List<PermissionEntity> permissions = new ArrayList<>();
 }

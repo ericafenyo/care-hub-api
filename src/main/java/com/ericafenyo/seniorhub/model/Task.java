@@ -29,12 +29,13 @@ import lombok.Setter;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Setter
 @Getter
 
 public class Task {
-    private String id;
+    private UUID id;
     private String title;
     private String description;
     private Status status;

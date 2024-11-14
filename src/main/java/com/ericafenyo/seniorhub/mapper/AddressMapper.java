@@ -45,7 +45,7 @@ public class AddressMapper implements Function<AddressEntity, Address> {
   @Override
   public Address apply(AddressEntity entity) {
     var address = new Address();
-    address.setId(entity.getUuid());
+    address.setId(entity.getId());
     address.setStreet(entity.getStreet());
     address.setPostalCode(entity.getPostalCode());
     address.setCity(entity.getCity().getName());

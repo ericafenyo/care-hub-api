@@ -25,16 +25,17 @@
 package com.ericafenyo.seniorhub.repository;
 
 import com.ericafenyo.seniorhub.entities.NoteEntity;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
- * Repository interface for managing `NoteEntity` type.
+ * Repository for performing database operations on a {@link NoteEntity}.
  */
-@Repository
+@org.springframework.stereotype.Repository
 public interface NoteRepository extends AbstractRepository<NoteEntity> {
-    @Query("SELECT n FROM notes n JOIN n.team t WHERE t.uuid = ?1")
-    List<NoteEntity> findByTeamId(String teamId);
+    List<NoteEntity> findByTeamId(UUID teamId);
+
+    Optional<NoteEntity> findByIdAndTeamIdAndAuthorId(UUID id, UUID teamId, UUID authorId);
 }

@@ -22,18 +22,34 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.repository;
+package com.ericafenyo.seniorhub.core;
 
-import com.ericafenyo.seniorhub.entities.EventEntity;
-import org.springframework.stereotype.Repository;
+import com.ericafenyo.seniorhub.model.Account;
+import com.ericafenyo.seniorhub.util.Accounts;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.Optional;
+import java.util.UUID;
 
-@Repository
-public interface EventRepository {
-  EventEntity save(EventEntity entity);
+/**
+ * Abstract class providing methods to retrieve the authenticated user information.
+ */
+public abstract class AuthenticationContext {
 
-  Optional<EventEntity> findById(String id);
+    /**
+     * Retrieves the authenticated user account.
+     *
+     * @return the authenticated user {@link Account}
+     */
+    protected Account getAccount() {
+        return Accounts.from(SecurityContextHolder.getContext().getAuthentication());
+    }
 
-  Iterable<EventEntity> findAll();
+    /**
+     * Retrieves the user ID of the authenticated user account.
+     *
+     * @return the user ID as a {@link String}
+     */
+    protected UUID getAuthenticatedUserId() {
+        return Accounts.extractUserId(SecurityContextHolder.getContext().getAuthentication());
+    }
 }

@@ -45,7 +45,7 @@ public class TeamMapper implements Function<TeamEntity, Team> {
     @Override
     public Team apply(TeamEntity entity) {
         var team = new Team();
-        team.setId(entity.getUuid());
+        team.setId(entity.getId());
         team.setName(entity.getName());
         team.setDescription(entity.getDescription());
         team.setCreatedAt(entity.getCreatedAt());

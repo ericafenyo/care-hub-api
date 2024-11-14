@@ -24,7 +24,6 @@
 
 package com.ericafenyo.seniorhub.entities;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -50,22 +49,13 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 @Data
 public class CredentialEntity {
-
     /**
      * The unique identifier for the credential.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
-
-    /**
-     * The universally unique identifier for the entity.
-     * <p>
-     * This is the actual id revealed publicly, the primary id is kept internally.
-     */
-    @Column(name = "uuid", unique = true)
-    private String uuid = UUID.randomUUID().toString();
+    private UUID id;
 
     /**
      * The password associated with the credential.
@@ -81,14 +71,14 @@ public class CredentialEntity {
     private UserEntity user;
 
     /**
-     * The date and time when the credential was created.
+     * The timestamp when the credential was created.
      */
     @CreatedDate
     @Column(name = "created_at")
     private Instant createdAt;
 
     /**
-     * The date and time when the credential was last updated.
+     * The timestamp when the credential was last updated.
      */
     @LastModifiedDate
     @Column(name = "updated_at")

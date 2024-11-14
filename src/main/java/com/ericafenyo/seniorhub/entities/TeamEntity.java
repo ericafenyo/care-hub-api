@@ -53,24 +53,50 @@ import java.util.function.Function;
 @Setter
 @Getter
 public class TeamEntity implements Mappable<TeamEntity, Team> {
+    /**
+     * The unique identifier for the team.
+     */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
+    private UUID id;
 
-    @Column(name = "uuid", nullable = false, unique = true, length = 36)
-    private String uuid = UUID.randomUUID().toString();
-
+    /**
+     * The name of the team.
+     */
     @Column(name = "name", nullable = false, unique = true, length = 50)
     private String name;
 
+    /**
+     * A brief description of the team.
+     */
     @Column(name = "description", nullable = false, length = 80)
     private String description;
 
+    /**
+     * The timestamp indicating when the team was created.
+     */
+    @CreatedDate
+    @Column(name = "created_at", nullable = false)
+    private Instant createdAt;
+
+    /**
+     * The timestamp indicating when the team was last updated.
+     */
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = false)
+    private Instant updatedAt;
+
+    /**
+     * The creator of the team.
+     */
     @ManyToOne()
     @JoinColumn(name = "creator_id", nullable = false)
     private UserEntity creator;
 
+    /**
+     * The list all members of the team.
+     */
     @ManyToMany()
     @JoinTable(
         name = "team_user",
@@ -78,14 +104,6 @@ public class TeamEntity implements Mappable<TeamEntity, Team> {
         inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<UserEntity> members = new ArrayList<>();
-
-    @CreatedDate
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at", nullable = false)
-    private Instant updatedAt;
 
     @Override
     public Team map(Function<? super TeamEntity, ? extends Team> mapper) {

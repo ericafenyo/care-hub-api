@@ -22,16 +22,14 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.entities;
+package com.ericafenyo.seniorhub.requests;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.time.LocalDateTime;
 
-import java.io.Serializable;
-
-@Getter
-@Setter
-public class CaretakerSeniorIds implements Serializable {
-    private Long caretaker;
-    private Long senior;
+public class UpdateMedicationRequest {
+    private String name;
+    private String dosage;
+    private String frequency;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 }

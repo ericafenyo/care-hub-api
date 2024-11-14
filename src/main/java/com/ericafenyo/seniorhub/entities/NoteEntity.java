@@ -49,32 +49,50 @@ import java.util.function.Function;
 @Data
 @Accessors(chain = true)
 public class NoteEntity implements Mappable<NoteEntity, Note> {
+    /**
+     * The unique identifier for the note.
+     */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
+    private UUID id;
 
-    @Column(name = "uuid", unique = true)
-    private String uuid = UUID.randomUUID().toString();
-
+    /**
+     * The title of the note.
+     */
     @Column(name = "title")
     private String title;
 
+    /**
+     * The body content of the note.
+     */
     @Column(name = "content")
     private String content;
 
+    /**
+     * The team to which the note belongs.
+     */
     @ManyToOne()
     @JoinColumn(name = "team_id", nullable = false)
     private TeamEntity team;
 
+    /**
+     * The author of the note.
+     */
     @ManyToOne()
     @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
 
+    /**
+     * The date and time when the note was created.
+     */
     @CreatedDate
     @Column(name = "created_at")
     private Instant createdAt;
 
+    /**
+     * The date and time when the note was last updated.
+     */
     @LastModifiedDate
     @Column(name = "updated_at")
     private Instant updatedAt;
