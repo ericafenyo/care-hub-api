@@ -35,7 +35,7 @@ public class InvitationMapper implements Function<InvitationEntity, Invitation> 
     @Override
     public Invitation apply(InvitationEntity entity) {
         return new Invitation()
-            .setId(entity.getUuid())
+            .setId(entity.getId())
             .setToken(entity.getToken())
             .setEmail(entity.getEmail())
             .setStatus(entity.getStatus())

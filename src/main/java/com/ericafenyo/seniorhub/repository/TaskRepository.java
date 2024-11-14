@@ -27,5 +27,8 @@ package com.ericafenyo.seniorhub.repository;
 import com.ericafenyo.seniorhub.entities.TaskEntity;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Repository for performing database operations on a {@link TaskEntity}.
+ */
 @Repository
 public interface TaskRepository extends AbstractRepository<TaskEntity> { }

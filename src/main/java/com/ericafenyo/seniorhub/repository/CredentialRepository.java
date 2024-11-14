@@ -27,8 +27,17 @@ package com.ericafenyo.seniorhub.repository;
 import com.ericafenyo.seniorhub.entities.CredentialEntity;
 
 import java.util.Optional;
+import java.util.UUID;
 
-public interface CredentialRepository {
-  Optional<CredentialEntity> findByUserId(Long userId);
-  CredentialEntity save(CredentialEntity entity);
+/**
+ * Repository for performing database operations on a {@link CredentialEntity}.
+ */
+public interface CredentialRepository extends AbstractRepository<CredentialEntity> {
+    /**
+     * Retrieves a credential by user id.
+     *
+     * @param userId The id of the user the credential belongs to.
+     * @return A credential object or {@literal Optional#empty()} if none found.
+     */
+    Optional<CredentialEntity> findByUserId(UUID userId);
 }

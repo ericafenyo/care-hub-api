@@ -28,6 +28,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @Accessors(chain = true)
@@ -35,7 +37,7 @@ public class Role {
     /**
      * The unique identifier for the role.
      */
-    private String id;
+    private UUID id;
 
     /**
      * The name of the role

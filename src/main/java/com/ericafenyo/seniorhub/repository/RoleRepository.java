@@ -25,12 +25,20 @@
 package com.ericafenyo.seniorhub.repository;
 
 import com.ericafenyo.seniorhub.entities.RoleEntity;
-import com.ericafenyo.seniorhub.entities.UserEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Repository for performing database operations on a {@link RoleEntity}.
+ */
 @Repository
 public interface RoleRepository extends AbstractRepository<RoleEntity> {
+    /**
+     * Retrieves a role by slug.
+     *
+     * @param slug The slug (The human-readable name of the role.) of the role.
+     * @return The role with the given slug or {@literal Optional#empty()} if none found.
+     */
     Optional<RoleEntity> findBySlug(String slug);
 }

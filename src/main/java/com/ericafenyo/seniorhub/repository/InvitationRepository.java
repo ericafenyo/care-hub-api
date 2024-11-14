@@ -25,14 +25,30 @@
 package com.ericafenyo.seniorhub.repository;
 
 import com.ericafenyo.seniorhub.entities.InvitationEntity;
-import com.ericafenyo.seniorhub.model.Invitation;
+import com.ericafenyo.seniorhub.model.Invitation.Status;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Repository for performing database operations on a {@link InvitationEntity}.
+ */
 @Repository
 public interface InvitationRepository extends AbstractRepository<InvitationEntity> {
+    /**
+     * Retrieves an invitation by token.
+     *
+     * @param token The token of the invitation.
+     * @return The invitation with the given token or {@literal Optional#empty()} if none found.
+     */
     Optional<InvitationEntity> findByToken(String token);
 
-    Optional<InvitationEntity> findByTokenAndStatus(String token, Invitation.Status status);
+    /**
+     * Retrieves an invitation by token and status.
+     *
+     * @param token  The token of the invitation.
+     * @param status The status of the invitation.
+     * @return The invitation with the given token and status or {@literal Optional#empty()} if none found.
+     */
+    Optional<InvitationEntity> findByTokenAndStatus(String token, Status status);
 }

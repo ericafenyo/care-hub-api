@@ -55,17 +55,9 @@ public class UserEntity {
      * The unique identifier for the user.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
-
-    /**
-     * The universally unique identifier for the entity.
-     * <p>
-     * This is the actual id revealed publicly, the primary id is kept internally.
-     */
-    @Column(name = "uuid", unique = true)
-    private String uuid = UUID.randomUUID().toString();
+    private UUID id;
 
     /**
      * The first name of the user.

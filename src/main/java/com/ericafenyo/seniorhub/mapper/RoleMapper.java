@@ -24,16 +24,14 @@
 
 package com.ericafenyo.seniorhub.mapper;
 
-import com.ericafenyo.seniorhub.entities.AddressEntity;
 import com.ericafenyo.seniorhub.entities.RoleEntity;
-import com.ericafenyo.seniorhub.model.Address;
 import com.ericafenyo.seniorhub.model.Role;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
 
 /**
- * Maps a {@link AddressEntity} to a {@link Address}.
+ * Maps a {@link RoleEntity} to a {@link Role}.
  */
 @Component
 public class RoleMapper implements Function<RoleEntity, Role> {
@@ -47,7 +45,7 @@ public class RoleMapper implements Function<RoleEntity, Role> {
     @Override
     public Role apply(RoleEntity entity) {
         return new Role()
-            .setId(entity.getUuid())
+            .setId(entity.getId())
             .setName(entity.getName())
             .setSlug(entity.getSlug())
             .setDescription(entity.getDescription());

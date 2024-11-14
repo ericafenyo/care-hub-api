@@ -29,6 +29,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.time.Instant;
+import java.util.UUID;
 
 /**
  * Represents an invitation to add a member to a care team.
@@ -40,7 +41,7 @@ public class Invitation {
     /**
      * The unique identifier of the invitation
      */
-    private String id;
+    private UUID id;
 
     /**
      * The email address of the person being invited

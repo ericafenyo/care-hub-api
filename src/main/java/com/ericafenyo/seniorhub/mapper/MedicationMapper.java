@@ -22,11 +22,41 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.dao;
+package com.ericafenyo.seniorhub.mapper;
 
-import com.ericafenyo.seniorhub.entities.CountryEntity;
-import org.springframework.data.repository.CrudRepository;
+import com.ericafenyo.seniorhub.entities.MedicationEntity;
+import com.ericafenyo.seniorhub.model.Medication;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+import java.util.function.Function;
+
 @Component
-public interface CountryDao extends CrudRepository<CountryEntity, Long> { }
+@RequiredArgsConstructor
+public class MedicationMapper implements Function<MedicationEntity, Medication> {
+    private final UserMapper userMapper;
+    private final TeamMapper teamMapper;
+
+    @Override
+    public Medication apply(MedicationEntity entity) {
+        var medication = new Medication()
+            .setId(entity.getId())
+            .setName(entity.getName())
+            .setDosage(entity.getDosage())
+            .setFrequency(entity.getFrequency())
+            .setStartDate(entity.getStartDate())
+            .setEndDate(entity.getEndDate())
+            .setCreatedAt(entity.getCreatedAt())
+            .setUpdatedAt(entity.getUpdatedAt());
+
+
+        Optional.ofNullable(entity.getUser())
+            .ifPresent(author -> medication.setUser(userMapper.apply(author)));
+
+        Optional.ofNullable(entity.getTeam())
+            .ifPresent(team -> medication.setTeam(teamMapper.apply(team)));
+
+        return medication;
+    }
+}

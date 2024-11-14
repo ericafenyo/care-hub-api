@@ -32,6 +32,10 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.time.Instant;
+import java.util.UUID;
 
 /**
  * A database entity representing a country.
@@ -45,13 +49,20 @@ public class CountryEntity {
      * The unique identifier for the country.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
+    private UUID id;
 
     /**
      * The name of the country.
      */
     @Column(name = "name")
     private String name;
+
+    /**
+     * The timestamp when the country record was created.
+     */
+    @CreatedDate
+    @Column(name = "created_at")
+    private Instant createdAt;
 }

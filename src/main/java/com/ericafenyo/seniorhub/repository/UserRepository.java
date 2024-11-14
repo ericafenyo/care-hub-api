@@ -29,9 +29,24 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Repository for performing database operations on a {@link UserEntity}.
+ */
 @Repository
 public interface UserRepository extends AbstractRepository<UserEntity> {
+    /**
+     * Retrieves a user by email.
+     *
+     * @param email The email of the user.
+     * @return The user with the given email or {@literal Optional#empty()} if none found.
+     */
     Optional<UserEntity> findByEmail(String email);
 
+    /**
+     * Checks if a user with the given email exists.
+     *
+     * @param email The email of the user.
+     * @return {@literal true} if a user with the given email exists, {@literal false} otherwise.
+     */
     boolean existsByEmail(String email);
 }

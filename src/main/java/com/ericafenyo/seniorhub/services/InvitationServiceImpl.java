@@ -50,6 +50,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import static com.ericafenyo.seniorhub.Messages.ERROR_RESOURCE_NOTFOUND;
 import static com.ericafenyo.seniorhub.Messages.ERROR_RESOURCE_NOTFOUND_CODE;
@@ -69,7 +70,7 @@ public class InvitationServiceImpl implements InvitationService {
 
     @Override
     @Transactional
-    public Report invite(String teamId, String inviterId, String roleSlug, String email) throws HttpException {
+    public Report invite(UUID teamId, UUID inviterId, String roleSlug, String email) throws HttpException {
 
         // Get the inviter or throw an error if it does not exist
         var inviter = userRepository.findById(inviterId).orElseThrow(

@@ -37,35 +37,60 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.UUID;
+
 @Entity(name = "recurrences")
 @EntityListeners(AuditingEntityListener.class)
 @Data @Accessors(chain = true)
 public class RecurrenceEntity {
+    /**
+     * The unique identifier for the recurrence.
+     */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
+    private UUID id;
 
+    /**
+     * How often the task should be repeated.
+     */
     @Column(name = "frequency")
     @Enumerated(EnumType.STRING)
     private Frequency frequency;
 
+    /**
+     * The number of times the task should be repeated.
+     */
     @Column(name = "count")
     private int count = 0;
 
+    /**
+     * The number of times the task has been repeated.
+     */
     @Column(name = "occurrences")
     private int occurrences = 1;
 
+    /**
+     * The day of the week the task should be repeated.
+     */
     @Column(name = "day_of_week")
     private int dayOfWeek = 1;
 
+    /**
+     * The week of the month the task should be repeated.
+     */
     @Column(name = "week_of_month")
     private int weekOfMonth = 1;
 
+    /**
+     * The day of the month the task should be repeated.
+     */
     @Column(name = "day_of_month")
     private int dayOfMonth = 1;
 
+    /**
+     * The month of the year the task should be repeated.
+     */
     @Column(name = "month_of_year")
     private int monthOfYear = 1;
 }
-

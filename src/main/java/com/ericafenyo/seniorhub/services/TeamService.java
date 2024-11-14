@@ -24,33 +24,36 @@
 
 package com.ericafenyo.seniorhub.services;
 
+import com.ericafenyo.seniorhub.contexts.CreateNoteContext;
 import com.ericafenyo.seniorhub.contexts.CreateTaskContext;
 import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
 import com.ericafenyo.seniorhub.dto.UpdateTeamRequest;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.model.Invitation;
+import com.ericafenyo.seniorhub.model.Note;
 import com.ericafenyo.seniorhub.model.Report;
 import com.ericafenyo.seniorhub.model.Task;
 import com.ericafenyo.seniorhub.model.Team;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface TeamService {
-    Team createTeam(CreateTeamRequest request, String creatorId) throws HttpException;
+    Team createTeam(CreateTeamRequest request, UUID creatorId) throws HttpException;
 
     List<Team> getTeams();
 
-    Team getTeamById(String id) throws HttpException;
+    Team getTeamById(UUID id) throws HttpException;
 
-    Team updateTeam(String id, UpdateTeamRequest userUpdateDto);
+    Team updateTeam(UUID id, UpdateTeamRequest userUpdateDto);
 
-    void deleteTeam(String id);
+    void deleteTeam(UUID id);
 
-    List<Team> getUserTeams(Long id) throws HttpException;
+    List<Team> getUserTeams(UUID id) throws HttpException;
 
-    Report invite(String teamId, String inviterId, String role, String email) throws HttpException;
+    Report invite(UUID teamId, UUID inviterId, String role, String email) throws HttpException;
 
-    Invitation validateInvitation(String teamId);
+    Invitation validateInvitation(UUID teamId);
 
     Task createTask(CreateTaskContext context) throws HttpException;
 }

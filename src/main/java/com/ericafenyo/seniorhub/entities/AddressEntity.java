@@ -34,8 +34,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.Instant;
 import java.util.UUID;
 
 /**
@@ -49,17 +51,9 @@ public class AddressEntity {
      * The unique identifier for the address.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
-
-    /**
-     * The universally unique identifier for the entity.
-     * <p>
-     * This is the actual id revealed publicly, the primary id is kept internally.
-     */
-    @Column(name = "uuid", unique = true)
-    private String uuid = UUID.randomUUID().toString();
+    private UUID id;
     ;
     /**
      * Indicates a precise street address.
@@ -81,4 +75,11 @@ public class AddressEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "country_id")
     private CountryEntity country;
+
+    /**
+     * The timestamp when the address record was created.
+     */
+    @CreatedDate
+    @Column(name = "created_at")
+    private Instant createdAt;
 }

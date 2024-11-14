@@ -59,21 +59,14 @@ import java.util.UUID;
 @Data
 @Accessors(chain = true)
 public class TaskEntity {
+
     /**
      * The unique identifier for the task.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
-
-    /**
-     * The universally unique identifier for the entity.
-     * <p>
-     * This is the actual id revealed publicly, the primary id is kept internally.
-     */
-    @Column(name = "uuid", unique = true, nullable = false)
-    private String uuid = UUID.randomUUID().toString();
+    private UUID id;
 
     /**
      * The title of the task.
@@ -87,17 +80,29 @@ public class TaskEntity {
     @Column(name = "description")
     private String description;
 
+    /**
+     * The current status of the task.
+     */
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status = Status.PLANNED;
 
+    /**
+     * The priority of the task.
+     */
     @Column(name = "priority", nullable = false)
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
+    /**
+     * The date when the task will be due.
+     */
     @Column(name = "due_date")
     private LocalDate dueDate;
 
+    /**
+     * The list of users assigned to the task.
+     */
     @ManyToMany()
     @JoinTable(
         name = "task_user",
@@ -106,10 +111,16 @@ public class TaskEntity {
     )
     private List<UserEntity> assignees = new ArrayList<>();
 
+    /**
+     * The team to which the task belongs.
+     */
     @ManyToOne()
     @JoinColumn(name = "team_id", nullable = false)
     private TeamEntity team;
 
+    /**
+     * The recurrence pattern for the task.
+     */
     @OneToOne()
     @JoinColumn(name = "recurrence_id")
     private RecurrenceEntity recurrence;

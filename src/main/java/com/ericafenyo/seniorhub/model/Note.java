@@ -24,15 +24,16 @@
 
 package com.ericafenyo.seniorhub.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.time.Instant;
+import java.util.UUID;
 
-@Setter
-@Getter
+@Data
+@Accessors(chain = true)
 public class Note {
-    private String id;
+    private UUID id;
     private String title;
     private String content;
     private Instant createdAt;

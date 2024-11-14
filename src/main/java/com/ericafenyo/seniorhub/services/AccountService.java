@@ -54,7 +54,7 @@ public class AccountService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Credential for username '" + email + "' not found"));
 
         return new Account()
-                .setId(user.getUuid())
+                .setId(user.getId())
                 .setEmail(user.getEmail())
                 .setPassword(credential.getPassword());
     }

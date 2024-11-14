@@ -28,6 +28,7 @@ import com.ericafenyo.seniorhub.entities.TeamEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface TeamRepository extends AbstractRepository<TeamEntity> {
@@ -37,5 +38,5 @@ public interface TeamRepository extends AbstractRepository<TeamEntity> {
 
     long countByName(String name);
 
-    List<TeamEntity> findAllByCreatorId(Long id);
+    List<TeamEntity> findAllByCreatorId(UUID creatorId);
 }

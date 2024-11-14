@@ -22,15 +22,25 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.dao;
+package com.ericafenyo.seniorhub.repository;
 
-import com.ericafenyo.seniorhub.entities.EventEntity;
-import org.springframework.data.repository.CrudRepository;
+import com.ericafenyo.seniorhub.entities.MedicationEntity;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.UUID;
 
+/**
+ * Repository for performing database operations on a {@link MedicationEntity}.
+ */
 @Repository
-public interface EventDao extends CrudRepository<EventEntity, Long> {
-  Optional<EventEntity> findByUuid(String uuid);
+public interface MedicationRepository extends AbstractRepository<MedicationEntity> {
+    /**
+     * Find all medications by team id and by user id.
+     *
+     * @param teamId the team id
+     * @param userId the user id
+     * @return the list of medications
+     */
+    List<MedicationEntity> findByTeamIdAndUserId(UUID teamId, UUID userId);
 }

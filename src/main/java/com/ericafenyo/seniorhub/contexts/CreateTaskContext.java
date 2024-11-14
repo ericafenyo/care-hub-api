@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @Builder(setterPrefix = "set")
@@ -14,5 +15,5 @@ public class CreateTaskContext {
     private String description;
     private LocalDate dueDate;
     private Priority priority;
-    private String teamId;
+    private UUID teamId;
 }

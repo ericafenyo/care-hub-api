@@ -28,6 +28,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.UUID;
 
 /**
  * A model class representing a group of users working
@@ -39,7 +40,7 @@ public class Team {
     /**
      * The unique identifier of the team.
      */
-    private String id;
+    private UUID id;
 
     /**
      * The name of the team.

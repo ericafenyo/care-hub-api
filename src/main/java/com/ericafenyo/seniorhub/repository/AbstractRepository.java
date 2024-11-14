@@ -24,31 +24,60 @@
 
 package com.ericafenyo.seniorhub.repository;
 
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
+/**
+ * Interface for performing database operations on a specific entity type.
+ *
+ * @param <T> the specific entity type the repository manages
+ */
 @NoRepositoryBean
-public interface AbstractRepository<T> extends Repository<T, Long> {
-    @Query("SELECT e FROM #{#entityName} as e WHERE e.uuid=?1")
-    Optional<T> findById(String id);
+public interface AbstractRepository<T> extends Repository<T, UUID> {
+    /**
+     * Retrieves an entity by its id.
+     *
+     * @param id must not be {@literal null}.
+     * @return the entity with the given id or {@literal Optional#empty()} if none found.
+     * @throws IllegalArgumentException if {@literal id} is {@literal null}.
+     */
+    Optional<T> findById(UUID id);
 
-    <E extends T> E save(E entity);
-
+    /**
+     * Returns all instances of the type.
+     *
+     * @return all entities
+     */
     List<T> findAll();
 
+    /**
+     * Saves a given entity. Use the returned instance for further operations as the save operation might have changed the
+     * entity instance completely.
+     *
+     * @param entity must not be {@literal null}.
+     * @return the saved entity; will never be {@literal null}.
+     * @throws IllegalArgumentException          in case the given {@literal entity} is {@literal null}.
+     * @throws OptimisticLockingFailureException when the entity uses optimistic locking and has a version attribute with
+     *                                           a different value from that found in the persistence store. Also thrown if the entity is assumed to be
+     *                                           present but does not exist in the database.
+     */
+    <E extends T> E save(E entity);
+
+    /**
+     * Deletes a given entity.
+     *
+     * @param entity must not be {@literal null}.
+     * @throws IllegalArgumentException          in case the given entity is {@literal null}.
+     * @throws OptimisticLockingFailureException when the entity uses optimistic locking and has a version attribute with
+     *                                           a different value from that found in the persistence store. Also thrown if the entity is assumed to be
+     *                                           present but does not exist in the database.
+     */
     void delete(T entity);
-
-    @Query("DELETE FROM #{#entityName} as e WHERE e.uuid=?1")
-    void deleteById(String id);
-
-    @Query("SELECT COUNT(e) FROM #{#entityName} as e WHERE e.uuid=?1")
-    long countById(String id);
-
-    default boolean exists(String id) {
-        return countById(id) > 0;
-    }
 }

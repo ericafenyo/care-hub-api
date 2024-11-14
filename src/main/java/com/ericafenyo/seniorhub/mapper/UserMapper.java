@@ -49,7 +49,7 @@ public class UserMapper implements Function<UserEntity, User> {
     @Override
     public User apply(UserEntity entity) {
         var user = new User();
-        user.setId(entity.getUuid());
+        user.setId(entity.getId());
         user.setFirstName(entity.getFirstName());
         user.setLastName(entity.getLastName());
         user.setBirthDate(entity.getBirthDate());

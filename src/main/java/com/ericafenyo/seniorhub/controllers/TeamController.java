@@ -24,22 +24,23 @@
 
 package com.ericafenyo.seniorhub.controllers;
 
+import com.ericafenyo.seniorhub.contexts.CreateNoteContext;
 import com.ericafenyo.seniorhub.contexts.CreateTaskContext;
 import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
 
 import com.ericafenyo.seniorhub.dto.InvitationRequest;
 import com.ericafenyo.seniorhub.dto.UpdateTeamRequest;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
-import com.ericafenyo.seniorhub.model.Invitation;
+import com.ericafenyo.seniorhub.model.Note;
 import com.ericafenyo.seniorhub.model.Task;
 import com.ericafenyo.seniorhub.model.Team;
+import com.ericafenyo.seniorhub.requests.CreateNoteRequest;
 import com.ericafenyo.seniorhub.requests.CreateTaskRequest;
 import com.ericafenyo.seniorhub.services.TeamService;
 import com.ericafenyo.seniorhub.util.Accounts;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.UUID;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,6 +52,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -63,7 +65,7 @@ public class TeamController {
         @RequestBody @Valid CreateTeamRequest request,
         Authentication authentication
     ) throws Exception {
-        String userId = Accounts.extractUserId(authentication);
+        UUID userId = Accounts.extractUserId(authentication);
         return service.createTeam(request, userId);
     }
 
@@ -73,20 +75,20 @@ public class TeamController {
     }
 
     @GetMapping("/teams/{id}")
-    public Team getUserById(@PathVariable @Valid @NotBlank String id) throws Exception {
+    public Team getUserById(@PathVariable @Valid @NotBlank UUID id) throws Exception {
         return service.getTeamById(id);
     }
 
     @PutMapping("/teams/{id}")
     public Team updateUser(
-        @PathVariable @Valid @NotBlank String id,
+        @PathVariable @Valid @NotBlank UUID id,
         @RequestBody @Valid UpdateTeamRequest userUpdateDto
     ) {
         return service.updateTeam(id, userUpdateDto);
     }
 
     @DeleteMapping("/teams/{id}")
-    public void deleteTeam(@PathVariable @Valid @NotBlank String id) {
+    public void deleteTeam(@PathVariable @Valid @NotBlank UUID id) {
         service.deleteTeam(id);
     }
 
@@ -94,7 +96,7 @@ public class TeamController {
 
     @PostMapping("/teams/{id}/invitations")
     public Object invite(
-        @PathVariable("id") String teamId,
+        @PathVariable("id") UUID teamId,
         @RequestBody() InvitationRequest request,
         Authentication authentication
     ) throws HttpException {
@@ -106,9 +108,10 @@ public class TeamController {
 
     @PostMapping("/teams/{id}/tasks")
     public Task createTask(
-        @PathVariable String id,
+        @PathVariable UUID id,
         @RequestBody CreateTaskRequest request
     ) throws HttpException {
+
 
         var context = CreateTaskContext.builder()
             .setTitle(request.getTitle())

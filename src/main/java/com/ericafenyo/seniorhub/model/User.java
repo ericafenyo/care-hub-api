@@ -30,6 +30,7 @@ import lombok.experimental.Accessors;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.UUID;
 
 /**
  * A user domain model representing an individual who interacts with the application.
@@ -41,7 +42,7 @@ public class User {
     /**
      * The unique identifier for the user.
      */
-    private String id;
+    private UUID id;
     /**
      * The first name of the user.
      */

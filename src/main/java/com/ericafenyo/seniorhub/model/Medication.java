@@ -26,14 +26,17 @@ package com.ericafenyo.seniorhub.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Setter
 @Getter
+@Accessors(chain = true)
 public class Medication {
-    private String id;
+    private UUID id;
     private String name;
     private String dosage;
     private String frequency;
@@ -41,5 +44,6 @@ public class Medication {
     private LocalDateTime endDate;
     private Instant createdAt;
     private Instant updatedAt;
+    private User user;
     private Team team;
 }

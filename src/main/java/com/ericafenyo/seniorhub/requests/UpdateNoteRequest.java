@@ -22,15 +22,12 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exceptions.event;
+package com.ericafenyo.seniorhub.requests;
 
-import com.ericafenyo.seniorhub.exceptions.NotFoundException;
+import lombok.Data;
 
-public class EventNotFoundException extends NotFoundException {
-  private static final String MESSAGE = "The requested event record could not be found";
-  private static final String ERROR_CODE = "event_not_found";
-
-  public EventNotFoundException() {
-    super(MESSAGE, ERROR_CODE);
-  }
+@Data
+public class UpdateNoteRequest {
+    private String title;
+    private String content;
 }

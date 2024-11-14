@@ -22,11 +22,17 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.dao;
+package com.ericafenyo.seniorhub.requests;
 
-import com.ericafenyo.seniorhub.entities.AddressEntity;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Component;
+import lombok.Data;
 
-@Component
-public interface AddressDao extends CrudRepository<AddressEntity, Long> { }
+import java.time.LocalDateTime;
+
+@Data
+public class CreateMedicationRequest {
+    private String name;
+    private String dosage;
+    private String frequency;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+}

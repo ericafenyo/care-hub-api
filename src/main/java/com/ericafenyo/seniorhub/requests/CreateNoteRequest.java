@@ -22,12 +22,16 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.dao;
+package com.ericafenyo.seniorhub.requests;
 
-import com.ericafenyo.seniorhub.entities.RoleEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Component;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
-@Component
-public interface RoleDao extends JpaRepository<RoleEntity, Long> { }
+@Data
+public class CreateNoteRequest {
+    @NotBlank
+    private String title;
+
+    @NotBlank
+    private String content;
+}

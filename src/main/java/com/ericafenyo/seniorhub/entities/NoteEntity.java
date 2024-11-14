@@ -24,6 +24,8 @@
 
 package com.ericafenyo.seniorhub.entities;
 
+import com.ericafenyo.seniorhub.api.Mappable;
+import com.ericafenyo.seniorhub.model.Note;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -32,47 +34,71 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.util.UUID;
+import java.util.function.Function;
 
 @Entity(name = "notes")
 @EntityListeners(AuditingEntityListener.class)
-@Setter
-@Getter
-public class NoteEntity {
+@Data
+@Accessors(chain = true)
+public class NoteEntity implements Mappable<NoteEntity, Note> {
+    /**
+     * The unique identifier for the note.
+     */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
+    private UUID id;
 
-    @Column(name = "uuid", unique = true)
-    private String uuid = UUID.randomUUID().toString();
-
+    /**
+     * The title of the note.
+     */
     @Column(name = "title")
     private String title;
 
+    /**
+     * The body content of the note.
+     */
     @Column(name = "content")
     private String content;
 
+    /**
+     * The team to which the note belongs.
+     */
     @ManyToOne()
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "team_id", nullable = false)
     private TeamEntity team;
 
+    /**
+     * The author of the note.
+     */
     @ManyToOne()
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
 
+    /**
+     * The date and time when the note was created.
+     */
     @CreatedDate
     @Column(name = "created_at")
     private Instant createdAt;
 
+    /**
+     * The date and time when the note was last updated.
+     */
     @LastModifiedDate
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @Override
+    public Note map(Function<? super NoteEntity, ? extends Note> mapper) {
+        return mapper.apply(this);
+    }
 }

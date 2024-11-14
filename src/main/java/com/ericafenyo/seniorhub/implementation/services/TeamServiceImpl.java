@@ -48,6 +48,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -65,7 +66,7 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public Team createTeam(
         CreateTeamRequest request,
-        String creatorId
+        UUID creatorId
     ) throws HttpException {
         var exists = teamRepository.existsByName(request.getName());
 
@@ -91,7 +92,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Team getTeamById(String id) throws HttpException {
+    public Team getTeamById(UUID id) throws HttpException {
         var team = teamRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("Team with id not found", ""));
 
@@ -99,7 +100,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Team updateTeam(String id, UpdateTeamRequest userUpdateDto) {
+    public Team updateTeam(UUID id, UpdateTeamRequest userUpdateDto) {
         var team = teamRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Invalid user id"));
 
@@ -110,12 +111,12 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public void deleteTeam(String id) {
+    public void deleteTeam(UUID id) {
     }
 
 
     @Override
-    public List<Team> getUserTeams(Long id) throws HttpException {
+    public List<Team> getUserTeams(UUID id) throws HttpException {
         return teamRepository.findAllByCreatorId(id)
             .stream()
             .map(mapper)
@@ -123,12 +124,12 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Report invite(String teamId, String inviterId, String role, String email) throws HttpException {
+    public Report invite(UUID teamId, UUID inviterId, String role, String email) throws HttpException {
         return invitationService.invite(teamId, inviterId, role, email);
     }
 
     @Override
-    public Invitation validateInvitation(String id) {
+    public Invitation validateInvitation(UUID id) {
         return null;
     }
 
@@ -151,5 +152,41 @@ public class TeamServiceImpl implements TeamService {
         TaskEntity task = taskRepository.save(entity);
 
         return taskMapper.apply(task);
+    }
+
+//    @Override
+//    public Note createNote(CreateNoteContext context) throws HttpException {
+//        var team = findById(context.getTeamId());
+//        var author = userRepository.findById(context.getUserId()).orElseThrow(() ->
+//            new NotFoundException(
+//                messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "User", context.getTeamId()),
+//                messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "user")
+//            )
+//        );
+//
+//        var entity = new NoteEntity()
+//            .setTitle(context.getTitle())
+//            .setContent(context.getContent())
+//            .setTeam(team)
+//            .setAuthor(author);
+//
+//        return noteRepository.save(entity).map(toNote);
+//    }
+
+//    @Override
+//    public List<Note> getNotes(UUID teamId, UUID userId) {
+//        return noteRepository.findByTeamId(teamId)
+//            .stream()
+//            .map(toNote)
+//            .toList();
+//    }
+
+    private TeamEntity findById(UUID teamId) throws NotFoundException {
+        return teamRepository.findById(teamId).orElseThrow(() ->
+            new NotFoundException(
+                messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "Team", teamId),
+                messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "team")
+            )
+        );
     }
 }

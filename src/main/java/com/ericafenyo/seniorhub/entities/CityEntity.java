@@ -34,7 +34,11 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.Instant;
+import java.util.UUID;
 
 /**
  * A database entity representing a city of a country.
@@ -49,13 +53,20 @@ public class CityEntity {
      * The unique identifier for the city.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
+    private UUID id;
 
     /**
      * The name of the city.
      */
     @Column(name = "name")
     private String name;
+
+    /**
+     * The timestamp when the credential was created.
+     */
+    @CreatedDate
+    @Column(name = "created_at")
+    private Instant createdAt;
 }

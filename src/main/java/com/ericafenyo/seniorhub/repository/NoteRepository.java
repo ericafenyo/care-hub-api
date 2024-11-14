@@ -22,31 +22,20 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.implementation.repositories;
+package com.ericafenyo.seniorhub.repository;
 
-import com.ericafenyo.seniorhub.dao.CredentialDao;
-import com.ericafenyo.seniorhub.entities.CredentialEntity;
-import com.ericafenyo.seniorhub.repository.CredentialRepository;
-import org.springframework.stereotype.Repository;
+import com.ericafenyo.seniorhub.entities.NoteEntity;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-@Repository
-public class DefailtCredentialRepository implements CredentialRepository {
+/**
+ * Repository for performing database operations on a {@link NoteEntity}.
+ */
+@org.springframework.stereotype.Repository
+public interface NoteRepository extends AbstractRepository<NoteEntity> {
+    List<NoteEntity> findByTeamId(UUID teamId);
 
-  private final CredentialDao dao;
-
-  public DefailtCredentialRepository(CredentialDao dao) {
-    this.dao = dao;
-  }
-
-  @Override
-  public Optional<CredentialEntity> findByUserId(Long userId) {
-    return dao.findByUserId(userId);
-  }
-
-  @Override
-  public CredentialEntity save(CredentialEntity entity) {
-    return dao.save(entity);
-  }
+    Optional<NoteEntity> findByIdAndTeamIdAndAuthorId(UUID id, UUID teamId, UUID authorId);
 }

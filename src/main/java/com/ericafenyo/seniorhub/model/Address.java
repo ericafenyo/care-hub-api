@@ -26,6 +26,8 @@ package com.ericafenyo.seniorhub.model;
 
 import lombok.Data;
 
+import java.util.UUID;
+
 /**
  * Represents an address with country, city, street, and postal code information.
  */
@@ -34,7 +36,7 @@ public class Address {
   /**
    * The unique identifier for the address.
    */
-  private String id;
+  private UUID id;
   /**
    * Indicates a precise street address.
    */

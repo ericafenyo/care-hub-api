@@ -28,9 +28,14 @@ import com.ericafenyo.seniorhub.model.Account;
 import org.springframework.security.core.Authentication;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public class Accounts {
     public static Account from(Authentication authentication) {
+        if (authentication == null) {
+            return null;
+        }
+
         Object principal = authentication.getPrincipal();
         if (principal instanceof Account) {
             return (Account) principal;
@@ -38,9 +43,9 @@ public class Accounts {
         return null;
     }
 
-    public static String extractUserId(Authentication authentication) {
+    public static UUID extractUserId(Authentication authentication) {
         return Optional.ofNullable(from(authentication))
-                .map(account -> account.getId())
-                .orElse(null);
+            .map(account -> account.getId())
+            .orElse(null);
     }
 }

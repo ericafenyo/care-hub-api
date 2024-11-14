@@ -22,16 +22,34 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.entities;
+package com.ericafenyo.seniorhub.core;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.ericafenyo.seniorhub.model.Account;
+import com.ericafenyo.seniorhub.util.Accounts;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.io.Serializable;
+import java.util.UUID;
 
-@Getter
-@Setter
-public class CaretakerSeniorIds implements Serializable {
-    private Long caretaker;
-    private Long senior;
+/**
+ * Abstract class providing methods to retrieve the authenticated user information.
+ */
+public abstract class AuthenticationContext {
+
+    /**
+     * Retrieves the authenticated user account.
+     *
+     * @return the authenticated user {@link Account}
+     */
+    protected Account getAccount() {
+        return Accounts.from(SecurityContextHolder.getContext().getAuthentication());
+    }
+
+    /**
+     * Retrieves the user ID of the authenticated user account.
+     *
+     * @return the user ID as a {@link String}
+     */
+    protected UUID getAuthenticatedUserId() {
+        return Accounts.extractUserId(SecurityContextHolder.getContext().getAuthentication());
+    }
 }
