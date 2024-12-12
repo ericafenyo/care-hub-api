@@ -58,7 +58,6 @@ public class UserMapper implements Function<UserEntity, User> {
         user.setCreatedAt(entity.getCreatedAt());
         user.setUpdatedAt(entity.getUpdatedAt());
 
-
         Optional.ofNullable(entity.getAddress())
             .ifPresent(address -> user.setAddress(addressMapper.apply(address)));
 

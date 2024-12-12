@@ -39,43 +39,43 @@ import java.util.UUID;
 @Setter
 @Accessors(chain = true)
 public class User {
-    /**
-     * The unique identifier for the user.
-     */
-    private UUID id;
-    /**
-     * The first name of the user.
-     */
-    private String firstName;
-    /**
-     * The last name of the user.
-     */
-    private String lastName;
+  /**
+   * The unique identifier for the user.
+   */
+  private UUID id;
+  /**
+   * The first name of the user.
+   */
+  private String firstName;
+  /**
+   * The last name of the user.
+   */
+  private String lastName;
 
-    /**
-     * The date of birth of the user.
-     */
-    private LocalDate birthDate;
+  /**
+   * The date the user was born.
+   */
+  private LocalDate birthDate;
 
-    /**
-     * The email address of the user.
-     */
-    private String email;
-    /**
-     * The URL pointing to the user's profile photo.
-     */
-    private String photoUrl;
-    /**
-     * The date and time when the user was created.
-     */
-    private Instant createdAt;
-    /**
-     * The date and time when the user was last updated.
-     */
-    private Instant updatedAt;
+  /**
+   * The email address of the user.
+   */
+  private String email;
+  /**
+   * The URL pointing to the user's profile photo.
+   */
+  private String photoUrl;
+  /**
+   * The date and time when the user was created.
+   */
+  private Instant createdAt;
+  /**
+   * The date and time when the user was last updated.
+   */
+  private Instant updatedAt;
 
-    /**
-     * The address where the user leaves.
-     */
-    private Address address;
+  /**
+   * The address where the user leaves.
+   */
+  private Address address;
 }

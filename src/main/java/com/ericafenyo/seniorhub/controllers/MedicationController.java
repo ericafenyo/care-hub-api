@@ -47,51 +47,53 @@ import java.util.UUID;
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class MedicationController {
-    private final MedicationService service;
+  private final MedicationService service;
 
-    @PostMapping("/teams/{teamId}/medications")
-    public Medication createMedication(
-        @PathVariable("teamId") UUID teamId,
-        @RequestBody CreateMedicationRequest request
-    ) throws HttpException {
-        return service.logMedication(
-            request.getName(),
-            request.getDosage(),
-            request.getFrequency(),
-            request.getStartDate(),
-            request.getEndDate(),
-            teamId
-        );
-    }
+  @PostMapping("/teams/{teamId}/medications")
+  public Medication addMedication(
+      @PathVariable("teamId") UUID teamId,
+      @RequestBody CreateMedicationRequest request
+  ) throws HttpException {
+    return service.addMedication(
+        request.getName(),
+        request.getDosage(),
+        request.getFrequency(),
+        request.getRoute(),
+        request.getInstructions(),
+        request.getStartDate(),
+        request.getEndDate(),
+        teamId
+    );
+  }
 
-    @GetMapping("/teams/{teamId}/medications")
-    public List<Medication> getMedications(
-        @PathVariable("teamId") UUID teamId,
-        Authentication authentication
-    ) throws HttpException {
-        return service.getMedications(teamId);
-    }
+  @GetMapping("/teams/{teamId}/medications")
+  public List<Medication> getMedications(
+      @PathVariable("teamId") UUID teamId,
+      Authentication authentication
+  ) throws HttpException {
+    return service.getMedications(teamId);
+  }
 
-    // Get medication by id
-    @GetMapping("/teams/{teamId}/medications/{medicationId}")
-    public Medication getMedicationById(@PathVariable() UUID teamId, @PathVariable() UUID medicationId) throws HttpException {
-        return service.getMedication(teamId, medicationId);
-    }
+  // Get medication by id
+  @GetMapping("/teams/{teamId}/medications/{medicationId}")
+  public Medication getMedicationById(@PathVariable() UUID teamId, @PathVariable() UUID medicationId) throws HttpException {
+    return service.getMedication(teamId, medicationId);
+  }
 
-    // Update medication
-    @PatchMapping("/teams/{teamId}/medications/{medicationId}")
-    public Medication updateMedication(
-        @PathVariable("teamId") UUID teamId,
-        @PathVariable("medicationId") UUID medicationId,
-        @RequestBody() UpdateMedicationRequest request
-    ) throws HttpException {
+  // Update medication
+  @PatchMapping("/teams/{teamId}/medications/{medicationId}")
+  public Medication updateMedication(
+      @PathVariable("teamId") UUID teamId,
+      @PathVariable("medicationId") UUID medicationId,
+      @RequestBody() UpdateMedicationRequest request
+  ) throws HttpException {
 //        return service.updateMedication(teamId, medicationId, request.getTitle(), request.getContent());
-        return null;
-    }
+    return null;
+  }
 
-    // Delete a medication by id
-    @DeleteMapping("/teams/{teamId}/medications/{medicationId}")
-    public void deleteMedication(@PathVariable() UUID teamId, @PathVariable() UUID medicationId) throws HttpException {
-        service.deleteMedication(teamId, medicationId);
-    }
+  // Delete a medication by id
+  @DeleteMapping("/teams/{teamId}/medications/{medicationId}")
+  public void deleteMedication(@PathVariable() UUID teamId, @PathVariable() UUID medicationId) throws HttpException {
+    service.deleteMedication(teamId, medicationId);
+  }
 }

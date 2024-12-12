@@ -28,6 +28,7 @@ import com.ericafenyo.seniorhub.entities.MedicationEntity;
 import com.ericafenyo.seniorhub.model.Medication;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -35,28 +36,31 @@ import java.util.function.Function;
 @Component
 @RequiredArgsConstructor
 public class MedicationMapper implements Function<MedicationEntity, Medication> {
-    private final UserMapper userMapper;
-    private final TeamMapper teamMapper;
+  private final UserMapper userMapper;
+  private final TeamMapper teamMapper;
 
-    @Override
-    public Medication apply(MedicationEntity entity) {
-        var medication = new Medication()
-            .setId(entity.getId())
-            .setName(entity.getName())
-            .setDosage(entity.getDosage())
-            .setFrequency(entity.getFrequency())
-            .setStartDate(entity.getStartDate())
-            .setEndDate(entity.getEndDate())
-            .setCreatedAt(entity.getCreatedAt())
-            .setUpdatedAt(entity.getUpdatedAt());
+  @Override
+  public Medication apply(MedicationEntity entity) {
+    Assert.notNull(entity, "Medication entity cannot be null");
 
+    var medication = new Medication()
+        .setId(entity.getId())
+        .setName(entity.getName())
+        .setDosage(entity.getDosage())
+        .setRoute(entity.getRoute())
+        .setInstructions(entity.getInstructions())
+        .setFrequency(entity.getFrequency())
+        .setStartDate(entity.getStartDate())
+        .setEndDate(entity.getEndDate())
+        .setCreatedAt(entity.getCreatedAt())
+        .setUpdatedAt(entity.getUpdatedAt());
 
-        Optional.ofNullable(entity.getUser())
-            .ifPresent(author -> medication.setUser(userMapper.apply(author)));
+    Optional.ofNullable(entity.getUser())
+        .ifPresent(author -> medication.setUser(userMapper.apply(author)));
 
-        Optional.ofNullable(entity.getTeam())
-            .ifPresent(team -> medication.setTeam(teamMapper.apply(team)));
+    Optional.ofNullable(entity.getTeam())
+        .ifPresent(team -> medication.setTeam(teamMapper.apply(team)));
 
-        return medication;
-    }
+    return medication;
+  }
 }

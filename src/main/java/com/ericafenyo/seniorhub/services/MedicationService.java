@@ -27,7 +27,7 @@ package com.ericafenyo.seniorhub.services;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.model.Medication;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,12 +35,14 @@ import java.util.UUID;
  * Service interface for managing medications.
  */
 public interface MedicationService {
-    Medication logMedication(
+    Medication addMedication(
         String name,
         String dosage,
         String frequency,
-        LocalDateTime startDate,
-        LocalDateTime endDate,
+        String route,
+        String instructions,
+        LocalDate startDate,
+        LocalDate endDate,
         UUID teamId
     ) throws HttpException;
 

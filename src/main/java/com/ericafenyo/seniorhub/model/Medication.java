@@ -29,21 +29,65 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Setter
 @Getter
 @Accessors(chain = true)
 public class Medication {
-    private UUID id;
-    private String name;
-    private String dosage;
-    private String frequency;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private Instant createdAt;
-    private Instant updatedAt;
-    private User user;
-    private Team team;
+  /**
+   * The unique identifier for the medication.
+   */
+  private UUID id;
+  /**
+   * The name of the medication administered or taken by the user.
+   */
+  private String name;
+  /**
+   * The dosage of the medication.
+   */
+  private String dosage;
+  /**
+   * The method by which the medication is to be taken.
+   */
+  private String route;
+  /**
+   * The frequency at which the medication is to be taken.
+   */
+  private String frequency;
+
+  /**
+   * The instructions for taking the medication.
+   */
+  private String instructions;
+
+  /**
+   * The date the medication is to be taken.
+   */
+  private LocalDate startDate;
+  /**
+   * The date the medication is to be stopped.
+   */
+  private LocalDate endDate;
+
+  /**
+   * The user associated with the medication record.
+   */
+  private User user;
+
+  /**
+   * The team associated with the medication record.
+   */
+  private Team team;
+
+  /**
+   * The timestamp when the medication record was created.
+   */
+  private Instant createdAt;
+
+  /**
+   * The timestamp when the medication record was last updated.
+   */
+  private Instant updatedAt;
 }

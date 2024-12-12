@@ -42,6 +42,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.function.Function;
@@ -52,75 +53,87 @@ import java.util.function.Function;
 @Getter
 @Accessors(chain = true)
 public class MedicationEntity implements Mappable<MedicationEntity, Medication> {
-    /**
-     * The unique identifier for the medication.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
-    private UUID id;
+  /**
+   * The unique identifier for the medication.
+   */
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  @Column(name = "id")
+  private UUID id;
 
-    /**
-     * The name of the medication administered or taken by the user.
-     */
-    @Column(name = "name")
-    private String name;
+  /**
+   * The name of the medication administered or taken by the user.
+   */
+  @Column(name = "name")
+  private String name;
 
-    /**
-     * The dosage of the medication.
-     */
-    @Column(name = "dosage")
-    private String dosage;
+  /**
+   * The dosage of the medication.
+   */
+  @Column(name = "dosage")
+  private String dosage;
 
-    /**
-     * The frequency at which the medication is to be taken.
-     */
-    @Column(name = "frequency")
-    private String frequency;
+  /**
+   * The method by which the medication is to be taken.
+   */
+  @Column(name = "route")
+  private String route;
 
-    /**
-     * The date and time the medication is to be taken.
-     */
-    @Column(name = "start_date")
-    private LocalDateTime startDate;
+  /**
+   * The frequency at which the medication is to be taken.
+   */
+  @Column(name = "frequency")
+  private String frequency;
 
-    /**
-     * The date and time the medication is to be stopped.
-     */
-    @Column(name = "end_date")
-    private LocalDateTime endDate;
+  /**
+   * The instructions for taking the medication.
+   */
+  @Column(name = "instructions")
+  private String instructions;
 
-    /**
-     * The team associated with the medication record.
-     */
-    @ManyToOne()
-    @JoinColumn(name = "team_id")
-    private TeamEntity team;
+  /**
+   * The date the medication is to be taken.
+   */
+  @Column(name = "start_date")
+  private LocalDate startDate;
+
+  /**
+   * The date the medication is to be stopped.
+   */
+  @Column(name = "end_date")
+  private LocalDate endDate;
+
+  /**
+   * The team associated with the medication record.
+   */
+  @ManyToOne()
+  @JoinColumn(name = "team_id")
+  private TeamEntity team;
 
 
-    /**
-     * The author of the note.
-     */
-    @ManyToOne()
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+  /**
+   * The user associated with the medication record.
+   */
+  @ManyToOne()
+  @JoinColumn(name = "user_id", nullable = false)
+  private UserEntity user;
 
-    /**
-     * The timestamp when the medication record was created.
-     */
-    @CreatedDate
-    @Column(name = "created_at")
-    private Instant createdAt;
+  /**
+   * The timestamp when the medication record was created.
+   */
+  @CreatedDate
+  @Column(name = "created_at")
+  private Instant createdAt;
 
-    /**
-     * The timestamp when the medication record was last updated.
-     */
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    private Instant updatedAt;
+  /**
+   * The timestamp when the medication record was last updated.
+   */
+  @LastModifiedDate
+  @Column(name = "updated_at")
+  private Instant updatedAt;
 
-    @Override
-    public Medication map(Function<? super MedicationEntity, ? extends Medication> mapper) {
-        return mapper.apply(this);
-    }
+  @Override
+  public Medication map(Function<? super MedicationEntity, ? extends Medication> mapper) {
+    return mapper.apply(this);
+  }
 }

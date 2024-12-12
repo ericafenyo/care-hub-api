@@ -26,13 +26,42 @@ package com.ericafenyo.seniorhub.requests;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 public class CreateMedicationRequest {
-    private String name;
-    private String dosage;
-    private String frequency;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+  /**
+   * The name of the medication.
+   */
+  private String name;
+
+  /**
+   * The strength of the medication. For example, 1000 mg.
+   */
+  private String dosage;
+
+  /**
+   * The method by which the medication is to be taken.
+   */
+  private String route;
+
+  /**
+   * The frequency at which the medication is to be taken.
+   */
+  private String frequency;
+
+  /**
+   * The instructions for taking the medication.
+   */
+  private String instructions;
+
+  /**
+   * The date the medication is to be taken.
+   */
+  private LocalDate startDate;
+
+  /**
+   * The date and time the medication is to be stopped.
+   */
+  private LocalDate endDate;
 }

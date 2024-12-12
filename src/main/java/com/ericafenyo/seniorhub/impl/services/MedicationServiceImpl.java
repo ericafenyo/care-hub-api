@@ -38,6 +38,7 @@ import com.ericafenyo.seniorhub.services.MedicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -45,69 +46,73 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class MedicationServiceImpl extends AuthenticationContext implements MedicationService {
-    private final MedicationRepository medicationRepository;
-    private final TeamRepository teamRepository;
-    private final UserRepository userRepository;
+  private final MedicationRepository medicationRepository;
+  private final TeamRepository teamRepository;
+  private final UserRepository userRepository;
 
-    private final Messages messages;
+  private final Messages messages;
 
-    private final MedicationMapper toMedication;
+  private final MedicationMapper toMedication;
 
-    @Override
-    public Medication logMedication(
-        String name,
-        String dosage,
-        String frequency,
-        LocalDateTime startDate,
-        LocalDateTime endDate,
-        UUID teamId
-    ) throws HttpException {
-        var team = teamRepository.findById(teamId).orElseThrow(() ->
-            new NotFoundException(
-                messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "Team", teamId),
-                messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "team")
-            )
-        );
+  @Override
+  public Medication addMedication(
+      String name,
+      String dosage,
+      String frequency,
+      String route,
+      String instructions,
+      LocalDate startDate,
+      LocalDate endDate,
+      UUID teamId
+  ) throws HttpException {
+    var team = teamRepository.findById(teamId).orElseThrow(() ->
+        new NotFoundException(
+            messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "Team", teamId),
+            messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "team")
+        )
+    );
 
-        var user = userRepository.findById(getAuthenticatedUserId()).orElseThrow(() ->
-            new NotFoundException(
-                messages.format(Messages.ERROR_RESOURCE_NOTFOUND, "User"),
-                messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "user")
-            )
-        );
+    var user = userRepository.findById(getAuthenticatedUserId()).orElseThrow(() ->
+        new NotFoundException(
+            messages.format(Messages.ERROR_RESOURCE_NOTFOUND, "User"),
+            messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "user")
+        )
+    );
 
-        var entity = new MedicationEntity()
-            .setName(name)
-            .setDosage(dosage)
-            .setFrequency(frequency)
-            .setStartDate(startDate)
-            .setEndDate(endDate)
-            .setTeam(team)
-            .setUser(user);
+    var entity = new MedicationEntity()
+        .setName(name)
+        .setDosage(dosage)
+        .setFrequency(frequency)
+        .setRoute(route)
+        .setInstructions(instructions)
+        .setStartDate(startDate)
+        .setEndDate(endDate)
+        .setTeam(team)
+        .setUser(user);
 
-        return medicationRepository.save(entity).map(toMedication);
-    }
+    return medicationRepository.save(entity).map(toMedication);
+  }
 
-    @Override
-    public List<Medication> getMedications(UUID teamId) {
-        return medicationRepository.findByTeamIdAndUserId(teamId, getAuthenticatedUserId())
-            .stream()
-            .map(toMedication)
-            .toList();
-    }
+  @Override
+  public List<Medication> getMedications(UUID teamId) {
+    return medicationRepository.findByTeamIdAndUserId(teamId, getAuthenticatedUserId())
+        .stream()
+        .map(toMedication)
+        .toList();
+  }
 
-    @Override
-    public Medication getMedication(UUID teamId, UUID MedicationId) throws HttpException {
-        return null;
-    }
+  @Override
+  public Medication getMedication(UUID teamId, UUID MedicationId) throws HttpException {
+    return null;
+  }
 
-    @Override
-    public Medication updateMedication(UUID teamId, UUID MedicationId, String title, String content) throws HttpException {
-        return null;
-    }
+  @Override
+  public Medication updateMedication(UUID teamId, UUID MedicationId, String title, String content) throws HttpException {
+    return null;
+  }
 
-    @Override
-    public void deleteMedication(UUID teamId, UUID MedicationId) throws HttpException {
+  @Override
+  public void deleteMedication(UUID teamId, UUID MedicationId) throws HttpException {
 
-    }
+  }
 }
