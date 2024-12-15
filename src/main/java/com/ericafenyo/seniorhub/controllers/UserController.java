@@ -75,7 +75,7 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    public User updateUser(@PathVariable UUID id, @RequestBody @Valid UserUpdateDto userUpdateDto) {
+    public User updateUser(@PathVariable UUID id, @RequestBody @Valid UserUpdateDto userUpdateDto) throws HttpException {
         return service.updateUser(id, userUpdateDto);
     }
 

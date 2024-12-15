@@ -42,7 +42,7 @@ public interface UserService {
 
     User createUser(CreateUserRequest userCreationDto) throws HttpException;
 
-    User updateUser(UUID id, UserUpdateDto updateUserDto);
+    User updateUser(UUID id, UserUpdateDto updateUserDto) throws HttpException;;
 
     void deleteUser(UUID id);
 

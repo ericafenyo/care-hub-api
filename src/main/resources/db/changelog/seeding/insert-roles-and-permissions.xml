@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.30.xsd">
+
+    <changeSet id="1734035510655" author="Eric">
+        <comment>This changeset populates the roles table</comment>
+
+        <insert tableName="roles">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="CAREGIVER"/>
+            <column name="slug" value="caregiver"/>
+            <column name="description" value="Non-professional individual who assist with patient care"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="HEALTHCARE-PROVIDER"/>
+            <column name="slug" value="healthcare-provider"/>
+            <column name="description" value="A medical professional delivering care to a patient"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="PATIENT"/>
+            <column name="slug" value="patient"/>
+            <column name="description" value="A person receiving medical treatment and care"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="ADMINISTRATOR"/>
+            <column name="slug" value="administrator"/>
+            <column name="description" value="A person responsible for managing the application"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+    </changeSet>
+
+
+    <changeSet id="1734045220719" author="Eric">
+        <comment>This changeset populates the permissions table</comment>
+
+        <!-- Appointment Management -->
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="create:appointments"/>
+            <column name="description" value="Create new appointments"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="read:appointments"/>
+            <column name="description" value="View appointments"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="update:appointments"/>
+            <column name="description" value="Modify existing appointments"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="delete:appointments"/>
+            <column name="description" value="Cancel or remove appointments"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+
+        <!-- Medication Tracking -->
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="add:medications"/>
+            <column name="description" value="Add new medication details"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="read:medications"/>
+            <column name="description" value="View patient medication records"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="update:medications"/>
+            <column name="description" value="Update medication details"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="delete:medications"/>
+            <column name="description" value="Remove medications from records"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+
+        <!-- Task Management -->
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="create:tasks"/>
+            <column name="description" value="Creat a new tasks"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="read:tasks"/>
+            <column name="description" value="View assigned tasks"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="update:tasks"/>
+            <column name="description" value="Modify task details or status"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="delete:tasks"/>
+            <column name="description" value="Remove completed or obsolete tasks"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+
+        <!-- Note-Taking -->
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="create:notes"/>
+            <column name="description" value="Write new patient care notes"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="read:notes"/>
+            <column name="description" value="Read existing notes"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="update:notes"/>
+            <column name="description" value="Edit previously written notes"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="delete:notes"/>
+            <column name="description" value="Remove notes"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <!-- Vital signs recording -->
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="read:vitals"/>
+            <column name="description" value="View patient vital signs"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="create:vitals"/>
+            <column name="description" value="Update patient vital signs records"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <!-- Administrative Permissions -->
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="manage:team"/>
+            <column name="description" value="Fully manage the team, its members, and resources"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

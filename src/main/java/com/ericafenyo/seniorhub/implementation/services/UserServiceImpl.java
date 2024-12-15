@@ -40,6 +40,8 @@ import com.ericafenyo.seniorhub.exceptions.user.UserNotFoundException;
 import com.ericafenyo.seniorhub.mapper.UserMapper;
 import com.ericafenyo.seniorhub.model.Team;
 import com.ericafenyo.seniorhub.model.User;
+import com.ericafenyo.seniorhub.repository.CityRepository;
+import com.ericafenyo.seniorhub.repository.CountryRepository;
 import com.ericafenyo.seniorhub.repository.CredentialRepository;
 import com.ericafenyo.seniorhub.repository.UserRepository;
 import com.ericafenyo.seniorhub.services.TeamService;
@@ -63,6 +65,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final CredentialRepository credentialRepository;
+    private final CityRepository cityRepository;
+    private final CountryRepository countryRepository;
 
     private final TeamService teamService;
 
@@ -73,16 +77,18 @@ public class UserServiceImpl implements UserService {
         boolean isPresent = userRepository.existsByEmail(request.getEmail());
         if (isPresent) {
             throw new ConflictException(
-                messages.format(Messages.ERROR_RESOURCE_ALREADY_EXISTS, "User"),
-                messages.format(Messages.ERROR_RESOURCE_ALREADY_EXISTS_CODE, "user")
+                    messages.format(Messages.ERROR_RESOURCE_ALREADY_EXISTS, "User"),
+                    messages.format(Messages.ERROR_RESOURCE_ALREADY_EXISTS_CODE, "user")
             );
         }
 
         // Create a new city entity
-        var city = new CityEntity().setName(request.getAddress().getCity());
+        var city = cityRepository.findByName(request.getAddress().getCity())
+                .orElseGet(() -> cityRepository.save(new CityEntity().setName(request.getAddress().getCity())));
 
         // Create a new country entity
-        var country = new CountryEntity().setName(request.getAddress().getCountry());
+        var country = countryRepository.findByName(request.getAddress().getCountry())
+                .orElseGet(() -> countryRepository.save(new CountryEntity().setName(request.getAddress().getCountry())));
 
         // Create a new address entity
         var address = new AddressEntity();
@@ -133,8 +139,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(UUID id, UserUpdateDto dto) {
-        UserEntity user = userRepository.findById(id).get();
+    public User updateUser(UUID id, UserUpdateDto dto) throws HttpException {
+        UserEntity user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
 
         AddressEntity address = user.getAddress();
         CityEntity city = address.getCity();
@@ -171,10 +177,10 @@ public class UserServiceImpl implements UserService {
     public List<Team> getUserTeams(UUID id) throws HttpException {
         // Find the current user using the provided id
         var user = userRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException(
-                messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "user", id),
-                messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "user")
-            ));
+                .orElseThrow(() -> new NotFoundException(
+                        messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "user", id),
+                        messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "user")
+                ));
 
         return teamService.getUserTeams(user.getId());
     }

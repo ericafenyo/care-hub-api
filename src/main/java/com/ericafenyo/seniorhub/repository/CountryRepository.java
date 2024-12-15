@@ -22,50 +22,23 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.entities;
+package com.ericafenyo.seniorhub.repository;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import com.ericafenyo.seniorhub.entities.CountryEntity;
+import org.springframework.stereotype.Repository;
 
-import java.time.Instant;
-import java.util.UUID;
+import java.util.Optional;
 
 /**
- * A database entity representing a city of a country.
+ * Repository for performing database operations on a {@link CountryEntity}.
  */
-@Entity(name = "cities")
-@EntityListeners(AuditingEntityListener.class)
-@Getter
-@Setter
-@Accessors(chain = true)
-public class CityEntity {
+@Repository
+public interface CountryRepository extends AbstractRepository<CountryEntity> {
     /**
-     * The unique identifier for the city.
+     * Retrieves a country by name.
+     *
+     * @param name The name of the country.
+     * @return A country object or {@literal Optional#empty()} if none found.
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
-    private UUID id;
-
-    /**
-     * The name of the city.
-     */
-    @Column(name = "name", nullable = false, unique = true)
-    private String name;
-
-    /**
-     * The timestamp when the credential was created.
-     */
-    @CreatedDate
-    @Column(name = "created_at")
-    private Instant createdAt;
+    Optional<CountryEntity> findByName(String name);
 }

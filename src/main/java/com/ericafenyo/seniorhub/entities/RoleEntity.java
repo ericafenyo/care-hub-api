@@ -46,7 +46,8 @@ import java.util.UUID;
 
 @Entity(name = "roles")
 @EntityListeners(AuditingEntityListener.class)
-@Getter @Setter
+@Getter
+@Setter
 public class RoleEntity {
     /**
      * The unique identifier for the role.
@@ -59,19 +60,19 @@ public class RoleEntity {
     /**
      * The name of the role
      */
-    @Column(name = "name")
+    @Column(name = "name", length = 50, nullable = false , unique = true)
     private String name;
 
     /**
      * Human-readable name of the role
      */
-    @Column(name = "slug")
+    @Column(name = "slug", length = 50 , nullable = false, unique = true)
     private String slug;
 
     /**
      * A brief description or explanation of the role.
      */
-    @Column(name = "description")
+    @Column(name = "description", length = 150 , nullable = false)
     private String description;
 
     /**
@@ -79,9 +80,9 @@ public class RoleEntity {
      */
     @ManyToMany()
     @JoinTable(
-        name = "role_permission",
-        joinColumns = @JoinColumn(name = "role_id")
-        , inverseJoinColumns = @JoinColumn(name = "permission_id")
+            name = "role_permission",
+            joinColumns = @JoinColumn(name = "role_id")
+            , inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     private List<PermissionEntity> permissions = new ArrayList<>();
 
@@ -89,13 +90,13 @@ public class RoleEntity {
      * The timestamp indicating when the role was created.
      */
     @CreatedDate
-    @Column(name = "created_at")
+    @Column(name = "created_at" , nullable = false)
     private Instant createdAt;
 
     /**
      * The timestamp indicating when the role was last updated.
      */
     @LastModifiedDate
-    @Column(name = "updated_at")
+    @Column(name = "updated_at" , nullable = false)
     private Instant updatedAt;
 }
