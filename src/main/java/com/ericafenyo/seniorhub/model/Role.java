@@ -34,6 +34,12 @@ import java.util.UUID;
 @Setter
 @Accessors(chain = true)
 public class Role {
+    public static final String SLUG_ADMIN = "admin";
+    public static final String SLUG_OWNER = "owner";
+    public static final String SLUG_CAREGIVER = "caregiver";
+    public static final String SLUG_PATIENT = "patient";
+    private static final String SLUG_HEALTH_PROVIDER = "health_provider";
+
     /**
      * The unique identifier for the role.
      */

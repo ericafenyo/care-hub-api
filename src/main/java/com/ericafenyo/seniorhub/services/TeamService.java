@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TeamService {
-    Team createTeam(CreateTeamRequest request, UUID creatorId) throws HttpException;
+    Team createTeam(String name, String description) throws HttpException;
 
     List<Team> getTeams();
 

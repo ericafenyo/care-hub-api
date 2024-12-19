@@ -24,8 +24,6 @@
 
 package com.ericafenyo.seniorhub.entities;
 
-import com.ericafenyo.seniorhub.api.Mappable;
-import com.ericafenyo.seniorhub.model.Team;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -34,23 +32,25 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.util.UUID;
-import java.util.function.Function;
 
-@Entity(name = "teams")
+/**
+ * A database entity that represents a team member.
+ */
+@Entity(name = "team_members")
 @EntityListeners(AuditingEntityListener.class)
-@Setter
-@Getter
-public class TeamEntity implements Mappable<TeamEntity, Team> {
+@Data
+@Accessors(chain = true)
+public class TeamMemberEntity {
     /**
-     * The unique identifier for the team.
+     * The unique identifier for the team member.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -58,40 +58,37 @@ public class TeamEntity implements Mappable<TeamEntity, Team> {
     private UUID id;
 
     /**
-     * The name of the team.
+     * The user associated with the team member.
      */
-    @Column(name = "name", nullable = false, unique = true, length = 50)
-    private String name;
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
     /**
-     * A brief description of the team.
+     * The team the user is a member of.
      */
-    @Column(name = "description", nullable = false, length = 80)
-    private String description;
+    @ManyToOne()
+    @JoinColumn(name = "team_id")
+    private TeamEntity team;
 
     /**
-     * The timestamp indicating when the team was created.
+     * The role assigned to the team member.
+     */
+    @ManyToOne()
+    @JoinColumn(name = "role_id")
+    private RoleEntity role;
+
+    /**
+     * The timestamp when the member was added to the team.
      */
     @CreatedDate
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private Instant createdAt;
 
     /**
-     * The timestamp indicating when the team was last updated.
+     * The timestamp when the team member was last updated.
      */
     @LastModifiedDate
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     private Instant updatedAt;
-
-    /**
-     * The creator of the team.
-     */
-    @ManyToOne()
-    @JoinColumn(name = "owner_id", nullable = false)
-    private UserEntity owner;
-
-    @Override
-    public Team map(Function<? super TeamEntity, ? extends Team> mapper) {
-        return mapper.apply(this);
-    }
 }
