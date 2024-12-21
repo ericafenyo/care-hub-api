@@ -22,29 +22,13 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.services;
+package com.ericafenyo.seniorhub.repository;
 
-import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
-import com.ericafenyo.seniorhub.dto.CreateUserRequest;
-import com.ericafenyo.seniorhub.dto.UserUpdateDto;
-import com.ericafenyo.seniorhub.exceptions.HttpException;
-import com.ericafenyo.seniorhub.model.Team;
-import com.ericafenyo.seniorhub.model.User;
+import com.ericafenyo.seniorhub.entities.TeamMemberEntity;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.UUID;
-
-
-public interface UserService {
-    List<User> getUsers();
-
-    User getUserById(UUID id) throws HttpException;
-
-    User createUser(CreateUserRequest userCreationDto) throws HttpException;
-
-    User updateUser(UUID id, UserUpdateDto updateUserDto) throws HttpException;;
-
-    void deleteUser(UUID id);
-
-    List<Team> getUserTeams(UUID id) throws HttpException;
-}
+/**
+ * Repository for performing database operations on a {@link TeamMemberEntity}.
+ */
+@Repository
+public interface TeamMemberRepository extends AbstractRepository<TeamMemberEntity> { }

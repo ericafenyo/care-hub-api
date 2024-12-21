@@ -66,7 +66,7 @@ public class TeamEntity implements Mappable<TeamEntity, Team> {
     /**
      * A brief description of the team.
      */
-    @Column(name = "description", nullable = false, length = 80)
+    @Column(name = "description", nullable = false, length = 150)
     private String description;
 
     /**

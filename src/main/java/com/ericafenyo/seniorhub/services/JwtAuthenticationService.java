@@ -30,12 +30,15 @@ import com.ericafenyo.seniorhub.model.Account;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Base64;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -45,7 +48,7 @@ public class JwtAuthenticationService {
     private static final String EMAIL_KEY = "email";
     private static final String ROLE_KEY = "role";
 
-    private final EnvironmentVariables environment;
+    private final EnvironmentVariables env;
 
     public <T> T extract(String token, Function<Claims, T> resolver) {
         Claims claims = extract(token);
@@ -54,23 +57,24 @@ public class JwtAuthenticationService {
 
     private Claims extract(String token) {
         return Jwts.parser()
-            .setSigningKey(environment.getJwtSecretKey())
-            .parseClaimsJws(token)
-            .getBody();
+                .verifyWith(getSecretKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     public String sign(Account account) {
         Instant issuedAt = Instant.now();
-        Instant expiration = issuedAt.plus(24, ChronoUnit.HOURS);
+        Instant expiration = issuedAt.plus(env.getJwtExpirationTimeSeconds(), ChronoUnit.SECONDS);
 
         return Jwts.builder()
-            .claim(EMAIL_KEY, account.getEmail())
-            .setSubject("auth|%s".formatted(account.getId()))
-            .setIssuer("http://localhost/senoir-hub")
-            .setIssuedAt(Date.from(issuedAt))
-            .setExpiration(Date.from(expiration))
-            .signWith(SignatureAlgorithm.HS256, environment.getJwtSecretKey())
-            .compact();
+                .claim(EMAIL_KEY, account.getEmail())
+                .subject("auth|%s".formatted(account.getId()))
+                .issuer(env.getJwtIssuer())
+                .issuedAt(Date.from(issuedAt))
+                .expiration(Date.from(expiration))
+                .signWith(getSecretKey())
+                .compact();
     }
 
     /**
@@ -113,5 +117,9 @@ public class JwtAuthenticationService {
 
     public String extractEmail(String token) {
         return extract(token, (claims -> claims.get(EMAIL_KEY, String.class)));
+    }
+
+    private SecretKey getSecretKey() {
+        return Keys.hmacShaKeyFor(Base64.getDecoder().decode(env.getJwtSecret()));
     }
 }

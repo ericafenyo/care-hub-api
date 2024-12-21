@@ -59,7 +59,7 @@ public class TeamController {
 
     @PostMapping("/teams")
     public Team createTeam(@RequestBody @Valid CreateTeamRequest request) throws Exception {
-        return service.createTeam(request);
+        return service.createTeam(request.getName(), request.getDescription());
     }
 
     @GetMapping("/teams")
@@ -88,13 +88,11 @@ public class TeamController {
     // Invitation sub-resources
 
     @PostMapping("/teams/{id}/invitations")
-    public Object invite(
+    public Object addMember(
         @PathVariable("id") UUID teamId,
-        @RequestBody() InvitationRequest request,
-        Authentication authentication
+        @RequestBody() InvitationRequest request
     ) throws HttpException {
-        var userId = Accounts.extractUserId(authentication);
-        return service.invite(teamId, userId, request.getRole(), request.getEmail());
+        return service.invite(teamId, request.getRole(), request.getEmail());
     }
 
     // Task sub-resources

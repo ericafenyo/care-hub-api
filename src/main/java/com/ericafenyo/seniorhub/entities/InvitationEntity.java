@@ -62,6 +62,18 @@ public class InvitationEntity {
     private UUID id;
 
     /**
+     * The first name of the invitation recipient
+     */
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+    /**
+     * The last name of the invitation recipient
+     */
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
+
+    /**
      * The email address of the invitation recipient
      */
     @Column(name = "email", nullable = false)
@@ -72,7 +84,7 @@ public class InvitationEntity {
      */
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Invitation.Status status = Invitation.Status.PENDING;
+    private Invitation.Status status;
 
     /**
      * The token associated with the invitation

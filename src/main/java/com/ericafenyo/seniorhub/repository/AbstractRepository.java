@@ -25,8 +25,6 @@
 package com.ericafenyo.seniorhub.repository;
 
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
 

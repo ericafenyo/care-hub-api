@@ -37,6 +37,6 @@ public class CreateTeamRequest {
     private String name;
 
     @NotBlank
-    @Size(max = 80)
+    @Size(max = 150)
     private String description;
 }

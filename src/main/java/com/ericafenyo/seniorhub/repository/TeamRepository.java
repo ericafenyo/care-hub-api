@@ -38,5 +38,5 @@ public interface TeamRepository extends AbstractRepository<TeamEntity> {
 
     long countByName(String name);
 
-    List<TeamEntity> findAllByCreatorId(UUID creatorId);
+    List<TeamEntity> findAllByOwnerId(UUID creatorId);
 }

@@ -24,6 +24,7 @@
 
 package com.ericafenyo.seniorhub.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -60,21 +61,21 @@ public class TeamMemberEntity {
     /**
      * The user associated with the team member.
      */
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
     /**
      * The team the user is a member of.
      */
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "team_id")
     private TeamEntity team;
 
     /**
      * The role assigned to the team member.
      */
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id")
     private RoleEntity role;
 

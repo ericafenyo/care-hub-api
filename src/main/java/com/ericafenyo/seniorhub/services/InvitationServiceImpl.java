@@ -26,6 +26,7 @@ package com.ericafenyo.seniorhub.services;
 
 import com.ericafenyo.seniorhub.EnvironmentVariables;
 import com.ericafenyo.seniorhub.Messages;
+import com.ericafenyo.seniorhub.core.AuthenticationContext;
 import com.ericafenyo.seniorhub.dto.AcceptInvitationRequest;
 import com.ericafenyo.seniorhub.dto.ValidateInvitationRequest;
 import com.ericafenyo.seniorhub.entities.InvitationEntity;
@@ -58,7 +59,7 @@ import static com.ericafenyo.seniorhub.Messages.MESSAGE_INVITATION_ACCEPTED;
 
 @Service
 @RequiredArgsConstructor
-public class InvitationServiceImpl implements InvitationService {
+public class InvitationServiceImpl extends AuthenticationContext implements InvitationService {
     private final EnvironmentVariables environment;
     private final InvitationMapper invitationMapper;
     private final InvitationRepository invitationRepository;
@@ -70,33 +71,43 @@ public class InvitationServiceImpl implements InvitationService {
 
     @Override
     @Transactional
-    public Report invite(UUID teamId, UUID inviterId, String roleSlug, String email) throws HttpException {
+    public Report invite(
+            UUID teamId,
+            String role,
+            String firstName,
+            String lastName,
+            String email
+    ) throws HttpException {
+        // inviter = select owner from teams where id = teamId and owner.id = authenticatedUserId
 
         // Get the inviter or throw an error if it does not exist
-        var inviter = userRepository.findById(inviterId).orElseThrow(
-            () -> new NotFoundException(
-                messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "User", inviterId),
-                messages.format(ERROR_RESOURCE_NOTFOUND_CODE, "user")
-            )
+        var inviter = userRepository.findById(getAuthenticatedUserId()).orElseThrow(
+                () -> new NotFoundException(
+                        messages.format(ERROR_RESOURCE_NOTFOUND, "User"),
+                        messages.format(ERROR_RESOURCE_NOTFOUND_CODE, "user")
+                )
         );
 
         // Get the team or throw an error if it does not exist
         var team = teamRepository.findById(teamId).orElseThrow(() -> new NotFoundException(
-            messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "Team", teamId),
-            messages.format(ERROR_RESOURCE_NOTFOUND_CODE, "team")
+                messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "Team", teamId),
+                messages.format(ERROR_RESOURCE_NOTFOUND_CODE, "team")
         ));
 
-        var role = roleRepository.findBySlug(roleSlug).orElseThrow(() -> new InvalidRoleException());
+        var s = roleRepository.findBySlug(role).orElseThrow(() -> new InvalidRoleException());
 
         String token = Hashing.randomSHA256();
 
         var invitation = new InvitationEntity()
-            .setToken(token)
-            .setEmail(email)
-            .setRole(role)
-            .setExpiresAt(Instant.now().plusSeconds(environment.getInvitationExpirySeconds()))
-            .setTeam(team)
-            .setInviter(inviter);
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setEmail(email)
+                .setToken(token)
+                .setStatus(Invitation.Status.PENDING)
+                .setRole(role)
+                .setExpiresAt(Instant.now().plusSeconds(environment.getInvitationExpirySeconds()))
+                .setTeam(team)
+                .setInviter(inviter);
 
         invitationRepository.save(invitation);
 
@@ -110,7 +121,7 @@ public class InvitationServiceImpl implements InvitationService {
     @Override
     public Invitation validateInvitation(ValidateInvitationRequest request) throws HttpException {
         var invitation = invitationRepository.findByToken(request.getToken())
-            .orElseThrow(() -> new InvitationNotFoundException());
+                .orElseThrow(() -> new InvitationNotFoundException());
 
         // Check if the invitation has already been accepted
         if (invitation.getStatus() == Invitation.Status.ACCEPTED) {
@@ -138,10 +149,10 @@ public class InvitationServiceImpl implements InvitationService {
     public Report acceptInvitation(AcceptInvitationRequest request) throws HttpException {
         // Check if the invitation exists
         var invitation = invitationRepository.findByToken(request.getToken())
-            .orElseThrow(() -> new NotFoundException(
-                messages.format(ERROR_RESOURCE_NOTFOUND, "invitation"),
-                messages.format(ERROR_RESOURCE_NOTFOUND_CODE, "invitation")
-            ));
+                .orElseThrow(() -> new NotFoundException(
+                        messages.format(ERROR_RESOURCE_NOTFOUND, "invitation"),
+                        messages.format(ERROR_RESOURCE_NOTFOUND_CODE, "invitation")
+                ));
 
         // Check if the invitation has already been accepted
         if (invitation.getStatus() == Invitation.Status.ACCEPTED) {
@@ -154,14 +165,14 @@ public class InvitationServiceImpl implements InvitationService {
         }
 
         var invitee = userRepository.findByEmail(invitation.getEmail())
-            .orElseThrow(() -> new NotFoundException(
-                messages.format(ERROR_RESOURCE_NOTFOUND, "invitee"),
-                messages.format(ERROR_RESOURCE_NOTFOUND_CODE, "invitee")
-            ));
+                .orElseThrow(() -> new NotFoundException(
+                        messages.format(ERROR_RESOURCE_NOTFOUND, "invitee"),
+                        messages.format(ERROR_RESOURCE_NOTFOUND_CODE, "invitee")
+                ));
 
         var team = invitation.getTeam();
 
-        team.getMembers().add(invitee);
+//        team.getMembers().add(invitee);
 
         invitation.setUsedAt(Instant.now());
         invitation.setStatus(Invitation.Status.ACCEPTED);

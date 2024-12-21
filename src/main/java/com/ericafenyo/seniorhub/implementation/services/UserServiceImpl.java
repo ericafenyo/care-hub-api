@@ -169,11 +169,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Team createTeam(UUID id, CreateTeamRequest request) throws HttpException {
-        return teamService.createTeam(request, id);
-    }
-
-    @Override
     public List<Team> getUserTeams(UUID id) throws HttpException {
         // Find the current user using the provided id
         var user = userRepository.findById(id)

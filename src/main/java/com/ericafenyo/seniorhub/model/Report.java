@@ -49,4 +49,3 @@ public class Report {
     this.timestamp = Instant.now();
   }
 }
-

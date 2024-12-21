@@ -83,15 +83,4 @@ public class UserController {
     public void deleteUser(@PathVariable UUID id) {
         service.deleteUser(id);
     }
-
-    // Team sub-resources
-    @PostMapping("/users/{id}/teams")
-    public Team createTeam(@PathVariable UUID id, @RequestBody CreateTeamRequest request) throws HttpException {
-        return service.createTeam(id, request);
-    }
-
-    @GetMapping("/users/{id}/teams")
-    public List<Team> getUserTeams(@PathVariable UUID id) throws HttpException {
-        return service.getUserTeams(id);
-    }
 }

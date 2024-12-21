@@ -43,15 +43,15 @@ public interface TeamService {
 
     List<Team> getTeams();
 
-    Team getTeamById(UUID id) throws HttpException;
+    Team getTeamById(UUID teamId) throws HttpException;
 
-    Team updateTeam(UUID id, UpdateTeamRequest userUpdateDto);
+    Team updateTeam(UUID teamId, UpdateTeamRequest userUpdateDto);
 
-    void deleteTeam(UUID id);
+    void deleteTeam(UUID teamId);
 
-    List<Team> getUserTeams(UUID id) throws HttpException;
+    List<Team> getUserTeams(UUID teamId) throws HttpException;
 
-    Report invite(UUID teamId, UUID inviterId, String role, String email) throws HttpException;
+    Report addMember(UUID teamId, String role, String firstName, String lastName, String email) throws HttpException;
 
     Invitation validateInvitation(UUID teamId);
 

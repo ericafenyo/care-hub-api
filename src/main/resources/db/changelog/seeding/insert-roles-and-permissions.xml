@@ -34,8 +34,16 @@
         <insert tableName="roles">
             <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
             <column name="name" value="ADMINISTRATOR"/>
-            <column name="slug" value="administrator"/>
+            <column name="slug" value="admin"/>
             <column name="description" value="A person responsible for managing the application"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="OWNER"/>
+            <column name="slug" value="owner"/>
+            <column name="description" value="Team owner with full permissions"/>
             <column name="created_at" valueComputed="NOW()"/>
             <column name="updated_at" valueComputed="NOW()"/>
         </insert>

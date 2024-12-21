@@ -28,7 +28,6 @@ import com.ericafenyo.seniorhub.Messages;
 import com.ericafenyo.seniorhub.contexts.CreateTaskContext;
 import com.ericafenyo.seniorhub.core.AuthenticationContext;
 import com.ericafenyo.seniorhub.dto.UpdateTeamRequest;
-import com.ericafenyo.seniorhub.entities.RoleEntity;
 import com.ericafenyo.seniorhub.entities.TaskEntity;
 import com.ericafenyo.seniorhub.entities.TeamEntity;
 import com.ericafenyo.seniorhub.entities.TeamMemberEntity;
@@ -44,6 +43,7 @@ import com.ericafenyo.seniorhub.model.Task;
 import com.ericafenyo.seniorhub.model.Team;
 import com.ericafenyo.seniorhub.repository.RoleRepository;
 import com.ericafenyo.seniorhub.repository.TaskRepository;
+import com.ericafenyo.seniorhub.repository.TeamMemberRepository;
 import com.ericafenyo.seniorhub.repository.TeamRepository;
 import com.ericafenyo.seniorhub.repository.UserRepository;
 import com.ericafenyo.seniorhub.services.InvitationService;
@@ -64,6 +64,7 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final TeamMemberRepository teamMemberRepository;
 
     private final InvitationService invitationService;
     private final Messages messages;
@@ -76,7 +77,7 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
 
         var userId = getAuthenticatedUserId();
 
-        var user = userRepository.findById(userId)
+        var owner = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(
                         messages.format(Messages.ERROR_RESOURCE_NOTFOUND, "User"),
                         messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "user")
@@ -91,12 +92,14 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
         var team = new TeamEntity();
         team.setName(name);
         team.setDescription(description);
-        team.setOwner(user);
+        team.setOwner(owner);
 
         var member = new TeamMemberEntity()
                 .setTeam(team)
-                .setUser(user)
+                .setUser(owner)
                 .setRole(role);
+
+        teamMemberRepository.save(member);
 
         return mapper.apply(teamRepository.save(team));
     }
@@ -124,7 +127,7 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
         team.setName(userUpdateDto.getName());
         team.setDescription(userUpdateDto.getDescription());
 
-        return mapper.apply(teamRepository.save(team));
+        return teamRepository.save(team).map(mapper);
     }
 
     @Override
@@ -132,16 +135,22 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
     }
 
     @Override
-    public List<Team> getUserTeams(UUID id) throws HttpException {
-        return teamRepository.findAllByCreatorId(id)
+    public List<Team> getUserTeams(UUID teamId) throws HttpException {
+        return teamRepository.findAllByOwnerId(teamId)
                 .stream()
                 .map(mapper)
                 .toList();
     }
 
     @Override
-    public Report invite(UUID teamId, UUID inviterId, String role, String email) throws HttpException {
-        return invitationService.invite(teamId, inviterId, role, email);
+    public Report addMember(
+            UUID teamId,
+            String role,
+            String firstName,
+            String lastName,
+            String email
+    ) throws HttpException {
+        return invitationService.invite(teamId, role, firstName, lastName, email);
     }
 
     @Override
@@ -169,33 +178,6 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
 
         return taskMapper.apply(task);
     }
-
-//    @Override
-//    public Note createNote(CreateNoteContext context) throws HttpException {
-//        var team = findById(context.getTeamId());
-//        var author = userRepository.findById(context.getUserId()).orElseThrow(() ->
-//            new NotFoundException(
-//                messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "User", context.getTeamId()),
-//                messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "user")
-//            )
-//        );
-//
-//        var entity = new NoteEntity()
-//            .setTitle(context.getTitle())
-//            .setContent(context.getContent())
-//            .setTeam(team)
-//            .setAuthor(author);
-//
-//        return noteRepository.save(entity).map(toNote);
-//    }
-
-//    @Override
-//    public List<Note> getNotes(UUID teamId, UUID userId) {
-//        return noteRepository.findByTeamId(teamId)
-//            .stream()
-//            .map(toNote)
-//            .toList();
-//    }
 
     private TeamEntity findById(UUID teamId) throws NotFoundException {
         return teamRepository.findById(teamId).orElseThrow(() ->
