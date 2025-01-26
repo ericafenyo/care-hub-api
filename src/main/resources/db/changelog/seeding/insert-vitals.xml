@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.30.xsd">
+
+    <changeSet id="1737900986117-1" author="Eric">
+        <comment>This changeset populates the 'vitals' table</comment>
+        <insert tableName="vitals">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="CAREGIVER"/>
+            <column name="slug" value="caregiver"/>
+            <column name="description" value="Non-professional individual who assist with patient care"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
