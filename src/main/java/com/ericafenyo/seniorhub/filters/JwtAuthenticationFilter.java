@@ -26,7 +26,7 @@ package com.ericafenyo.seniorhub.filters;
 
 import com.ericafenyo.seniorhub.model.Account;
 import com.ericafenyo.seniorhub.services.AccountService;
-import com.ericafenyo.seniorhub.services.JwtAuthenticationService;
+import com.ericafenyo.seniorhub.util.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,60 +41,58 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.UUID;
+
+import static com.ericafenyo.seniorhub.Constants.KEY_EMAIL;
+import static com.ericafenyo.seniorhub.Constants.KEY_MEMBERSHIP;
 
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-  // The additional space at the end is required. Do not delete.
-  public static final String BEARER_AUTH_SCHEME = "bearer ";
+    // The additional space at the end is required. Do not delete it.
+    public static final String BEARER_AUTH_SCHEME = "bearer ";
 
-  private final JwtAuthenticationService jwtAuthenticationService;
-  private final AccountService accountService;
+    private final JwtUtils jwtUtils;
+    private final AccountService accountService;
 
-  @Override
-  protected void doFilterInternal(
-      @NonNull HttpServletRequest request,
-      @NonNull HttpServletResponse response,
-      @NonNull FilterChain filterChain
-  ) throws ServletException, IOException {
-    String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+    @Override
+    protected void doFilterInternal(
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain
+    ) throws ServletException, IOException {
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-    if (isNotAuthenticated() && hasValidBearerAuthSchema(header)) {
-      String token = header.substring(BEARER_AUTH_SCHEME.length());
+        if (isNotAuthenticated() && hasValidAuthenticationToken(header)) {
+            String jwt = header.substring(BEARER_AUTH_SCHEME.length());
 
-      String email = jwtAuthenticationService.extractEmail(token);
+            String email = jwtUtils.extract(jwt, (claims) -> claims.get(KEY_EMAIL, String.class));
+            String membershipId = jwtUtils.extract(jwt, (claims) -> claims.get(KEY_MEMBERSHIP, String.class));
 
-      Account account = accountService.getAccount(email);
-      if (account == null) {
+            Account account = membershipId != null
+                    ? accountService.getAccount(UUID.fromString(membershipId))
+                    : accountService.getAccount(email);
+
+            if (account != null) {
+                // Validate the JWT token and authenticate the user
+                if (!jwtUtils.hasExpired(jwt)) {
+                    UsernamePasswordAuthenticationToken authenticationToken =
+                            new UsernamePasswordAuthenticationToken(account, null, account.getAuthorities());
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                }
+            }
+        }
+
         filterChain.doFilter(request, response);
-        return;
-      }
-
-      boolean isValid = jwtAuthenticationService.verify(token, account);
-
-      if (isValid) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-            new UsernamePasswordAuthenticationToken(
-                account, null, account.getAuthorities()
-            );
-
-        authenticationToken.setDetails(
-            new WebAuthenticationDetailsSource().buildDetails(request)
-        );
-
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-      }
     }
 
-    filterChain.doFilter(request, response);
-  }
+    private boolean isNotAuthenticated() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication == null || !authentication.isAuthenticated();
+    }
 
-  private boolean isNotAuthenticated() {
-    var authentication = SecurityContextHolder.getContext().getAuthentication();
-    return authentication == null || !authentication.isAuthenticated();
-  }
-
-  private static boolean hasValidBearerAuthSchema(String header) {
-    return (header != null) && header.toLowerCase().startsWith(BEARER_AUTH_SCHEME);
-  }
+    private static boolean hasValidAuthenticationToken(String header) {
+        return (header != null) && header.toLowerCase().startsWith(BEARER_AUTH_SCHEME);
+    }
 }

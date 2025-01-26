@@ -22,15 +22,10 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exceptions.user;
+package com.ericafenyo.seniorhub.services.validation;
 
-import com.ericafenyo.seniorhub.exceptions.NotFoundException;
+import jakarta.validation.ValidationException;
 
-public class UserNotFoundException extends NotFoundException {
-  private static final String MESSAGE = "The requested user record could not be found";
-  private static final String ERROR_CODE = "user_not_found";
-
-  public UserNotFoundException() {
-    super(MESSAGE, ERROR_CODE);
-  }
+public interface Constraint<T> {
+    void validate(T context) throws ValidationException;
 }

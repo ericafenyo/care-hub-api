@@ -45,6 +45,5 @@ public class EmailPasswordAuthenticationService {
       throw new InvalidCredentialsException(exception);
     }
   }
-
 }
 

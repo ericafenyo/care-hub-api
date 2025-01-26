@@ -78,4 +78,13 @@ public interface AbstractRepository<T> extends Repository<T, UUID> {
      *                                           present but does not exist in the database.
      */
     void delete(T entity);
+
+    /**
+     * Returns whether an entity with the given id exists.
+     *
+     * @param id must not be {@literal null}.
+     * @return {@literal true} if an entity with the given id exists, {@literal false} otherwise.
+     * @throws IllegalArgumentException if {@literal id} is {@literal null}.
+     */
+    boolean existsById(UUID id);
 }

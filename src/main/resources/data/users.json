@@ -1,0 +1,114 @@
+[
+  {
+    "firstName": "Awa",
+    "lastName": "N'Diaye",
+    "email": "awa.ndiaye@example.fr",
+    "password": "3eB8c79pjKaF1LHs",
+    "birthDate": "1962-11-05",
+    "photoUrl": null,
+    "address": {
+      "street": "10 Rue de la République",
+      "postalCode": "13002",
+      "city": "Marseille",
+      "country": "France"
+    }
+  },
+  {
+    "firstName": "Charles",
+    "lastName": "N'Diaye",
+    "email": "charles.ndiaye@example.fr",
+    "password": "Jn4r8wV8d4ytunjX",
+    "birthDate": "1959-04-20",
+    "photoUrl": null,
+    "address": {
+      "street": "10 Rue de la République",
+      "postalCode": "13002",
+      "city": "Marseille",
+      "country": "France"
+    }
+  },
+  {
+    "firstName": "Didier",
+    "lastName": "N'Diaye",
+    "email": "didier.ndiaye@example.fr",
+    "password": "4u1oX0vAf4gPfLZ8",
+    "birthDate": "1986-07-15",
+    "photoUrl": null,
+    "address": {
+      "street": "45 Rue de Bonnel",
+      "postalCode": "69003",
+      "city": "Lyon",
+      "country": "France"
+    }
+  },
+  {
+    "firstName": "Jean",
+    "lastName": "Dupont",
+    "email": "jean.dupont@yopmail.fr",
+    "password": "A1b2C3d4E5f6G7h8",
+    "birthDate": "1979-04-22",
+    "photoUrl": null,
+    "address": {
+      "street": "12 Boulevard Michelet",
+      "postalCode": "13008",
+      "city": "Marseille",
+      "country": "France"
+    }
+  },
+  {
+    "firstName": "Malik",
+    "lastName": "N'Diaye",
+    "email": "malik.ndiaye@example.fr",
+    "password": "2iQ90wkQwc3sxBNy",
+    "birthDate": "1989-02-10",
+    "photoUrl": null,
+    "address": {
+      "street": "30 Avenue Jean Rieux",
+      "postalCode": "31500",
+      "city": "Toulouse",
+      "country": "France"
+    }
+  },
+  {
+    "firstName": "Maria",
+    "lastName": "Rodriguez",
+    "email": "maria.rodriguez@yopmail.fr",
+    "password": "jxPBx1F8iK6ZleoW",
+    "birthDate": "1994-08-15",
+    "photoUrl": null,
+    "address": {
+      "street": "15 Quai Jean Moulin",
+      "postalCode": "69001",
+      "city": "Lyon",
+      "country": "France"
+    }
+  },
+  {
+    "firstName": "Pierre",
+    "lastName": "Martin",
+    "email": "pierre.martin@example.fr",
+    "password": "6uV6vc7hn307kblg",
+    "birthDate": "1957-08-30",
+    "photoUrl": null,
+    "address": {
+      "street": "12 Rue de la République",
+      "postalCode": "13002",
+      "city": "Marseille",
+      "country": "France"
+    }
+  },
+  {
+    "firstName": "Sophie",
+    "lastName": "Dubois",
+    "email": "sophie.dubois@example.fr",
+    "password": "2w6PFYdhNAs0Nz7y",
+    "birthDate": "1984-03-12",
+    "photoUrl": null,
+    "address": {
+      "street": "22 Rue de Bercy",
+      "postalCode": "75012",
+      "city": "Paris",
+      "country": "France"
+    }
+  }
+]

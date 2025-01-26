@@ -31,4 +31,7 @@ public final class Constants {
   public static final String EXTRA_VERIFICATION_CODE_KEY = "extra_verification_code";
 
   public static final String COOKIES_EMAIL_VERIFICATION_CODE_KEY = "verification-key";
+
+  public static final String KEY_EMAIL = "email";
+  public static final String KEY_MEMBERSHIP = "membership";
 }

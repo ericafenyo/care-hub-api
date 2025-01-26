@@ -3,7 +3,6 @@ package com.ericafenyo.seniorhub.contexts;
 import com.ericafenyo.seniorhub.model.Priority;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.UUID;

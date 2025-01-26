@@ -33,41 +33,41 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class HttpException extends Exception {
 
-  /**
-   * The HTTP status associated with the exception.
-   */
-  private final HttpStatus status;
+    /**
+     * The HTTP status associated with the exception.
+     */
+    private final HttpStatus status;
 
-  /**
-   * A unique error code associated with the exception.
-   */
-  private final String code;
+    /**
+     * A unique error code associated with the exception.
+     */
+    private final String code;
 
-  /**
-   * Constructs a new {@code HttpException} with the specified HTTP status, error message, and code.
-   *
-   * @param status  The HTTP status code representing the error.
-   * @param message A descriptive error message.
-   * @param code    A unique error code associated with the exception.
-   */
-  public HttpException(HttpStatus status, String message, String code) {
-    super(message);
-    this.status = status;
-    this.code = code;
-  }
+    /**
+     * Constructs a new {@code HttpException} with the specified HTTP status, error message, and code.
+     *
+     * @param status  The HTTP status code representing the error.
+     * @param message A descriptive error message.
+     * @param code    A unique error code associated with the exception.
+     */
+    public HttpException(HttpStatus status, String message, String code) {
+        super(message);
+        this.status = status;
+        this.code = code;
+    }
 
-  /**
-   * Constructs a new {@code HttpException} with the specified HTTP status, error message, code, and a cause.
-   *
-   * @param status  The HTTP status code representing the error.
-   * @param message A descriptive error message.
-   * @param code    A unique error code associated with the exception.
-   * @param cause   The cause of the exception.
-   */
-  public HttpException(HttpStatus status, String message, String code, Throwable cause) {
-    super(message, cause);
-    this.status = status;
-    this.code = code;
-  }
+    /**
+     * Constructs a new {@code HttpException} with the specified HTTP status, error message, code, and a cause.
+     *
+     * @param status  The HTTP status code representing the error.
+     * @param message A descriptive error message.
+     * @param code    A unique error code associated with the exception.
+     * @param cause   The cause of the exception.
+     */
+    public HttpException(HttpStatus status, String message, String code, Throwable cause) {
+        super(message, cause);
+        this.status = status;
+        this.code = code;
+    }
 }
 

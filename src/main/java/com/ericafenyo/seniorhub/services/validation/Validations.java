@@ -22,40 +22,24 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.services;
+package com.ericafenyo.seniorhub.services.validation;
 
-import com.ericafenyo.seniorhub.dto.CreateUserRequest;
-import com.ericafenyo.seniorhub.dto.UserUpdateDto;
-import com.ericafenyo.seniorhub.exceptions.HttpException;
-import com.ericafenyo.seniorhub.model.Membership;
-import com.ericafenyo.seniorhub.model.Team;
-import com.ericafenyo.seniorhub.model.User;
+import com.ericafenyo.seniorhub.services.validation.rule.TeamExistsRule;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.UUID;
 
+@Component
+@RequiredArgsConstructor
+public class Validations {
+    private final TeamExistsRule teamExistsRule;
 
-public interface UserService {
-    List<User> getUsers();
+    public void validateTeamExistsById(UUID teamId) {
+        teamExistsRule.validate(teamId);
+    }
 
-    User getUserById(UUID id) throws HttpException;
+    public void validateUserIsTeamMember(UUID teamId, UUID userId) {
 
-    User createUser(CreateUserRequest userCreationDto) throws HttpException;
-
-    User updateUser(UUID id, UserUpdateDto updateUserDto) throws HttpException;
-
-    ;
-
-    void deleteUser(UUID id);
-
-    List<Team> getUserTeams(UUID id) throws HttpException;
-
-//    /**
-//     * Get all team memberships for a user.
-//     *
-//     * @param userId the unique identifier of the user
-//     * @return a list of team memberships
-//     * @throws HttpException if an error occurs
-//     */
-    List<Membership> getMemberships(UUID userId) throws HttpException;
+    }
 }

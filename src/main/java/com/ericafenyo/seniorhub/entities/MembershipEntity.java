@@ -24,10 +24,13 @@
 
 package com.ericafenyo.seniorhub.entities;
 
+import com.ericafenyo.seniorhub.model.Membership.Status;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -45,11 +48,11 @@ import java.util.UUID;
 /**
  * A database entity that represents a team member.
  */
-@Entity(name = "team_members")
+@Entity(name = "memberships")
 @EntityListeners(AuditingEntityListener.class)
 @Data
 @Accessors(chain = true)
-public class TeamMemberEntity {
+public class MembershipEntity {
     /**
      * The unique identifier for the team member.
      */
@@ -78,6 +81,13 @@ public class TeamMemberEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id")
     private RoleEntity role;
+
+    /**
+     * The status of the team member.
+     */
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     /**
      * The timestamp when the member was added to the team.

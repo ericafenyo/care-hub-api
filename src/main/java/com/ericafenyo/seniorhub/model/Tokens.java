@@ -24,12 +24,30 @@
 
 package com.ericafenyo.seniorhub.model;
 
-import lombok.Builder;
-import lombok.Data;
+import org.springframework.util.Assert;
 
-@Data()
-@Builder()
-public class Tokens {
-  private String accessToken;
-  private String refreshToken;
+import java.util.HashMap;
+
+public class Tokens extends HashMap<String, String> {
+    public static Tokens create() {
+        return new Tokens();
+    }
+
+    public Tokens set(TokenType type, String value) {
+        Assert.notNull(value, "Token value must not be null");
+        super.put(type.key, value);
+        return this;
+    }
+
+   public enum TokenType {
+        ACCESS_TOKEN("accessToken"),
+        REFRESH_TOKEN("refreshToken");
+
+        private final String key;
+
+        TokenType(String key) {
+            this.key = key;
+        }
+    }
 }
+

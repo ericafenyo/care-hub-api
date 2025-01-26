@@ -27,11 +27,15 @@ package com.ericafenyo.seniorhub.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Getter
@@ -41,10 +45,31 @@ public class Account implements UserDetails {
     private UUID id;
     private String email;
     private String password;
+    private List<String> permissions = Collections.emptyList();
+
+    public static Account from(Authentication authentication) {
+        if (authentication == null) {
+            return null;
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof Account) {
+            return (Account) principal;
+        }
+        return null;
+    }
+
+    public static UUID extractUserId(Authentication authentication) {
+        return Optional.ofNullable(from(authentication))
+                .map(account -> account.getId())
+                .orElse(null);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return permissions.stream()
+                .map(permission -> new SimpleGrantedAuthority(permission))
+                .toList();
     }
 
     @Override

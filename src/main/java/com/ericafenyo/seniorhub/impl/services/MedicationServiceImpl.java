@@ -39,7 +39,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,19 +64,9 @@ public class MedicationServiceImpl extends AuthenticationContext implements Medi
       LocalDate endDate,
       UUID teamId
   ) throws HttpException {
-    var team = teamRepository.findById(teamId).orElseThrow(() ->
-        new NotFoundException(
-            messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "Team", teamId),
-            messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "team")
-        )
-    );
+    var team = teamRepository.findById(teamId).get();
 
-    var user = userRepository.findById(getAuthenticatedUserId()).orElseThrow(() ->
-        new NotFoundException(
-            messages.format(Messages.ERROR_RESOURCE_NOTFOUND, "User"),
-            messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "user")
-        )
-    );
+    var user = userRepository.findById(getAuthenticatedUserId()).get();
 
     var entity = new MedicationEntity()
         .setName(name)

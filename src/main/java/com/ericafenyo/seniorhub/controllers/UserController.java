@@ -24,11 +24,11 @@
 
 package com.ericafenyo.seniorhub.controllers;
 
-import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
+import com.ericafenyo.seniorhub.core.AuthenticationContext;
 import com.ericafenyo.seniorhub.dto.CreateUserRequest;
 import com.ericafenyo.seniorhub.dto.UserUpdateDto;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
-import com.ericafenyo.seniorhub.model.Team;
+import com.ericafenyo.seniorhub.model.Membership;
 import com.ericafenyo.seniorhub.model.User;
 import com.ericafenyo.seniorhub.services.UserService;
 import com.ericafenyo.seniorhub.util.Accounts;
@@ -48,9 +48,8 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController extends AuthenticationContext {
     private final UserService service;
 
     @PostMapping("/users")
@@ -83,4 +82,10 @@ public class UserController {
     public void deleteUser(@PathVariable UUID id) {
         service.deleteUser(id);
     }
+
+    @GetMapping("/users/{id}/teams")
+    public List<Membership> getMemberships(@PathVariable("id") UUID userId) throws HttpException {
+        return service.getMemberships(userId);
+    }
+
 }

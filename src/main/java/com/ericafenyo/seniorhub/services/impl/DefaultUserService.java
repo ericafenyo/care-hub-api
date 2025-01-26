@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2024 Eric Afenyo
+ * Copyright (C) 2025 Eric Afenyo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,9 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.implementation.services;
+package com.ericafenyo.seniorhub.services.impl;
 
 import com.ericafenyo.seniorhub.Messages;
-import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
 import com.ericafenyo.seniorhub.dto.CreateUserRequest;
 import com.ericafenyo.seniorhub.dto.UserUpdateDto;
 import com.ericafenyo.seniorhub.entities.AddressEntity;
@@ -36,8 +35,8 @@ import com.ericafenyo.seniorhub.entities.UserEntity;
 import com.ericafenyo.seniorhub.exceptions.ConflictException;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.exceptions.NotFoundException;
-import com.ericafenyo.seniorhub.exceptions.user.UserNotFoundException;
 import com.ericafenyo.seniorhub.mapper.UserMapper;
+import com.ericafenyo.seniorhub.model.Membership;
 import com.ericafenyo.seniorhub.model.Team;
 import com.ericafenyo.seniorhub.model.User;
 import com.ericafenyo.seniorhub.repository.CityRepository;
@@ -53,14 +52,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class DefaultUserService implements UserService {
     private final PasswordEncoder passwordEncoder;
-    private final UserMapper mapper;
+    private final UserMapper toUser;
     private final Messages messages;
 
     private final UserRepository userRepository;
@@ -73,14 +71,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User createUser(CreateUserRequest request) throws HttpException {
-        // Throw error if the user already exists
-        boolean isPresent = userRepository.existsByEmail(request.getEmail());
-        if (isPresent) {
-            throw new ConflictException(
-                    messages.format(Messages.ERROR_RESOURCE_ALREADY_EXISTS, "User"),
-                    messages.format(Messages.ERROR_RESOURCE_ALREADY_EXISTS_CODE, "user")
-            );
-        }
+        // Validate if a user with the provided email already exists
+        validateUserExistByEmail(request.getEmail());
 
         // Create a new city entity
         var city = cityRepository.findByName(request.getAddress().getCity())
@@ -113,7 +105,7 @@ public class UserServiceImpl implements UserService {
         credential.setUser(savedUser);
         credentialRepository.save(credential);
 
-        return mapper.apply(savedUser);
+        return toUser.apply(savedUser);
     }
 
     @Override
@@ -122,25 +114,20 @@ public class UserServiceImpl implements UserService {
 
         var entities = userRepository.findAll();
         for (UserEntity entity : entities) {
-            users.add(mapper.apply(entity));
+            users.add(toUser.apply(entity));
         }
 
         return users;
     }
 
     @Override
-    public User getUserById(UUID id) throws UserNotFoundException {
-        Optional<UserEntity> user = userRepository.findById(id);
-
-        if (user.isEmpty()) {
-            throw new UserNotFoundException();
-        }
-        return mapper.apply(user.get());
+    public User getUserById(UUID userId) throws NotFoundException {
+        return findUserById(userId).map(toUser);
     }
 
     @Override
-    public User updateUser(UUID id, UserUpdateDto dto) throws HttpException {
-        UserEntity user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
+    public User updateUser(UUID userId, UserUpdateDto dto) throws HttpException {
+        var user = findUserById(userId);
 
         AddressEntity address = user.getAddress();
         CityEntity city = address.getCity();
@@ -160,7 +147,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity savedUser = userRepository.save(user);
 
-        return mapper.apply(savedUser);
+        return toUser.apply(savedUser);
     }
 
     @Override
@@ -169,14 +156,46 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Team> getUserTeams(UUID id) throws HttpException {
+    public List<Team> getUserTeams(UUID userId) throws HttpException {
         // Find the current user using the provided id
-        var user = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(
-                        messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "user", id),
-                        messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "user")
-                ));
+        var user = findUserById(userId);
 
         return teamService.getUserTeams(user.getId());
+    }
+
+    @Override
+    public List<Membership> getMemberships(UUID userId) throws HttpException {
+        var user = this.findUserById(userId);
+        return teamService.getMemberships(user.getId());
+    }
+
+    /**
+     * Find a user by the provided id.
+     *
+     * @param userId The id of the user to find.
+     * @return The user entity if found.
+     * @throws NotFoundException If the user is not found, a NotFoundException is thrown.
+     */
+    private UserEntity findUserById(UUID userId) throws NotFoundException {
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(
+                messages.format("error.resource.not.found", "User"),
+                messages.format("error.resource.not.found.code", "user")
+        ));
+    }
+
+    /**
+     * Validate if a user with the provided email already exists.
+     *
+     * @param email The email to validate.
+     * @throws ConflictException If the email already exists, a ConflictException is thrown.
+     */
+    private void validateUserExistByEmail(String email) throws ConflictException {
+        boolean isPresent = userRepository.existsByEmail(email);
+        if (isPresent) {
+            throw new ConflictException(
+                    messages.format("error.resource.already.exists", "User"),
+                    messages.format("error.resource.already.exists.code", "user")
+            );
+        }
     }
 }

@@ -22,13 +22,23 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.repository;
+package com.ericafenyo.seniorhub.services.validation.rule;
 
-import com.ericafenyo.seniorhub.entities.TeamMemberEntity;
-import org.springframework.stereotype.Repository;
+import com.ericafenyo.seniorhub.repository.TeamRepository;
+import com.ericafenyo.seniorhub.services.validation.Constraint;
+import jakarta.validation.ValidationException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-/**
- * Repository for performing database operations on a {@link TeamMemberEntity}.
- */
-@Repository
-public interface TeamMemberRepository extends AbstractRepository<TeamMemberEntity> { }
+import java.util.UUID;
+
+@Component
+@RequiredArgsConstructor
+public class TeamExistsRule implements Constraint<UUID> {
+    private final TeamRepository teamRepository;
+
+    @Override
+    public void validate(UUID teamId) throws ValidationException {
+        teamRepository.existsById(teamId);
+    }
+}

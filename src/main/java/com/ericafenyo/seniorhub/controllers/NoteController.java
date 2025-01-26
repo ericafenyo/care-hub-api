@@ -44,7 +44,6 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class NoteController {
     private final NoteService service;

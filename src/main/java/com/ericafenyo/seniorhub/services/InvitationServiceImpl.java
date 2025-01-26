@@ -53,10 +53,6 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.UUID;
 
-import static com.ericafenyo.seniorhub.Messages.ERROR_RESOURCE_NOTFOUND;
-import static com.ericafenyo.seniorhub.Messages.ERROR_RESOURCE_NOTFOUND_CODE;
-import static com.ericafenyo.seniorhub.Messages.MESSAGE_INVITATION_ACCEPTED;
-
 @Service
 @RequiredArgsConstructor
 public class InvitationServiceImpl extends AuthenticationContext implements InvitationService {
@@ -79,24 +75,24 @@ public class InvitationServiceImpl extends AuthenticationContext implements Invi
             String email
     ) throws HttpException {
         // inviter = select owner from teams where id = teamId and owner.id = authenticatedUserId
-
         // Get the inviter or throw an error if it does not exist
         var inviter = userRepository.findById(getAuthenticatedUserId()).orElseThrow(
                 () -> new NotFoundException(
-                        messages.format(ERROR_RESOURCE_NOTFOUND, "User"),
-                        messages.format(ERROR_RESOURCE_NOTFOUND_CODE, "user")
+                        messages.format("error.resource.not.found", "User"),
+                        messages.format("error.resource.not.found.code", "user")
                 )
         );
 
         // Get the team or throw an error if it does not exist
         var team = teamRepository.findById(teamId).orElseThrow(() -> new NotFoundException(
-                messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "Team", teamId),
-                messages.format(ERROR_RESOURCE_NOTFOUND_CODE, "team")
+                messages.format("error.resource.not.found", "Team", teamId),
+                messages.format("error.resource.not.found.code", "team")
         ));
 
         var s = roleRepository.findBySlug(role).orElseThrow(() -> new InvalidRoleException());
 
         String token = Hashing.randomSHA256();
+
 
         var invitation = new InvitationEntity()
                 .setFirstName(firstName)
@@ -104,7 +100,7 @@ public class InvitationServiceImpl extends AuthenticationContext implements Invi
                 .setEmail(email)
                 .setToken(token)
                 .setStatus(Invitation.Status.PENDING)
-                .setRole(role)
+                .setRole(s)
                 .setExpiresAt(Instant.now().plusSeconds(environment.getInvitationExpirySeconds()))
                 .setTeam(team)
                 .setInviter(inviter);
@@ -150,8 +146,8 @@ public class InvitationServiceImpl extends AuthenticationContext implements Invi
         // Check if the invitation exists
         var invitation = invitationRepository.findByToken(request.getToken())
                 .orElseThrow(() -> new NotFoundException(
-                        messages.format(ERROR_RESOURCE_NOTFOUND, "invitation"),
-                        messages.format(ERROR_RESOURCE_NOTFOUND_CODE, "invitation")
+                        messages.format("error.resource.not.found", "invitation"),
+                        messages.format("error.resource.not.found.code", "invitation")
                 ));
 
         // Check if the invitation has already been accepted
@@ -166,8 +162,8 @@ public class InvitationServiceImpl extends AuthenticationContext implements Invi
 
         var invitee = userRepository.findByEmail(invitation.getEmail())
                 .orElseThrow(() -> new NotFoundException(
-                        messages.format(ERROR_RESOURCE_NOTFOUND, "invitee"),
-                        messages.format(ERROR_RESOURCE_NOTFOUND_CODE, "invitee")
+                        messages.format("error.resource.not.found", "Invitee"),
+                        messages.format("error.resource.not.found.code", "invitee")
                 ));
 
         var team = invitation.getTeam();
@@ -179,6 +175,6 @@ public class InvitationServiceImpl extends AuthenticationContext implements Invi
 
         invitationRepository.save(invitation);
 
-        return new Report(messages.get(MESSAGE_INVITATION_ACCEPTED));
+        return new Report(messages.get("message.invitation.accepted"));
     }
 }

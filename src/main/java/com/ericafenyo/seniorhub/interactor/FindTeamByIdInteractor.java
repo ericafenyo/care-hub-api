@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2024 Eric Afenyo
+ * Copyright (C) 2025 Eric Afenyo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,40 +22,30 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.services;
+package com.ericafenyo.seniorhub.interactor;
 
-import com.ericafenyo.seniorhub.dto.CreateUserRequest;
-import com.ericafenyo.seniorhub.dto.UserUpdateDto;
-import com.ericafenyo.seniorhub.exceptions.HttpException;
-import com.ericafenyo.seniorhub.model.Membership;
-import com.ericafenyo.seniorhub.model.Team;
-import com.ericafenyo.seniorhub.model.User;
+import com.ericafenyo.seniorhub.Messages;
+import com.ericafenyo.seniorhub.entities.TeamEntity;
+import com.ericafenyo.seniorhub.exceptions.NotFoundException;
+import com.ericafenyo.seniorhub.repository.TeamRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.UUID;
 
+@Component
+@RequiredArgsConstructor
+public class FindTeamByIdInteractor extends Interactor<UUID, TeamEntity> {
+    private final TeamRepository repository;
+    private final Messages messages;
 
-public interface UserService {
-    List<User> getUsers();
-
-    User getUserById(UUID id) throws HttpException;
-
-    User createUser(CreateUserRequest userCreationDto) throws HttpException;
-
-    User updateUser(UUID id, UserUpdateDto updateUserDto) throws HttpException;
-
-    ;
-
-    void deleteUser(UUID id);
-
-    List<Team> getUserTeams(UUID id) throws HttpException;
-
-//    /**
-//     * Get all team memberships for a user.
-//     *
-//     * @param userId the unique identifier of the user
-//     * @return a list of team memberships
-//     * @throws HttpException if an error occurs
-//     */
-    List<Membership> getMemberships(UUID userId) throws HttpException;
+    @Override
+    protected TeamEntity create(UUID params) throws Exception {
+        return repository.findById(params)
+                .orElseThrow(() -> new NotFoundException(
+                                messages.format("error.resource.not.found", "Team"),
+                                messages.format("error.resource.not.found.code", "team")
+                        )
+                );
+    }
 }

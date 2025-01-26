@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2024 Eric Afenyo
+ * Copyright (C) 2025 Eric Afenyo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,15 +22,36 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exceptions.user;
+package com.ericafenyo.seniorhub.interactor;
 
-import com.ericafenyo.seniorhub.exceptions.ConflictException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class UserExistsException extends ConflictException {
-  private static final String MESSAGE = "The user you are attempting to create already exists";
-  private static final String ERROR_CODE = "user_exists";
+public abstract class Interactor<T, R> {
+    private static final Logger logger = LoggerFactory.getLogger(Interactor.class);
 
-  public UserExistsException() {
-    super(MESSAGE, ERROR_CODE);
-  }
+    /**
+     * Executes the business logic.
+     *
+     * @param params Parameters required for the business logic.
+     * @return The result of the business logic execution.
+     * @throws RuntimeException If an error occurs during execution.
+     */
+    public R execute(T params) {
+        try {
+            return create(params);
+        } catch (Exception e) {
+            logger.error("Error executing interactor", e);
+            throw new RuntimeException("Interactor execution failed", e);
+        }
+    }
+
+    /**
+     * Core business logic to be implemented by subclasses.
+     *
+     * @param params Parameters required for execution.
+     * @return The result of the execution.
+     * @throws Exception If an error occurs during execution.
+     */
+    protected abstract R create(T params) throws Exception;
 }

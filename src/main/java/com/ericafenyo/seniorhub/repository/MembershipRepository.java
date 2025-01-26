@@ -22,40 +22,34 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.services;
+package com.ericafenyo.seniorhub.repository;
 
-import com.ericafenyo.seniorhub.dto.CreateUserRequest;
-import com.ericafenyo.seniorhub.dto.UserUpdateDto;
-import com.ericafenyo.seniorhub.exceptions.HttpException;
-import com.ericafenyo.seniorhub.model.Membership;
-import com.ericafenyo.seniorhub.model.Team;
-import com.ericafenyo.seniorhub.model.User;
+import com.ericafenyo.seniorhub.entities.MembershipEntity;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Repository for performing database operations on a {@link com.ericafenyo.seniorhub.entities.MembershipEntity}.
+ */
+@Repository
+public interface MembershipRepository extends AbstractRepository<MembershipEntity> {
+    /**
+     * Retrieves a team member by team id and user id.
+     *
+     * @param teamId The id of the team.
+     * @param userId The id of the user.
+     * @return The team member with the given team id and user id or {@literal Optional#empty()} if none found.
+     */
+    Optional<MembershipEntity> findByTeamIdAndUserId(UUID teamId, UUID userId);
 
-public interface UserService {
-    List<User> getUsers();
-
-    User getUserById(UUID id) throws HttpException;
-
-    User createUser(CreateUserRequest userCreationDto) throws HttpException;
-
-    User updateUser(UUID id, UserUpdateDto updateUserDto) throws HttpException;
-
-    ;
-
-    void deleteUser(UUID id);
-
-    List<Team> getUserTeams(UUID id) throws HttpException;
-
-//    /**
-//     * Get all team memberships for a user.
-//     *
-//     * @param userId the unique identifier of the user
-//     * @return a list of team memberships
-//     * @throws HttpException if an error occurs
-//     */
-    List<Membership> getMemberships(UUID userId) throws HttpException;
+    /**
+     * Retrieves a list of team membership for a given user id.
+     *
+     * @param userId The unique identifier of the user.
+     * @return A list of team membership for the given user id or an empty list if none found.
+     */
+    List<MembershipEntity> findByUserId(UUID userId);
 }
