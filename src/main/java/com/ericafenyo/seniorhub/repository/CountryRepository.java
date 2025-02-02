@@ -22,15 +22,23 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exceptions.user;
+package com.ericafenyo.seniorhub.repository;
 
-import com.ericafenyo.seniorhub.exceptions.ConflictException;
+import com.ericafenyo.seniorhub.entities.CountryEntity;
+import org.springframework.stereotype.Repository;
 
-public class UserExistsException extends ConflictException {
-  private static final String MESSAGE = "The user you are attempting to create already exists";
-  private static final String ERROR_CODE = "user_exists";
+import java.util.Optional;
 
-  public UserExistsException() {
-    super(MESSAGE, ERROR_CODE);
-  }
+/**
+ * Repository for performing database operations on a {@link CountryEntity}.
+ */
+@Repository
+public interface CountryRepository extends AbstractRepository<CountryEntity> {
+    /**
+     * Retrieves a country by name.
+     *
+     * @param name The name of the country.
+     * @return A country object or {@literal Optional#empty()} if none found.
+     */
+    Optional<CountryEntity> findByName(String name);
 }

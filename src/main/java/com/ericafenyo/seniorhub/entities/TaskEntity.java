@@ -25,9 +25,7 @@
 package com.ericafenyo.seniorhub.entities;
 
 import com.ericafenyo.seniorhub.model.Priority;
-import com.ericafenyo.seniorhub.model.Task;
 import com.ericafenyo.seniorhub.model.Task.Status;
-import com.ericafenyo.seniorhub.model.TaskStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -49,7 +47,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -125,7 +122,7 @@ public class TaskEntity {
     @JoinColumn(name = "recurrence_id")
     private RecurrenceEntity recurrence;
 
-    /**
+    /**  
      * The timestamp at which the task was created.
      */
     @CreatedDate

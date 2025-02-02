@@ -33,8 +33,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,8 +41,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -70,7 +66,7 @@ public class TeamEntity implements Mappable<TeamEntity, Team> {
     /**
      * A brief description of the team.
      */
-    @Column(name = "description", nullable = false, length = 80)
+    @Column(name = "description", nullable = false, length = 150)
     private String description;
 
     /**
@@ -91,19 +87,8 @@ public class TeamEntity implements Mappable<TeamEntity, Team> {
      * The creator of the team.
      */
     @ManyToOne()
-    @JoinColumn(name = "creator_id", nullable = false)
-    private UserEntity creator;
-
-    /**
-     * The list all members of the team.
-     */
-    @ManyToMany()
-    @JoinTable(
-        name = "team_user",
-        joinColumns = @JoinColumn(name = "team_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<UserEntity> members = new ArrayList<>();
+    @JoinColumn(name = "owner_id", nullable = false)
+    private UserEntity owner;
 
     @Override
     public Team map(Function<? super TeamEntity, ? extends Team> mapper) {

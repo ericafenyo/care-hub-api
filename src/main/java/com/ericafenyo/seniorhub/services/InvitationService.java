@@ -37,16 +37,17 @@ import java.util.UUID;
  */
 public interface InvitationService {
     /**
-     * Invites a user to join a team.
+     * Invites a user to join a team using the provided information.
      *
      * @param teamId    The ID of the team to which the user is being invited.
-     * @param inviterId The ID of the user sending the invitation.
-     * @param email     The email address of the person being invited.
-     * @param role      The role that the invited user will have in the team.
+     * @param role      The role to be assigned to the user.
+     * @param firstName The first name of the user being invited.
+     * @param lastName  The last name of the user being invited.
+     * @param email     The email address of the user being invited.
      * @return A {@link Report} object containing the result of the invitation.
-     * @throws HttpException If the invitation fails, an HttpException is thrown.
+     * @throws HttpException If the invitation fails, an InvitationException is thrown.
      */
-    Report invite(UUID teamId, UUID inviterId, String role, String email) throws HttpException;
+    Report invite(UUID teamId, String role, String firstName, String lastName, String email) throws HttpException;
 
     /**
      * Validates an invitation using the provided request.

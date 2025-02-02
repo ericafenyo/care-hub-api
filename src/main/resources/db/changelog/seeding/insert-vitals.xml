@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.30.xsd">
+
+    <changeSet id="1737900986117-1" author="Eric">
+        <comment>This changeset populates the 'vitals' table</comment>
+        <insert tableName="vitals">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="type" value="Body Temperature"/>
+            <column name="unit" value="°C"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="vitals">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="type" value="Heart Rate (Pulse)"/>
+            <column name="unit" value="bpm"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="vitals">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="type" value="Respiratory Rate"/>
+            <column name="unit" value="breaths/min"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="vitals">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="type" value="Blood Pressure"/>
+            <column name="unit" value="mmHg"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="vitals">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="type" value="Oxygen Saturation"/>
+            <column name="unit" value="% (SpO2)"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="vitals">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="type" value="Blood Glucose Levels"/>
+            <column name="unit" value="mg/dL"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="vitals">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="type" value="Body Mass Index (BMI)"/>
+            <column name="unit" value="kg/m²"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

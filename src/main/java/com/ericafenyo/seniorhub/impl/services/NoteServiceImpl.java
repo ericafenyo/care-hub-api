@@ -36,6 +36,7 @@ import com.ericafenyo.seniorhub.repository.NoteRepository;
 import com.ericafenyo.seniorhub.repository.TeamRepository;
 import com.ericafenyo.seniorhub.repository.UserRepository;
 import com.ericafenyo.seniorhub.services.NoteService;
+import com.ericafenyo.seniorhub.services.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +50,8 @@ public class NoteServiceImpl extends AuthenticationContext implements NoteServic
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
 
+    private final TeamService teamService;
+
     private final Messages messages;
 
     private final NoteMapper toNote;
@@ -57,25 +60,15 @@ public class NoteServiceImpl extends AuthenticationContext implements NoteServic
     public Note createNote(String title, String content, UUID teamId) throws HttpException {
         var userId = getAuthenticatedUserId();
 
-        var team = teamRepository.findById(teamId).orElseThrow(() ->
-            new NotFoundException(
-                messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "Team", teamId),
-                messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "team")
-            )
-        );
+        var team = teamRepository.findById(teamId).get();
 
-        var author = userRepository.findById(userId).orElseThrow(() ->
-            new NotFoundException(
-                messages.format(Messages.ERROR_RESOURCE_NOTFOUND, "User"),
-                messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "user")
-            )
-        );
+        var author = userRepository.findById(userId).get();
 
         var entity = new NoteEntity()
-            .setTitle(title)
-            .setContent(content)
-            .setTeam(team)
-            .setAuthor(author);
+                .setTitle(title)
+                .setContent(content)
+                .setTeam(team)
+                .setAuthor(author);
 
         return noteRepository.save(entity).map(toNote);
     }
@@ -84,21 +77,16 @@ public class NoteServiceImpl extends AuthenticationContext implements NoteServic
     @Override
     public List<Note> getNotes(UUID teamId) {
         return noteRepository.findByTeamId(teamId)
-            .stream()
-            .map(toNote)
-            .toList();
+                .stream()
+                .map(toNote)
+                .toList();
     }
 
     @Override
     public Note getNote(UUID teamId, UUID noteId) throws HttpException {
         var author = getAuthenticatedUser();
 
-        var note = noteRepository.findByIdAndTeamIdAndAuthorId(noteId, teamId, author.getId()).orElseThrow(() ->
-            new NotFoundException(
-                messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "Note", noteId),
-                messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "note")
-            )
-        );
+        var note = noteRepository.findByIdAndTeamIdAndAuthorId(noteId, teamId, author.getId()).get();
 
         return note.map(toNote);
     }
@@ -107,12 +95,7 @@ public class NoteServiceImpl extends AuthenticationContext implements NoteServic
     public Note updateNote(UUID teamId, UUID noteId, String title, String content) throws HttpException {
         var author = getAuthenticatedUser();
 
-        var note = noteRepository.findByIdAndTeamIdAndAuthorId(noteId, teamId, author.getId()).orElseThrow(() ->
-            new NotFoundException(
-                messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, "Note", noteId),
-                messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "note")
-            )
-        );
+        var note = noteRepository.findByIdAndTeamIdAndAuthorId(noteId, teamId, author.getId()).get();
 
         note.setTitle(title);
         note.setContent(content);
@@ -124,17 +107,12 @@ public class NoteServiceImpl extends AuthenticationContext implements NoteServic
     public void deleteNote(UUID noteId, UUID teamId) throws HttpException {
         var author = getAuthenticatedUser();
         noteRepository.findByIdAndTeamIdAndAuthorId(teamId, noteId, author.getId())
-            .ifPresent(note -> noteRepository.delete(note));
+                .ifPresent(note -> noteRepository.delete(note));
     }
 
     private UserEntity getAuthenticatedUser() throws NotFoundException {
         var userId = getAuthenticatedUserId();
 
-        return userRepository.findById(userId).orElseThrow(() ->
-            new NotFoundException(
-                messages.format(Messages.ERROR_RESOURCE_NOTFOUND, "User"),
-                messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, "user")
-            )
-        );
+        return userRepository.findById(userId).get();
     }
 }

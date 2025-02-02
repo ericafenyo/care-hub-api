@@ -24,6 +24,8 @@
 
 package com.ericafenyo.seniorhub.entities;
 
+import com.ericafenyo.seniorhub.api.Mappable;
+import com.ericafenyo.seniorhub.model.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,6 +44,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
+import java.util.function.Function;
 
 /**
  * A database entity representing an individual or entity who interacts with the application.
@@ -50,7 +53,7 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-public class UserEntity {
+public class UserEntity implements Mappable<UserEntity, User> {
     /**
      * The unique identifier for the user.
      */
@@ -109,4 +112,9 @@ public class UserEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private AddressEntity address;
+
+    @Override
+    public User map(Function<? super UserEntity, ? extends User> mapper) {
+        return mapper.apply(this);
+    }
 }

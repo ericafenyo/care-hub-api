@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.30.xsd">
+
+    <!-- Step 1: Insert data into the 'roles' table -->
+    <changeSet id="1734035510655-1" author="Eric">
+        <comment>This changeset populates the 'roles' table</comment>
+
+        <insert tableName="roles">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="CAREGIVER"/>
+            <column name="slug" value="caregiver"/>
+            <column name="description" value="Non-professional individual who assist with patient care"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="HEALTHCARE-PROVIDER"/>
+            <column name="slug" value="healthcare-provider"/>
+            <column name="description" value="A medical professional delivering care to a patient"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="PATIENT"/>
+            <column name="slug" value="patient"/>
+            <column name="description" value="A person receiving medical treatment and care"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="ADMINISTRATOR"/>
+            <column name="slug" value="admin"/>
+            <column name="description" value="A person responsible for managing the application"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="OWNER"/>
+            <column name="slug" value="owner"/>
+            <column name="description" value="Team owner with full permissions"/>
+            <column name="created_at" valueComputed="NOW()"/>
+            <column name="updated_at" valueComputed="NOW()"/>
+        </insert>
+    </changeSet>
+
+
+    <!-- Step 2: Insert data into the 'permissions' table -->
+    <changeSet id="1734045220719-1" author="Eric">
+        <comment>This changeset populates the 'permissions' table</comment>
+
+        <!-- Appointment Management -->
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="create:appointments"/>
+            <column name="description" value="Create new appointments"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="read:appointments"/>
+            <column name="description" value="View appointments"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="update:appointments"/>
+            <column name="description" value="Modify existing appointments"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="delete:appointments"/>
+            <column name="description" value="Cancel or remove appointments"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+
+        <!-- Medication Tracking -->
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="add:medications"/>
+            <column name="description" value="Add new medication details"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="read:medications"/>
+            <column name="description" value="View patient medication records"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="update:medications"/>
+            <column name="description" value="Update medication details"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="delete:medications"/>
+            <column name="description" value="Remove medications from records"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+
+        <!-- Task Management -->
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="create:tasks"/>
+            <column name="description" value="Creat a new tasks"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="read:tasks"/>
+            <column name="description" value="View assigned tasks"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="update:tasks"/>
+            <column name="description" value="Modify task details or status"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="delete:tasks"/>
+            <column name="description" value="Remove completed or obsolete tasks"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="assign:tasks"/>
+            <column name="description" value="Assign tasks to members"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="complete:tasks"/>
+            <column name="description" value="Complete an ongoing task"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <!-- Note-Taking -->
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="create:notes"/>
+            <column name="description" value="Write new patient care notes"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="read:notes"/>
+            <column name="description" value="Read existing notes"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="update:notes"/>
+            <column name="description" value="Edit previously written notes"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="delete:notes"/>
+            <column name="description" value="Remove notes"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <!-- Vital signs recording -->
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="read:vitals"/>
+            <column name="description" value="View patient vital signs"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="create:vitals"/>
+            <column name="description" value="Update patient vital signs records"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="delete:vitals"/>
+            <column name="description" value="Delete patient vital signs records"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+
+        <!-- Administrative Permissions -->
+        <insert tableName="permissions">
+            <column name="id" valueComputed="UUID_TO_BIN(UUID())"/>
+            <column name="name" value="manage:team"/>
+            <column name="description" value="Fully manage the team, its members, and resources"/>
+            <column name="created_at" value="now()"/>
+            <column name="updated_at" value="now()"/>
+        </insert>
+    </changeSet>
+
+    <!-- Step 3: Create a temporary table for mapping roles to permissions -->
+    <changeSet id="1734786112552-1" author="Eric">
+        <createTable tableName="role_permission_map">
+            <column name="role_name" type="VARCHAR(255)"/>
+            <column name="permission_name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Step 4: Insert data into the 'role_permissions_map' table -->
+    <changeSet id="1734786228023-1" author="Eric">
+        <!-- Create appointments -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="caregiver"/>
+            <column name="permission_name" value="create:appointments"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="create:appointments"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="patient"/>
+            <column name="permission_name" value="create:appointments"/>
+        </insert>
+
+        <!-- Read appointments -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="caregiver"/>
+            <column name="permission_name" value="read:appointments"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="read:appointments"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="patient"/>
+            <column name="permission_name" value="update:appointments"/>
+        </insert>
+
+        <!-- Update appointments -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="caregiver"/>
+            <column name="permission_name" value="update:appointments"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="update:appointments"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="patient"/>
+            <column name="permission_name" value="update:appointments"/>
+        </insert>
+
+        <!-- Delete appointments -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="caregiver"/>
+            <column name="permission_name" value="delete:appointments"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="delete:appointments"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="patient"/>
+            <column name="permission_name" value="delete:appointments"/>
+        </insert>
+
+        <!-- Add medications -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="add:medications"/>
+        </insert>
+
+        <!-- Read medications -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="caregiver"/>
+            <column name="permission_name" value="read:medications"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="read:medications"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="patient"/>
+            <column name="permission_name" value="read:medications"/>
+        </insert>
+
+        <!-- Update medications -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="update:medications"/>
+        </insert>
+
+
+        <!-- Create tasks -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="create:tasks"/>
+        </insert>
+
+        <!-- Read tasks -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="caregiver"/>
+            <column name="permission_name" value="read:tasks"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="read:tasks"/>
+        </insert>
+
+        <!-- Update tasks -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="update:tasks"/>
+        </insert>
+
+        <!-- Delete tasks -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="delete:tasks"/>
+        </insert>
+
+        <!-- Assign tasks -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="assign:tasks"/>
+        </insert>
+
+        <!-- Complete tasks -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="complete:tasks"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="caregiver"/>
+            <column name="permission_name" value="complete:tasks"/>
+        </insert>
+
+        <!-- Create notes -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="caregiver"/>
+            <column name="permission_name" value="create:notes"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="create:notes"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="patient"/>
+            <column name="permission_name" value="create:notes"/>
+        </insert>
+
+        <!-- Read notes -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="caregiver"/>
+            <column name="permission_name" value="read:notes"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="read:notes"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="patient"/>
+            <column name="permission_name" value="read:notes"/>
+        </insert>
+
+        <!-- Update notes -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="caregiver"/>
+            <column name="permission_name" value="update:notes"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="update:notes"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="patient"/>
+            <column name="permission_name" value="update:notes"/>
+        </insert>
+
+        <!-- Delete notes -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="caregiver"/>
+            <column name="permission_name" value="delete:notes"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="delete:notes"/>
+        </insert>
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="patient"/>
+            <column name="permission_name" value="delete:notes"/>
+        </insert>
+
+        <!-- Read vitals -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="read:vitals"/>
+        </insert>
+
+        <!-- Create vitals -->
+        <insert tableName="role_permission_map">
+            <column name="role_name" value="healthcare-provider"/>
+            <column name="permission_name" value="create:vitals"/>
+        </insert>
+    </changeSet>
+
+    <!-- Step 3: Use the Mapping Table to Populate roles_permission -->
+    <changeSet id="1734819357891-1" author="Eric">
+        <sql>
+            INSERT INTO role_permission (permission_id, role_id)
+            SELECT p.id, r.id
+            FROM permissions p
+                     JOIN role_permission_map prm ON p.name = prm.permission_name
+                     JOIN roles r ON r.name = prm.role_name;
+        </sql>
+    </changeSet>
+
+    <!-- Step 4: Drop the Temporary Mapping Table -->
+    <changeSet id="1734819372507-1" author="Eric">
+        <dropTable tableName="role_permission_map"/>
+    </changeSet>
+
+    <!-- Assign all permissions to Admin -->
+    <changeSet id="1734819380435-1" author="Eric">
+        <sql>
+            INSERT INTO role_permission (permission_id, role_id)
+            SELECT p.id, r.id
+            FROM permissions p
+                     JOIN roles r ON r.slug = 'admin';
+        </sql>
+    </changeSet>
+
+    <!-- Assign all permissions to Owner -->
+    <changeSet id="1735037731223-1" author="Eric">
+        <sql>
+            INSERT INTO role_permission (permission_id, role_id)
+            SELECT p.id, r.id
+            FROM permissions p
+                     JOIN roles r ON r.slug = 'owner';
+        </sql>
+    </changeSet>
+</databaseChangeLog>

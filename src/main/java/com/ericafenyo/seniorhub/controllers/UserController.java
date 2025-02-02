@@ -24,11 +24,11 @@
 
 package com.ericafenyo.seniorhub.controllers;
 
-import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
+import com.ericafenyo.seniorhub.core.AuthenticationContext;
 import com.ericafenyo.seniorhub.dto.CreateUserRequest;
 import com.ericafenyo.seniorhub.dto.UserUpdateDto;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
-import com.ericafenyo.seniorhub.model.Team;
+import com.ericafenyo.seniorhub.model.Membership;
 import com.ericafenyo.seniorhub.model.User;
 import com.ericafenyo.seniorhub.services.UserService;
 import com.ericafenyo.seniorhub.util.Accounts;
@@ -48,9 +48,8 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController extends AuthenticationContext {
     private final UserService service;
 
     @PostMapping("/users")
@@ -75,7 +74,7 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    public User updateUser(@PathVariable UUID id, @RequestBody @Valid UserUpdateDto userUpdateDto) {
+    public User updateUser(@PathVariable UUID id, @RequestBody @Valid UserUpdateDto userUpdateDto) throws HttpException {
         return service.updateUser(id, userUpdateDto);
     }
 
@@ -84,14 +83,9 @@ public class UserController {
         service.deleteUser(id);
     }
 
-    // Team sub-resources
-    @PostMapping("/users/{id}/teams")
-    public Team createTeam(@PathVariable UUID id, @RequestBody CreateTeamRequest request) throws HttpException {
-        return service.createTeam(id, request);
+    @GetMapping("/users/{id}/teams")
+    public List<Membership> getMemberships(@PathVariable("id") UUID userId) throws HttpException {
+        return service.getMemberships(userId);
     }
 
-    @GetMapping("/users/{id}/teams")
-    public List<Team> getUserTeams(@PathVariable UUID id) throws HttpException {
-        return service.getUserTeams(id);
-    }
 }

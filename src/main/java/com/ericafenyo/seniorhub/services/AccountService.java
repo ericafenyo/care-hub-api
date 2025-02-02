@@ -24,9 +24,9 @@
 
 package com.ericafenyo.seniorhub.services;
 
-import com.ericafenyo.seniorhub.mapper.RoleMapper;
 import com.ericafenyo.seniorhub.model.Account;
 import com.ericafenyo.seniorhub.repository.CredentialRepository;
+import com.ericafenyo.seniorhub.repository.MembershipRepository;
 import com.ericafenyo.seniorhub.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,12 +34,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @AllArgsConstructor
 public class AccountService implements UserDetailsService {
     private final UserRepository userRepository;
     private final CredentialRepository credentialRepository;
-    private final RoleMapper roleMapper;
+    private final MembershipRepository membershipRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -57,5 +59,25 @@ public class AccountService implements UserDetailsService {
                 .setId(user.getId())
                 .setEmail(user.getEmail())
                 .setPassword(credential.getPassword());
+    }
+
+    public Account getAccount(UUID membershipId) {
+        var membership = membershipRepository.findById(membershipId)
+                .orElseThrow(() -> new UsernameNotFoundException("Membership with id '" + membershipId + "' not found"));
+
+        var user = membership.getUser();
+
+        var credential = credentialRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new UsernameNotFoundException("Credential for username '" + user.getEmail() + "' not found"));
+
+        var role = membership.getRole();
+
+        var permissions = role.getPermissions();
+
+        return new Account()
+                .setId(user.getId())
+                .setEmail(user.getEmail())
+                .setPassword(credential.getPassword())
+                .setPermissions(permissions.stream().map(permission -> permission.getName()).toList());
     }
 }

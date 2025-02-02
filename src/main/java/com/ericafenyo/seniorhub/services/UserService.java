@@ -24,10 +24,10 @@
 
 package com.ericafenyo.seniorhub.services;
 
-import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
 import com.ericafenyo.seniorhub.dto.CreateUserRequest;
 import com.ericafenyo.seniorhub.dto.UserUpdateDto;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
+import com.ericafenyo.seniorhub.model.Membership;
 import com.ericafenyo.seniorhub.model.Team;
 import com.ericafenyo.seniorhub.model.User;
 
@@ -42,11 +42,20 @@ public interface UserService {
 
     User createUser(CreateUserRequest userCreationDto) throws HttpException;
 
-    User updateUser(UUID id, UserUpdateDto updateUserDto);
+    User updateUser(UUID id, UserUpdateDto updateUserDto) throws HttpException;
+
+    ;
 
     void deleteUser(UUID id);
 
     List<Team> getUserTeams(UUID id) throws HttpException;
 
-    Team createTeam(UUID id, CreateTeamRequest request) throws HttpException;
+//    /**
+//     * Get all team memberships for a user.
+//     *
+//     * @param userId the unique identifier of the user
+//     * @return a list of team memberships
+//     * @throws HttpException if an error occurs
+//     */
+    List<Membership> getMemberships(UUID userId) throws HttpException;
 }

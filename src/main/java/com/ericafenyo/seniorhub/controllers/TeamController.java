@@ -24,24 +24,20 @@
 
 package com.ericafenyo.seniorhub.controllers;
 
-import com.ericafenyo.seniorhub.contexts.CreateNoteContext;
 import com.ericafenyo.seniorhub.contexts.CreateTaskContext;
 import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
 
 import com.ericafenyo.seniorhub.dto.InvitationRequest;
 import com.ericafenyo.seniorhub.dto.UpdateTeamRequest;
+import com.ericafenyo.seniorhub.entities.VitalReportEntity;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
-import com.ericafenyo.seniorhub.model.Note;
 import com.ericafenyo.seniorhub.model.Task;
 import com.ericafenyo.seniorhub.model.Team;
-import com.ericafenyo.seniorhub.requests.CreateNoteRequest;
 import com.ericafenyo.seniorhub.requests.CreateTaskRequest;
 import com.ericafenyo.seniorhub.services.TeamService;
-import com.ericafenyo.seniorhub.util.Accounts;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,17 +52,12 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class TeamController {
     private final TeamService service;
 
     @PostMapping("/teams")
-    public Team createTeam(
-        @RequestBody @Valid CreateTeamRequest request,
-        Authentication authentication
-    ) throws Exception {
-        UUID userId = Accounts.extractUserId(authentication);
-        return service.createTeam(request, userId);
+    public Team createTeam(@RequestBody @Valid CreateTeamRequest request) throws Exception {
+        return service.createTeam(request.getName(), request.getDescription());
     }
 
     @GetMapping("/teams")
@@ -81,8 +72,8 @@ public class TeamController {
 
     @PutMapping("/teams/{id}")
     public Team updateUser(
-        @PathVariable @Valid @NotBlank UUID id,
-        @RequestBody @Valid UpdateTeamRequest userUpdateDto
+            @PathVariable @Valid @NotBlank UUID id,
+            @RequestBody @Valid UpdateTeamRequest userUpdateDto
     ) {
         return service.updateTeam(id, userUpdateDto);
     }
@@ -95,32 +86,53 @@ public class TeamController {
     // Invitation sub-resources
 
     @PostMapping("/teams/{id}/invitations")
-    public Object invite(
-        @PathVariable("id") UUID teamId,
-        @RequestBody() InvitationRequest request,
-        Authentication authentication
+    public Object addMember(
+            @PathVariable("id") UUID teamId,
+            @RequestBody() InvitationRequest request
     ) throws HttpException {
-        var userId = Accounts.extractUserId(authentication);
-        return service.invite(teamId, userId, request.getRole(), request.getEmail());
+        return service.addMember(
+                teamId,
+                request.getRole(),
+                request.getFirstName(),
+                request.getLastName(),
+                request.getEmail()
+        );
+    }
+
+    @GetMapping("/teams/{id}/members/{userId}")
+    public Object getMember(
+            @PathVariable("id") UUID teamId,
+            @PathVariable("userId") UUID userId
+    ) throws HttpException {
+        return service.getMembership(teamId, userId);
+    }
+
+    @GetMapping("/teams/{id}/membership")
+    public Object getMembership(@PathVariable("id") UUID teamId) throws HttpException {
+        return service.getMembership(teamId);
     }
 
     // Task sub-resources
 
     @PostMapping("/teams/{id}/tasks")
     public Task createTask(
-        @PathVariable UUID id,
-        @RequestBody CreateTaskRequest request
+            @PathVariable UUID id,
+            @RequestBody CreateTaskRequest request
     ) throws HttpException {
-
-
         var context = CreateTaskContext.builder()
-            .setTitle(request.getTitle())
-            .setDescription(request.getDescription())
-            .setDueDate(request.getDueDate())
-            .setPriority(request.getPriority())
-            .setTeamId(id)
-            .build();
+                .setTitle(request.getTitle())
+                .setDescription(request.getDescription())
+                .setDueDate(request.getDueDate())
+                .setPriority(request.getPriority())
+                .setTeamId(id)
+                .build();
 
         return service.createTask(context);
+    }
+
+    // Vitals sub-resources
+    @GetMapping("/teams/{id}/vitals")
+    public List<VitalReportEntity> getVitals(@PathVariable("id") UUID teamId) throws HttpException {
+        return service.getVitals(teamId);
     }
 }

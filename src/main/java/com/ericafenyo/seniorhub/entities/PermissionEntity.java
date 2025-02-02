@@ -27,6 +27,7 @@ package com.ericafenyo.seniorhub.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -56,33 +57,33 @@ public class PermissionEntity {
     /**
      * The name of the permission
      */
-    @Column(name = "name")
+    @Column(name = "name", unique = true, nullable = false, length = 50)
     private String name;
 
     /**
      * A brief description or explanation of the permission.
      */
-    @Column(name = "description")
+    @Column(name = "description", nullable = false, length = 100)
     private String description;
 
     /**
      * The roles that have this permission.
      */
-    @ManyToMany(mappedBy = "permissions")
+    @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
     private List<RoleEntity> roles = new ArrayList<>();
 
     /**
      * The timestamp when the permission was created.
      */
     @CreatedDate
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
     /**
      * The timestamp when the permission was last updated.
      */
     @LastModifiedDate
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
 }

@@ -22,15 +22,23 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.seniorhub.exceptions.user;
+package com.ericafenyo.seniorhub.services.validation.rule;
 
-import com.ericafenyo.seniorhub.exceptions.NotFoundException;
+import com.ericafenyo.seniorhub.repository.TeamRepository;
+import com.ericafenyo.seniorhub.services.validation.Constraint;
+import jakarta.validation.ValidationException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-public class UserNotFoundException extends NotFoundException {
-  private static final String MESSAGE = "The requested user record could not be found";
-  private static final String ERROR_CODE = "user_not_found";
+import java.util.UUID;
 
-  public UserNotFoundException() {
-    super(MESSAGE, ERROR_CODE);
-  }
+@Component
+@RequiredArgsConstructor
+public class TeamExistsRule implements Constraint<UUID> {
+    private final TeamRepository teamRepository;
+
+    @Override
+    public void validate(UUID teamId) throws ValidationException {
+        teamRepository.existsById(teamId);
+    }
 }

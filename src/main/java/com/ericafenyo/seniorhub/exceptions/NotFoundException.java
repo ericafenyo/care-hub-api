@@ -24,20 +24,15 @@
 
 package com.ericafenyo.seniorhub.exceptions;
 
-import lombok.Builder;
 import org.springframework.http.HttpStatus;
 
 
+/**
+ * Defines an exception for resource not found.
+ */
 public class NotFoundException extends HttpException {
-    private String message;
-    private String code;
 
-    @Builder
     public NotFoundException(String message, String code) {
         super(HttpStatus.NOT_FOUND, message, code);
-    }
-
-    public NotFoundException(String message, String code, Throwable cause) {
-        super(HttpStatus.NOT_FOUND, message, code, cause);
     }
 }

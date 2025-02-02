@@ -33,17 +33,6 @@ import java.util.Locale;
 @Component
 @RequiredArgsConstructor
 public class Messages {
-    public static final String ERROR_RESOURCE_WITH_ID_NOTFOUND = "error.resource.with.id.not.found";
-    public static final String ERROR_REQUESTED_RESOURCE_WITH_ID_NOT_FOUND = "error.requested.resource.with.id.not.found";
-    public static final String ERROR_RESOURCE_NOTFOUND = "error.resource.not.found";
-    public static final String ERROR_REQUESTED_RESOURCE_NOT_FOUND = "error.requested.resource.not.found";
-    public static final String ERROR_RESOURCE_NOTFOUND_CODE = "error.resource.not.found.code";
-
-    public static final String ERROR_RESOURCE_ALREADY_EXISTS = "error.resource.already.exists";
-    public static final String ERROR_RESOURCE_ALREADY_EXISTS_CODE = "error.resource.already.exists.code";
-
-    public static final String MESSAGE_INVITATION_ACCEPTED = "message.invitation.accepted";
-
     private final MessageSource source;
 
     public String get(String key) {

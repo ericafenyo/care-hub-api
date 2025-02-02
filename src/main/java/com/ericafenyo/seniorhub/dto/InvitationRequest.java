@@ -27,14 +27,22 @@ package com.ericafenyo.seniorhub.dto;
 import com.ericafenyo.seniorhub.validation.constraints.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import static com.ericafenyo.seniorhub.Constants.REGEX_EMAIL;
 
-@Getter
-@Setter
+@Data
 public class InvitationRequest {
+    /**
+     * The first name of the person being invited.
+     */
+    private String firstName;
+
+    /**
+     * The last name of the person being invited.
+     */
+    private String lastName;
+
     /**
      * The email address of the person being invited.
      */
@@ -48,12 +56,4 @@ public class InvitationRequest {
     @NotBlank
     @UserRole
     private String role;
-
-    @Override
-    public String toString() {
-        return "InvitationRequest{" +
-            "email='" + email + '\'' +
-            ", role='" + role + '\'' +
-            '}';
-    }
 }

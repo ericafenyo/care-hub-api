@@ -1,0 +1,32 @@
+[
+  {
+    "id": "7d7cf01b-08d9-437c-85ed-63cdee60daa0",
+    "name": "CAREGIVER",
+    "slug": "caregiver",
+    "description": "Non-professional individual who assist with patient care"
+  },
+  {
+    "id": "0acafcba-6cc3-4efa-abd5-1103ab366d91",
+    "name": "HEALTHCARE-PROVIDER",
+    "slug": "healthcare-provider",
+    "description": "A medical professional delivering care to a patient"
+  },
+  {
+    "id": "a293ca31-21da-4187-ae43-5bd99c0af4ea",
+    "name": "PATIENT",
+    "slug": "patient",
+    "description": "A person receiving medical treatment and care"
+  },
+  {
+    "id": "6812abf7-1192-4dfb-afc6-e0d46a254a3e",
+    "name": "OWNER",
+    "slug": "owner",
+    "description": "Team owner with full permissions"
+  },
+  {
+    "id": "2fafa3c0-041e-487a-ab35-b533ab064721",
+    "name": "ADMINISTRATOR",
+    "slug": "admin",
+    "description": "A person responsible for managing the application"
+  }
+]

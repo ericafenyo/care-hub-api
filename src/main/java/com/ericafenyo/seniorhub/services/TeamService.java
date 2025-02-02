@@ -24,13 +24,12 @@
 
 package com.ericafenyo.seniorhub.services;
 
-import com.ericafenyo.seniorhub.contexts.CreateNoteContext;
 import com.ericafenyo.seniorhub.contexts.CreateTaskContext;
-import com.ericafenyo.seniorhub.dto.CreateTeamRequest;
+import com.ericafenyo.seniorhub.entities.VitalReportEntity;
+import com.ericafenyo.seniorhub.model.Membership;
 import com.ericafenyo.seniorhub.dto.UpdateTeamRequest;
 import com.ericafenyo.seniorhub.exceptions.HttpException;
 import com.ericafenyo.seniorhub.model.Invitation;
-import com.ericafenyo.seniorhub.model.Note;
 import com.ericafenyo.seniorhub.model.Report;
 import com.ericafenyo.seniorhub.model.Task;
 import com.ericafenyo.seniorhub.model.Team;
@@ -39,21 +38,29 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TeamService {
-    Team createTeam(CreateTeamRequest request, UUID creatorId) throws HttpException;
+    Team createTeam(String name, String description) throws HttpException;
 
     List<Team> getTeams();
 
-    Team getTeamById(UUID id) throws HttpException;
+    Team getTeamById(UUID teamId) throws HttpException;
 
-    Team updateTeam(UUID id, UpdateTeamRequest userUpdateDto);
+    Team updateTeam(UUID teamId, UpdateTeamRequest userUpdateDto);
 
-    void deleteTeam(UUID id);
+    void deleteTeam(UUID teamId);
 
-    List<Team> getUserTeams(UUID id) throws HttpException;
+    List<Team> getUserTeams(UUID teamId) throws HttpException;
 
-    Report invite(UUID teamId, UUID inviterId, String role, String email) throws HttpException;
+    Report addMember(UUID teamId, String role, String firstName, String lastName, String email) throws HttpException;
 
     Invitation validateInvitation(UUID teamId);
 
     Task createTask(CreateTaskContext context) throws HttpException;
+
+    Membership getMembership(UUID teamId, UUID userId) throws HttpException;
+
+    Membership getMembership(UUID teamId) throws HttpException;
+
+    List<Membership> getMemberships(UUID userId) throws HttpException;
+
+    List<VitalReportEntity> getVitals(UUID teamId) throws HttpException;
 }
