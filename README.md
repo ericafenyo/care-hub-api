@@ -10,7 +10,7 @@ my [Senior Hub Application](https://github.com/ericafenyo/senior-hub)
 Visit [this page](https://github.com/ericafenyo/senior-hub/blob/main/docs/rest-api-documentation.md) for a complete API
 documentation with example responses.
 
-The documentation is still in progress in the [test.md](./src/main/java/com/ericafenyo/seniorhub/test.md) file. I will
+The documentation is still in progress in the [test.md](./src/main/java/com/ericafenyo/carehub/test.md) file. I will
 add it to this Readme file once it's complete.
 
 ## Building and Testing
