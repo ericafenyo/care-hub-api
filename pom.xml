@@ -10,9 +10,11 @@
     </parent>
 
     <groupId>com.ericafenyo</groupId>
-    <artifactId>seniorhub</artifactId>
+    <artifactId>carehub</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>seniorhub</name>
+    <name>carehub</name>
+
+
 
     <description>
         This project serves as the backend for the Senior Hub Application, providing a central hub for senior users to
