@@ -10,11 +10,6 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
-    # Sets the permissions granted to the GITHUB_TOKEN for the actions in this job.
-    permissions:
-      contents: read
-      packages: write
-
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
@@ -33,7 +28,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Build and push the Docker image
         uses: docker/build-push-action@v6
