@@ -76,7 +76,5 @@ jobs:
         #          password: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Deploy to remote server swarm
-        with:
-
         run: |
           docker stack deploy -c deploy-compose.yml care-hub-api-stack
