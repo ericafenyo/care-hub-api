@@ -21,7 +21,7 @@ jobs:
 
       - name: Generate application.properties.tmpl
         run: |
-          sed 's|spring.datasource.url=.*|spring.datasource.url={{ secret \"datasource_url\" }}|' application.properties > application.properties.tmpl
+          sed 's|spring.datasource.url=.*|spring.datasource.url={{ secret \"datasource_url\" }}|' src/main/resources/application.properties > application.properties.tmpl
           sed -i 's|spring.datasource.username=.*|spring.datasource.username={{ secret \"datasource_username\" }}|' application.properties.tmpl
           sed -i 's|spring.datasource.password=.*|spring.datasource.password={{ secret \"datasource_password\" }}|' application.properties.tmpl
 
