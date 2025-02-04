@@ -62,12 +62,12 @@ jobs:
           docker context create deploy --docker "host=ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}"
           docker context use deploy
 
-        #      - name: Login to GitHub Container Registry
-        #        uses: docker/login-action@v3
-        #        with:
-        #          registry: ghcr.io
-        #          username: ${{ github.actor }}
-        #          password: ${{ secrets.ACCESS_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Deploy to remote server swarm
         run: |
