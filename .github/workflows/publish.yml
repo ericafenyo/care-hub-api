@@ -1,4 +1,4 @@
-name: "Build & Push Docker Image to GHCR"
+name: "CI/CD"
 
 on:
   push:
@@ -7,9 +7,8 @@ on:
       - develop
 
 jobs:
-  build-and-push:
+  build-and-push-image:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
@@ -19,6 +18,12 @@ jobs:
         with:
           java-version: "21"
           distribution: "temurin"
+
+      - name: Generate application.properties.tmpl
+        run: |
+          sed 's|spring.datasource.url=.*|spring.datasource.url={{ secret \"datasource_url\" }}|' application.properties > deploy/application.properties.tmpl
+          sed -i 's|spring.datasource.username=.*|spring.datasource.username={{ secret \"datasource_username\" }}|' deploy/application.properties.tmpl
+          sed -i 's|spring.datasource.password=.*|spring.datasource.password={{ secret \"datasource_password\" }}|' deploy/application.properties.tmpl
 
       - name: Build the JAR file
         run: ./mvnw clean package -DskipTests
@@ -38,3 +43,41 @@ jobs:
           tags: |
             ghcr.io/${{ github.actor }}/care-hub-api:latest
             ghcr.io/${{ github.actor }}/care-hub-api:${{ github.sha }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs:
+      - build-and-push-image
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: create env file
+        run: |
+          echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
+
+      - name: Create and use docker context for remote server
+        run: |
+          docker context create deploy --docker "host=ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}"
+          docker context use deploy
+
+        #      - name: Login to GitHub Container Registry
+        #        uses: docker/login-action@v3
+        #        with:
+        #          registry: ghcr.io
+        #          username: ${{ github.actor }}
+        #          password: ${{ secrets.ACCESS_TOKEN }}
+
+      - name: Deploy to remote server swarm
+        with:
+
+        run: |
+          cd deploy
+          docker stack deploy -c deploy-compose.yml myapp-stack
