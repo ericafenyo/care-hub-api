@@ -3,19 +3,16 @@ version: '3.8'
 services:
   api-server:
     image: ghcr.io/ericafenyo/care-hub-api:${GIT_COMMIT_HASH:-latest}
-    env_file: ./envfile
+    env_file: ./.env.docker
 
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
 
-    configs:
-      - source: application.properties
-        target: /config/application.properties
-
     environment:
-      - SPRING_CONFIG_LOCATION=file:/config/application.properties
+      - SPRING_PROFILES_ACTIVE=docker-stack
+      - SPRING_CONFIG_IMPORT=optional:configtree:/run/secrets/
 
     secrets:
       - datasource_url
@@ -25,12 +22,6 @@ services:
       - "8080:8080"
     networks:
       - app-network
-configs:
-  application.properties:
-    template_driver: golang
-    file: ./application.properties.tmpl
-    name: docker-stack.application.properties
-
 secrets:
   datasource_url:
     external: true

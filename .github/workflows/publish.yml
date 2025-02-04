@@ -19,12 +19,6 @@ jobs:
           java-version: "21"
           distribution: "temurin"
 
-      - name: Generate application.properties.tmpl
-        run: |
-          sed 's|spring.datasource.url=.*|spring.datasource.url={{ secret \"datasource_url\" }}|' src/main/resources/application.properties > application.properties.tmpl
-          sed -i 's|spring.datasource.username=.*|spring.datasource.username={{ secret \"datasource_username\" }}|' application.properties.tmpl
-          sed -i 's|spring.datasource.password=.*|spring.datasource.password={{ secret \"datasource_password\" }}|' application.properties.tmpl
-
       - name: Build the JAR file
         run: ./mvnw clean package -DskipTests
 
@@ -61,7 +55,7 @@ jobs:
 
       - name: create env file
         run: |
-          echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
+          echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./.env.docker
 
       - name: Create and use docker context for remote server
         run: |
