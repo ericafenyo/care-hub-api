@@ -3,7 +3,6 @@ version: '3.8'
 services:
   api-server:
     image: ghcr.io/ericafenyo/care-hub-api:${GIT_COMMIT_HASH:-latest}
-    env_file: ./env.docker
 
     deploy:
       replicas: 1

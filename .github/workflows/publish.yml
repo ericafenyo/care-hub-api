@@ -53,10 +53,6 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
 
-      - name: create env file
-        run: |
-          echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./env.docker
-
       - name: Create and use docker context for remote server
         run: |
           docker context create deploy --docker "host=ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}"
@@ -71,4 +67,5 @@ jobs:
 
       - name: Deploy to remote server swarm
         run: |
+          export GIT_COMMIT_HASH=${{ github.sha }}
           docker stack deploy --prune --with-registry-auth -c deploy-compose.yml care-hub-api-stack
