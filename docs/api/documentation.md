@@ -1,8 +1,7 @@
 # Senior Hub API documentation
 
 Welcome to the API documentation for Senior Hub. The endpoints are documented in separate files. For example, routes
-related to user management are documented in `users.md`, while task-related routes are documented in `tasks.md`. This
-approach keeps the documentation organized and specific to each area of the API.
+related to user management are documented in `users.md`.
 
 ### API URL
 
@@ -14,20 +13,15 @@ http://localhost:8080
 ### Authentication
 
 The API uses JWT (JSON Web Token) for authentication. To access the protected endpoints, you need to include the JWT in
-the `Authorization` header of your requests. The JWT is obtained by authenticating with the `/auth/login` endpoint.
+the `Authorization` header of your requests.
 
 ### Verbs
 
 **`GET`** - Retrieve data from the server.  
 **`POST`** - Send data to the server.  
 **`PUT`** - Update data on the server.  
+**`PATCH`** - Update data on the server.  
 **`DELETE`** - Remove data from the server.
-
-> PATCH is not used in this API.
-> For partial updates, the client should send the full resource representation with the updated fields.
-> The fields that are not updatable will be ignored by the server.
->
-> This might change in the future when resources become more complex.
 
 ### Status Codes
 

@@ -26,6 +26,7 @@ package com.ericafenyo.carehub.entities;
 
 import com.ericafenyo.carehub.api.Mappable;
 import com.ericafenyo.carehub.model.Team;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -86,7 +87,7 @@ public class TeamEntity implements Mappable<TeamEntity, Team> {
     /**
      * The creator of the team.
      */
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_id", nullable = false)
     private UserEntity owner;
 

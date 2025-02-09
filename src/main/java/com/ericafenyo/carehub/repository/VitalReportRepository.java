@@ -22,23 +22,20 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.controllers;
+package com.ericafenyo.carehub.repository;
 
-import com.ericafenyo.carehub.model.Vital;
-import com.ericafenyo.carehub.services.VitalService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.ericafenyo.carehub.entities.VitalReportEntity;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
-@RestController
-@RequiredArgsConstructor
-public class VitalController {
-    private final VitalService service;
-
-    @GetMapping("vitals")
-    public List<Vital> getVitals() {
-        return service.getVitals();
-    }
+/**
+ * Repository for performing database operations on a {@link VitalReportEntity}.
+ */
+@Repository
+public interface VitalReportRepository extends AbstractRepository<VitalReportEntity> {
+    List<VitalReportEntity> findByTeamId(UUID teamId);
+    Optional<VitalReportEntity> findByTeamIdAndId(UUID teamId, UUID reportId);
 }

@@ -27,11 +27,11 @@ package com.ericafenyo.carehub.implementation.services;
 import com.ericafenyo.carehub.Messages;
 import com.ericafenyo.carehub.contexts.CreateTaskContext;
 import com.ericafenyo.carehub.core.AuthenticationContext;
+import com.ericafenyo.carehub.dto.CreateVitalReportRequest;
 import com.ericafenyo.carehub.dto.UpdateTeamRequest;
 import com.ericafenyo.carehub.entities.TaskEntity;
 import com.ericafenyo.carehub.entities.TeamEntity;
 import com.ericafenyo.carehub.entities.MembershipEntity;
-import com.ericafenyo.carehub.entities.VitalReportEntity;
 import com.ericafenyo.carehub.exceptions.ConflictException;
 import com.ericafenyo.carehub.exceptions.HttpException;
 import com.ericafenyo.carehub.exceptions.NotFoundException;
@@ -45,6 +45,8 @@ import com.ericafenyo.carehub.model.Report;
 import com.ericafenyo.carehub.model.Role;
 import com.ericafenyo.carehub.model.Task;
 import com.ericafenyo.carehub.model.Team;
+import com.ericafenyo.carehub.model.VitalMeasurement;
+import com.ericafenyo.carehub.model.VitalReport;
 import com.ericafenyo.carehub.repository.RoleRepository;
 import com.ericafenyo.carehub.repository.TaskRepository;
 import com.ericafenyo.carehub.repository.MembershipRepository;
@@ -52,6 +54,9 @@ import com.ericafenyo.carehub.repository.TeamRepository;
 import com.ericafenyo.carehub.repository.UserRepository;
 import com.ericafenyo.carehub.services.InvitationService;
 import com.ericafenyo.carehub.services.TeamService;
+import com.ericafenyo.carehub.services.VitalMeasurementService;
+import com.ericafenyo.carehub.services.VitalReportService;
+import com.ericafenyo.carehub.services.VitalService;
 import com.ericafenyo.carehub.services.validation.Validations;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -62,10 +67,10 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class DefaultTeamService extends AuthenticationContext implements TeamService {
+    private final VitalService vitalService;
+    private final VitalReportService vitalReportService;
     private final TeamMapper mapper;
     private final TaskMapper taskMapper;
-
-    private final FindTeamByIdInteractor findTeamByIdInteractor;
 
     private final TaskRepository taskRepository;
     private final TeamRepository teamRepository;
@@ -80,6 +85,7 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
     private final MembershipRepository membershipRepository;
 
     private final MembershipMapper membershipMapper;
+    private final VitalMeasurementService vitalMeasurementService;
 
     @Override
     public Team createTeam(String name, String description) throws HttpException {
@@ -102,6 +108,7 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
         var member = new MembershipEntity()
                 .setTeam(team)
                 .setUser(owner)
+                .setStatus(Membership.Status.ACTIVE)
                 .setRole(role);
 
         teamMemberRepository.save(member);
@@ -231,7 +238,26 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
     }
 
     @Override
-    public List<VitalReportEntity> getVitals(UUID teamId) throws HttpException {
-        return List.of();
+    public List<VitalReport> getVitalReports(UUID teamId) {
+        return vitalReportService.getVitalReports(teamId);
+    }
+
+    @Override
+    public VitalReport createVitalReports(UUID teamId, CreateVitalReportRequest request) throws NotFoundException {
+        var team = findTeamById(teamId);
+        var user = userRepository.findById(getAuthenticatedUserId()).get();
+
+        return vitalReportService.createVitalReport(team, user, request);
+    }
+
+    @Override
+    public VitalReport getVitalReport(UUID teamId, UUID reportId) {
+        validations.validateTeamExistsById(teamId);
+        return vitalReportService.getVitalReport(reportId);
+    }
+
+    @Override
+    public List<VitalMeasurement> getVitalMeasurements(UUID teamId) {
+        return vitalMeasurementService.getMeasurements(teamId);
     }
 }

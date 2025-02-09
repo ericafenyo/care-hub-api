@@ -22,23 +22,40 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.controllers;
+package com.ericafenyo.carehub.mapper;
 
-import com.ericafenyo.carehub.model.Vital;
-import com.ericafenyo.carehub.services.VitalService;
+import com.ericafenyo.carehub.entities.VitalMeasurementEntity;
+import com.ericafenyo.carehub.model.VitalMeasurement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
-@RestController
+/**
+ * A class responsible for converting a {@link VitalMeasurementEntity} to a {@link VitalMeasurement}.
+ */
+@Component
 @RequiredArgsConstructor
-public class VitalController {
-    private final VitalService service;
+public class VitalMeasurementMapper implements Function<VitalMeasurementEntity, VitalMeasurement> {
 
-    @GetMapping("vitals")
-    public List<Vital> getVitals() {
-        return service.getVitals();
+    /**
+     * Converts a {@link VitalMeasurementEntity} to a {@link VitalMeasurement}.
+     *
+     * @param entity the {@link VitalMeasurementEntity} to be converted
+     * @return the corresponding {@link VitalMeasurement} object
+     */
+    @Override
+    public VitalMeasurement apply(VitalMeasurementEntity entity) {
+        var measurement = new VitalMeasurement();
+        measurement.setId(entity.getId());
+        measurement.setValue(entity.getValue());
+        measurement.setRecordedAt(entity.getCreatedAt());
+
+        Optional.ofNullable(entity.getVital()).ifPresent(vital -> {
+            measurement.setType(vital.getType());
+            measurement.setUnit(vital.getUnit());
+        });
+        return measurement;
     }
 }

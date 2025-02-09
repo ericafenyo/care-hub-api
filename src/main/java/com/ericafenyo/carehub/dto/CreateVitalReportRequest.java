@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2024 Eric Afenyo
+ * Copyright (C) 2025 Eric Afenyo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,23 +22,15 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.controllers;
+package com.ericafenyo.carehub.dto;
 
-import com.ericafenyo.carehub.model.Vital;
-import com.ericafenyo.carehub.services.VitalService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
-
-@RestController
-@RequiredArgsConstructor
-public class VitalController {
-    private final VitalService service;
-
-    @GetMapping("vitals")
-    public List<Vital> getVitals() {
-        return service.getVitals();
-    }
+@Setter
+@Getter
+public class CreateVitalReportRequest {
+    private String notes;
+    private List<VitalMeasurementRequest> measurements;
 }

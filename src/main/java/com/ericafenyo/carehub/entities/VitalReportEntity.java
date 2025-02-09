@@ -24,12 +24,17 @@
 
 package com.ericafenyo.carehub.entities;
 
+import com.ericafenyo.carehub.api.Mappable;
+import com.ericafenyo.carehub.model.VitalReport;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,21 +44,18 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
-/**
- * A database entity representing a city of a country.
- */
 @Entity(name = "vital_records")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @Accessors(chain = true)
-public class VitalReportEntity {
-
+public class VitalReportEntity implements Mappable<VitalReportEntity, VitalReport> {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
@@ -63,7 +65,18 @@ public class VitalReportEntity {
     private String notes;
 
     @Column(name = "recorded_at")
-    private ZonedDateTime recordedAt;
+    private LocalDateTime recordedAt;
+
+    @OneToMany(mappedBy = "report", cascade = CascadeType.ALL)
+    private List<VitalMeasurementEntity> vitals;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "team_id", nullable = false)
+    private TeamEntity team;
+
+    @ManyToOne()
+    @JoinColumn(name = "member_id", nullable = false)
+    private UserEntity member;
 
     @CreatedDate
     @Column(name = "created_at")
@@ -73,10 +86,12 @@ public class VitalReportEntity {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @OneToMany(mappedBy = "report")
-    private List<VitalMeasurementEntity> vitals;
-
     public VitalReportEntity() {
         vitals = new ArrayList<>();
+    }
+
+    @Override
+    public VitalReport map(Function<? super VitalReportEntity, ? extends VitalReport> mapper) {
+        return mapper.apply(this);
     }
 }

@@ -31,7 +31,7 @@ import org.springframework.http.HttpStatus;
  * Exception class representing HTTP-related errors.
  */
 @Getter
-public class HttpException extends Exception {
+public class HttpException extends RuntimeException {
 
     /**
      * The HTTP status associated with the exception.

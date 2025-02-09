@@ -4,4 +4,5 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.30.xsd">
 
     <include file="db/changelog/seeding/insert-roles-and-permissions.xml"/>
+    <include file="db/changelog/seeding/insert-vitals.xml"/>
 </databaseChangeLog>

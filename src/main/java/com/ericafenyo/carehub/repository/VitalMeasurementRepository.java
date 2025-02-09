@@ -22,23 +22,26 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.controllers;
+package com.ericafenyo.carehub.repository;
 
-import com.ericafenyo.carehub.model.Vital;
-import com.ericafenyo.carehub.services.VitalService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.ericafenyo.carehub.entities.VitalMeasurementEntity;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
-@RestController
-@RequiredArgsConstructor
-public class VitalController {
-    private final VitalService service;
+/**
+ * Repository for performing database operations on a {@link VitalMeasurementEntity}.
+ */
+@Repository
+public interface VitalMeasurementRepository extends AbstractRepository<VitalMeasurementEntity> {
 
-    @GetMapping("vitals")
-    public List<Vital> getVitals() {
-        return service.getVitals();
-    }
+    // Custom query to get the latest vital measurement for each vital type for a given team
+    @Query("SELECT vm FROM vital_measurements vm " +
+            "WHERE vm.report.team.id = :teamId " +
+            "AND vm.createdAt = (SELECT MAX(v2.createdAt) FROM vital_measurements v2 " +
+            "WHERE v2.vital.id = vm.vital.id AND v2.report.team.id = :teamId) ")
+    List<VitalMeasurementEntity> findLatestVitalMeasurementsForTeam(@Param("teamId") UUID teamId);
 }

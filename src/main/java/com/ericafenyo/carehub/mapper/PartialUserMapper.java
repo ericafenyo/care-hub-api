@@ -22,23 +22,34 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.controllers;
+package com.ericafenyo.carehub.mapper;
 
-import com.ericafenyo.carehub.model.Vital;
-import com.ericafenyo.carehub.services.VitalService;
+import com.ericafenyo.carehub.entities.UserEntity;
+import com.ericafenyo.carehub.model.PartialUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.function.Function;
 
-@RestController
+/**
+ * A class responsible for converting a {@link UserEntity} to a {@link com.ericafenyo.carehub.model.PartialUser}.
+ */
+@Component
 @RequiredArgsConstructor
-public class VitalController {
-    private final VitalService service;
+public class PartialUserMapper implements Function<UserEntity, PartialUser> {
 
-    @GetMapping("vitals")
-    public List<Vital> getVitals() {
-        return service.getVitals();
+    /**
+     * Converts a {@link UserEntity} to a {@link com.ericafenyo.carehub.model.PartialUser}.
+     *
+     * @param entity the {@link UserEntity} to be converted
+     * @return the corresponding {@link com.ericafenyo.carehub.model.PartialUser} object
+     */
+    @Override
+    public PartialUser apply(UserEntity entity) {
+        var user = new PartialUser();
+        user.setId(entity.getId());
+        user.setFirstName(entity.getFirstName());
+        user.setLastName(entity.getLastName());
+        return user;
     }
 }

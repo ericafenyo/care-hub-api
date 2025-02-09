@@ -22,60 +22,22 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.entities;
+package com.ericafenyo.carehub.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.util.UUID;
 
-/**
- * A database entity representing a city of a country.
- */
-@Entity(name = "vital_measurements")
-@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @Accessors(chain = true)
-public class VitalMeasurementEntity {
-    /**
-     * The unique identifier for the city.
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+public class VitalMeasurement {
     private UUID id;
-
-    @Column(name = "value", nullable = false, length = 20)
+    private String type;
+    private String unit;
     private String value;
-
-    @ManyToOne
-    @JoinColumn(name = "vital_id", nullable = false)
-    private VitalEntity vital;
-
-    @ManyToOne
-    @JoinColumn(name = "report_id", nullable = false)
-    private VitalReportEntity report;
-
-    @CreatedDate
-    @Column(name = "created_at")
-    private Instant createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    private Instant updatedAt;
+    private Instant recordedAt;
 }

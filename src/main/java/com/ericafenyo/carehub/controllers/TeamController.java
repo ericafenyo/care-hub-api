@@ -27,12 +27,15 @@ package com.ericafenyo.carehub.controllers;
 import com.ericafenyo.carehub.contexts.CreateTaskContext;
 import com.ericafenyo.carehub.dto.CreateTeamRequest;
 
+import com.ericafenyo.carehub.dto.CreateVitalReportRequest;
 import com.ericafenyo.carehub.dto.InvitationRequest;
 import com.ericafenyo.carehub.dto.UpdateTeamRequest;
 import com.ericafenyo.carehub.entities.VitalReportEntity;
 import com.ericafenyo.carehub.exceptions.HttpException;
 import com.ericafenyo.carehub.model.Task;
 import com.ericafenyo.carehub.model.Team;
+import com.ericafenyo.carehub.model.VitalMeasurement;
+import com.ericafenyo.carehub.model.VitalReport;
 import com.ericafenyo.carehub.requests.CreateTaskRequest;
 import com.ericafenyo.carehub.services.TeamService;
 import jakarta.validation.Valid;
@@ -129,9 +132,32 @@ public class TeamController {
         return service.createTask(context);
     }
 
+    // Patient vitals sub-resources
+    @GetMapping("/teams/{id}/vital-reports")
+    public List<VitalReport> getVitalReports(@PathVariable("id") UUID teamId) throws HttpException {
+        return service.getVitalReports(teamId);
+    }
+
+    // Patient vitals sub-resources
+    @PostMapping("/teams/{id}/vital-reports")
+    public VitalReport createVitalReports(
+            @PathVariable("id") UUID teamId,
+            @RequestBody CreateVitalReportRequest request
+    ) throws HttpException {
+        return service.createVitalReports(teamId, request);
+    }
+
     // Vitals sub-resources
-    @GetMapping("/teams/{id}/vitals")
-    public List<VitalReportEntity> getVitals(@PathVariable("id") UUID teamId) throws HttpException {
-        return service.getVitals(teamId);
+    @GetMapping("/teams/{id}/vital-measurements")
+    public List<VitalMeasurement> getVitals(@PathVariable("id") UUID teamId) throws HttpException {
+        return service.getVitalMeasurements(teamId);
+    }
+
+    @GetMapping("/teams/{id}/vital-reports/{reportId}")
+    public VitalReport getVitalReport(
+            @PathVariable("id") UUID teamId,
+            @PathVariable("reportId") UUID reportId
+    ) {
+        return service.getVitalReport(teamId, reportId);
     }
 }

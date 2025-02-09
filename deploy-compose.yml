@@ -2,7 +2,11 @@ version: '3.8'
 
 services:
   api-server:
-    image: ghcr.io/ericafenyo/care-hub-api:${GIT_COMMIT_HASH:-latest}
+    image: ghcr.io/ericafenyo/care-hub-api:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api-server.rule=Host(`care-hub-api.ericafenyo.com`)"  # Define your domain/subdomain here
+      - "traefik.http.services.api-server.loadbalancer.server.port=8080"  # Expose the backend port 8080 to Traefik
 
     deploy:
       replicas: 1
@@ -21,6 +25,22 @@ services:
       - "8080:8080"
     networks:
       - app-network
+
+  traefik:
+    image: traefik:v2.10
+    command:
+      - "--api.insecure=true"  # Enable dashboard (don't use in production)
+      - "--providers.docker=true"  # Enable Docker provider
+      - "--entrypoints.web.address=:80"  # HTTP
+      - "--entrypoints.websecure.address=:443"  # HTTPS
+    ports:
+      - "80:80"     # Expose HTTP
+      - "443:443"   # Expose HTTPS
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"  # Allows Traefik to interact with Docker
+    networks:
+      - app-network
+
 secrets:
   datasource_url:
     external: true

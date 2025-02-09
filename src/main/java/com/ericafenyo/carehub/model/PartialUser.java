@@ -22,23 +22,31 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.controllers;
+package com.ericafenyo.carehub.model;
 
-import com.ericafenyo.carehub.model.Vital;
-import com.ericafenyo.carehub.services.VitalService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
-import java.util.List;
+import java.util.UUID;
 
-@RestController
-@RequiredArgsConstructor
-public class VitalController {
-    private final VitalService service;
-
-    @GetMapping("vitals")
-    public List<Vital> getVitals() {
-        return service.getVitals();
-    }
+/**
+ * A user domain model representing an individual who interacts with the application.
+ */
+@Getter
+@Setter
+@Accessors(chain = true)
+public class PartialUser {
+    /**
+     * The unique identifier for the user.
+     */
+    private UUID id;
+    /**
+     * The first name of the user.
+     */
+    private String firstName;
+    /**
+     * The last name of the user.
+     */
+    private String lastName;
 }

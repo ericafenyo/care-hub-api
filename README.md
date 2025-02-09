@@ -1,17 +1,15 @@
-# Senior Hub API
+# Care Hub API
 
 This is a Spring Boot project serving as the backend for
-my [Senior Hub Application](https://github.com/ericafenyo/senior-hub)
+my [Care Hub Next.js Application](https://github.com/ericafenyo/care-hub)
 
 <img src="./docs/assets/postman-example.png">
 
 ## API Documentation
 
-Visit [this page](https://github.com/ericafenyo/senior-hub/blob/main/docs/rest-api-documentation.md) for a complete API
-documentation with example responses.
+Visit [this page](docs/api/documentation.md) for complete API documentation with example responses.
 
-The documentation is still in progress in the [test.md](./src/main/java/com/ericafenyo/carehub/test.md) file. I will
-add it to this Readme file once it's complete.
+> The documentation is still in progress.
 
 ## Building and Testing
 
@@ -42,36 +40,18 @@ docker-compose up
 Run the Application:
 
 ```sh
-java -jar target/seniorhub-0.0.1-SNAPSHOT.jar
+./mvnw spring-boot:run
 ```
 
-## Configuration
+> The application will be available at `http://localhost:8080`.
 
-The application's configuration properties are stored in the application.properties file.
+Finally, run database migrations/seeds:
 
-Certain data, such as user roles and permissions, are automatically stored in the database using Liquibase.
-After launching the application, you can disable this functionality by setting the following property in the
-application.properties file:
-
-```properties
-spring.liquibase.enabled=false
+```shell
+./mvnw liquibase:update
 ```
 
-This property disables Liquibase upon application startup.
-
-## Exceptions during startup
-
-If you encounter an exception during startup, it could be because the database tables aren't prepared before Liquibase
-performs the database migrations.
-
-To resolve the issue, begin by disabling Liquibase and starting the application:
-
-```properties
-spring.liquibase.enabled=false
-```
-
-This allows Hibernate to create the necessary tables. Once the tables are created, re-enable Liquibase to execute the
-migrations. Afterward, restart the application. This sequence of steps should address the problem.
+```sh
 
 ## License
 
