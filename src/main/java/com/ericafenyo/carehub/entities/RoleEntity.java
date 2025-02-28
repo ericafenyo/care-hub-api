@@ -64,6 +64,17 @@ public class RoleEntity {
     private String name;
 
     /**
+     * The actions or operations that users with this role are allowed to perform.
+     */
+    @ManyToMany()
+    @JoinTable(
+            name = "role_permission",
+            joinColumns = @JoinColumn(name = "role_id")
+            , inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private List<PermissionEntity> permissions = new ArrayList<>();
+
+    /**
      * Human-readable name of the role
      */
     @Column(name = "slug", length = 50 , nullable = false, unique = true)
@@ -75,16 +86,7 @@ public class RoleEntity {
     @Column(name = "description", length = 150 , nullable = false)
     private String description;
 
-    /**
-     * The actions or operations that users with this role are allowed to perform.
-     */
-    @ManyToMany()
-    @JoinTable(
-            name = "role_permission",
-            joinColumns = @JoinColumn(name = "role_id")
-            , inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
-    private List<PermissionEntity> permissions = new ArrayList<>();
+
 
     /**
      * The timestamp indicating when the role was created.
