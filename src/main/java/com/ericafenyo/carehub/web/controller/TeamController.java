@@ -32,6 +32,7 @@ import com.ericafenyo.carehub.dto.InvitationRequest;
 import com.ericafenyo.carehub.dto.UpdateTeamRequest;
 import com.ericafenyo.carehub.entities.VitalReportEntity;
 import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.model.Membership;
 import com.ericafenyo.carehub.model.Task;
 import com.ericafenyo.carehub.model.Team;
 import com.ericafenyo.carehub.model.VitalMeasurement;
@@ -109,9 +110,9 @@ public class TeamController {
         return service.getMembership(teamId, userId);
     }
 
-    @GetMapping("/teams/{id}/membership")
-    public Object getMembership(@PathVariable("id") UUID teamId) throws HttpException {
-        return service.getMembership(teamId);
+    @GetMapping("/teams/{id}/memberships")
+    public List<Membership> getMembership(@PathVariable("id") UUID teamId) throws HttpException {
+        return service.getTeamMembership(teamId);
     }
 
     // Task sub-resources

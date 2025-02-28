@@ -25,9 +25,7 @@
 package com.ericafenyo.carehub.services;
 
 import com.ericafenyo.carehub.contexts.CreateTaskContext;
-import com.ericafenyo.carehub.dto.CreateVitalReportRequest;
-import com.ericafenyo.carehub.entities.VitalReportEntity;
-import com.ericafenyo.carehub.exceptions.NotFoundException;
+import com.ericafenyo.carehub.web.request.CreateVitalReportModel;
 import com.ericafenyo.carehub.model.Membership;
 import com.ericafenyo.carehub.dto.UpdateTeamRequest;
 import com.ericafenyo.carehub.exceptions.HttpException;
@@ -62,13 +60,13 @@ public interface TeamService {
 
     Membership getMembership(UUID teamId, UUID userId) throws HttpException;
 
-    Membership getMembership(UUID teamId) throws HttpException;
+    List<Membership> getTeamMembership(UUID teamId) throws HttpException;
 
     List<Membership> getMemberships(UUID userId) throws HttpException;
 
     List<VitalReport> getVitalReports(UUID teamId) throws HttpException;
 
-    VitalReport createVitalReports(UUID teamId, CreateVitalReportRequest request) throws HttpException;
+    VitalReport createVitalReports(UUID teamId, CreateVitalReportModel request) throws HttpException;
 
     VitalReport getVitalReport(UUID teamId, UUID reportId);
 
