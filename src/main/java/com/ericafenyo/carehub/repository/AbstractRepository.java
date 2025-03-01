@@ -57,7 +57,8 @@ public interface AbstractRepository<T> extends Repository<T, UUID> {
      * @return the saved entity; will never be {@literal null}.
      * @throws IllegalArgumentException          in case the given {@literal entity} is {@literal null}.
      * @throws OptimisticLockingFailureException when the entity uses optimistic locking and has a version attribute with
-     *                                           a different value from that found in the persistence store. Also thrown if the entity is assumed to be
+     *                                           a different value from that found in the persistence store.
+     *                                           Also thrown if the entity is assumed to be
      *                                           present but does not exist in the database.
      */
     <E extends T> E save(E entity);
