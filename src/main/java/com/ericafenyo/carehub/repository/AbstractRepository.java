@@ -48,12 +48,6 @@ public interface AbstractRepository<T> extends Repository<T, UUID> {
      */
     Optional<T> findById(UUID id);
 
-    /**
-     * Returns all instances of the type.
-     *
-     * @return all entities
-     */
-    List<T> findAll();
 
     /**
      * Saves a given entity. Use the returned instance for further operations as the save operation might have changed the
@@ -78,6 +72,13 @@ public interface AbstractRepository<T> extends Repository<T, UUID> {
      *                                           present but does not exist in the database.
      */
     void delete(T entity);
+
+    /**
+     * Returns all instances of the type.
+     *
+     * @return all entities
+     */
+    List<T> findAll();
 
     /**
      * Returns whether an entity with the given id exists.
