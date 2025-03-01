@@ -37,8 +37,12 @@ import java.util.UUID;
  */
 @Repository
 public interface VitalMeasurementRepository extends AbstractRepository<VitalMeasurementEntity> {
-
-    // Custom query to get the latest vital measurement for each vital type for a given team
+    /**
+     * Retrieves the latest vital measurements for each vital type for a given team.
+     *
+     * @param teamId The unique identifier of the team.
+     * @return A list of the latest vital measurements for each vital type for the given team or an empty list if none found.
+     */
     @Query("SELECT vm FROM vital_measurements vm " +
             "WHERE vm.report.team.id = :teamId " +
             "AND vm.createdAt = (SELECT MAX(v2.createdAt) FROM vital_measurements v2 " +
