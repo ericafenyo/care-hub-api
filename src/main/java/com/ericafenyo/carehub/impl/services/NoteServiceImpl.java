@@ -24,11 +24,11 @@
 
 package com.ericafenyo.carehub.impl.services;
 
-import com.ericafenyo.carehub.Messages;
 import com.ericafenyo.carehub.core.AuthenticationContext;
+import com.ericafenyo.carehub.domain.service.rule.HasMembershipRule;
 import com.ericafenyo.carehub.entities.NoteEntity;
 import com.ericafenyo.carehub.entities.UserEntity;
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.exceptions.NotFoundException;
 import com.ericafenyo.carehub.mapper.NoteMapper;
 import com.ericafenyo.carehub.model.Note;
@@ -36,7 +36,7 @@ import com.ericafenyo.carehub.repository.NoteRepository;
 import com.ericafenyo.carehub.repository.TeamRepository;
 import com.ericafenyo.carehub.repository.UserRepository;
 import com.ericafenyo.carehub.services.NoteService;
-import com.ericafenyo.carehub.services.TeamService;
+import com.ericafenyo.carehub.services.validation.Validations;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -47,21 +47,24 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class NoteServiceImpl extends AuthenticationContext implements NoteService {
     private final NoteRepository noteRepository;
-    private final TeamRepository teamRepository;
-    private final UserRepository userRepository;
 
-    private final TeamService teamService;
+    private final NoteMapper mapper;
 
-    private final Messages messages;
-
-    private final NoteMapper toNote;
+    private final HasMembershipRule hasMembershipRule;
+    private final Validations validations;
 
     @Override
-    public Note createNote(String title, String content, UUID teamId) throws HttpException {
+    public Note createNote(String title, String content, UUID teamId) throws DomainException {
         var userId = getAuthenticatedUserId();
 
-        var team = teamRepository.findById(teamId).get();
+        // Validate that the team and user should exist
+        validations.validateTeamShouldExists(teamId);
+        validations.validateUserShouldExists(userId);
 
+        // Validate that the user has a membership in the team
+        hasMembershipRule.validate(new HasMembershipRule.Params(teamId, userId));
+
+        var team = teamRepository.findById(teamId).get();
         var author = userRepository.findById(userId).get();
 
         var entity = new NoteEntity()
@@ -70,7 +73,7 @@ public class NoteServiceImpl extends AuthenticationContext implements NoteServic
                 .setTeam(team)
                 .setAuthor(author);
 
-        return noteRepository.save(entity).map(toNote);
+        return noteRepository.save(entity).map(mapper);
     }
 
 
@@ -78,21 +81,21 @@ public class NoteServiceImpl extends AuthenticationContext implements NoteServic
     public List<Note> getNotes(UUID teamId) {
         return noteRepository.findByTeamId(teamId)
                 .stream()
-                .map(toNote)
+                .map(mapper)
                 .toList();
     }
 
     @Override
-    public Note getNote(UUID teamId, UUID noteId) throws HttpException {
+    public Note getNote(UUID teamId, UUID noteId) throws DomainException {
         var author = getAuthenticatedUser();
 
         var note = noteRepository.findByIdAndTeamIdAndAuthorId(noteId, teamId, author.getId()).get();
 
-        return note.map(toNote);
+        return note.map(mapper);
     }
 
     @Override
-    public Note updateNote(UUID teamId, UUID noteId, String title, String content) throws HttpException {
+    public Note updateNote(UUID teamId, UUID noteId, String title, String content) throws DomainException {
         var author = getAuthenticatedUser();
 
         var note = noteRepository.findByIdAndTeamIdAndAuthorId(noteId, teamId, author.getId()).get();
@@ -100,11 +103,11 @@ public class NoteServiceImpl extends AuthenticationContext implements NoteServic
         note.setTitle(title);
         note.setContent(content);
 
-        return noteRepository.save(note).map(toNote);
+        return noteRepository.save(note).map(mapper);
     }
 
     @Override
-    public void deleteNote(UUID noteId, UUID teamId) throws HttpException {
+    public void deleteNote(UUID noteId, UUID teamId) throws DomainException {
         var author = getAuthenticatedUser();
         noteRepository.findByIdAndTeamIdAndAuthorId(teamId, noteId, author.getId())
                 .ifPresent(note -> noteRepository.delete(note));
