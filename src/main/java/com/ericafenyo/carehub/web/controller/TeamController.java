@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2024 Eric Afenyo
+ * Copyright (C) 2025 Eric Afenyo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +22,28 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.controllers;
+package com.ericafenyo.carehub.web.controller;
 
 import com.ericafenyo.carehub.contexts.CreateTaskContext;
 import com.ericafenyo.carehub.dto.CreateTeamRequest;
 
-import com.ericafenyo.carehub.dto.CreateVitalReportRequest;
 import com.ericafenyo.carehub.dto.InvitationRequest;
 import com.ericafenyo.carehub.dto.UpdateTeamRequest;
-import com.ericafenyo.carehub.entities.VitalReportEntity;
 import com.ericafenyo.carehub.exceptions.HttpException;
 import com.ericafenyo.carehub.model.Membership;
+import com.ericafenyo.carehub.model.Note;
 import com.ericafenyo.carehub.model.Task;
 import com.ericafenyo.carehub.model.Team;
 import com.ericafenyo.carehub.model.VitalMeasurement;
 import com.ericafenyo.carehub.model.VitalReport;
+import com.ericafenyo.carehub.requests.CreateNoteRequest;
 import com.ericafenyo.carehub.requests.CreateTaskRequest;
-import com.ericafenyo.carehub.services.TeamService;
+import com.ericafenyo.carehub.domain.service.TeamService;
+import com.ericafenyo.carehub.web.request.impl.CreateVitalReportRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,9 +61,19 @@ public class TeamController {
     private final TeamService service;
 
     @PostMapping("/teams")
-    public Team createTeam(@RequestBody @Valid CreateTeamRequest request) throws Exception {
+    public Team createTeam(@RequestBody @Valid CreateTeamRequest request) {
         return service.createTeam(request.getName(), request.getDescription());
     }
+
+    @PostMapping("/teams/{teamId}/notes")
+    @PreAuthorize("hasAuthority('create:notes')")
+    public Note createNote(
+            @PathVariable("teamId") UUID teamId,
+            @RequestBody CreateNoteRequest request
+    ) {
+        return service.createNote(request.getTitle(), request.getContent(), teamId);
+    }
+
 
     @GetMapping("/teams")
     public List<Team> getTeams() {
@@ -133,13 +145,11 @@ public class TeamController {
         return service.createTask(context);
     }
 
-    // Patient vitals sub-resources
-    @GetMapping("/teams/{id}/vital-reports")
-    public List<VitalReport> getVitalReports(@PathVariable("id") UUID teamId) throws HttpException {
-        return service.getVitalReports(teamId);
-    }
+    // Vitals sub-resources
 
-    // Patient vitals sub-resources
+    /**
+     * Create a new vital report for a team
+     */
     @PostMapping("/teams/{id}/vital-reports")
     public VitalReport createVitalReports(
             @PathVariable("id") UUID teamId,
@@ -147,6 +157,15 @@ public class TeamController {
     ) throws HttpException {
         return service.createVitalReports(teamId, request);
     }
+
+    /**
+     * Get a list of vital reports belonging to a team
+     */
+    @GetMapping("/teams/{id}/vital-reports")
+    public List<VitalReport> getVitalReports(@PathVariable("id") UUID teamId) throws HttpException {
+        return service.getVitalReports(teamId);
+    }
+
 
     // Vitals sub-resources
     @GetMapping("/teams/{id}/vital-measurements")
