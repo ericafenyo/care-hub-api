@@ -32,18 +32,21 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Repository for performing database operations on a {@link com.ericafenyo.carehub.entities.MembershipEntity}.
+ * Repository for performing database operations on a {@link MembershipEntity}.
  */
 @Repository
 public interface MembershipRepository extends AbstractRepository<MembershipEntity> {
+
     /**
-     * Retrieves a team member by team id and user id.
+     * Retrieves a team membership for a given team id and user id.
      *
-     * @param teamId The id of the team.
-     * @param userId The id of the user.
-     * @return The team member with the given team id and user id or {@literal Optional#empty()} if none found.
+     * @param teamId The unique identifier of the team.
+     * @param userId The unique identifier of the user.
+     * @return A team membership for the given team id and user id or an empty optional if none found.
      */
     Optional<MembershipEntity> findByTeamIdAndUserId(UUID teamId, UUID userId);
+
+    boolean existsByTeamIdAndUserId(UUID teamId, UUID userId);
 
     /**
      * Retrieves a list of team membership for a given user id.
@@ -52,4 +55,12 @@ public interface MembershipRepository extends AbstractRepository<MembershipEntit
      * @return A list of team membership for the given user id or an empty list if none found.
      */
     List<MembershipEntity> findByUserId(UUID userId);
+
+    /**
+     * Retrieves a list of team membership for a given team id.
+     *
+     * @param teamId The unique identifier of the team.
+     * @return A list of team membership for the given team id or an empty list if none found.
+     */
+    List<MembershipEntity> findByTeamId(UUID teamId);
 }
