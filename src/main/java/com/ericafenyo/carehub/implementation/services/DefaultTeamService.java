@@ -27,22 +27,23 @@ package com.ericafenyo.carehub.implementation.services;
 import com.ericafenyo.carehub.Messages;
 import com.ericafenyo.carehub.contexts.CreateTaskContext;
 import com.ericafenyo.carehub.core.AuthenticationContext;
-import com.ericafenyo.carehub.dto.CreateVitalReportRequest;
+import com.ericafenyo.carehub.domain.service.FindUserByIdDelegate;
+import com.ericafenyo.carehub.domain.service.rule.HasMembershipRule;
 import com.ericafenyo.carehub.dto.UpdateTeamRequest;
 import com.ericafenyo.carehub.entities.TaskEntity;
 import com.ericafenyo.carehub.entities.TeamEntity;
 import com.ericafenyo.carehub.entities.MembershipEntity;
 import com.ericafenyo.carehub.exceptions.ConflictException;
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.exceptions.NotFoundException;
-import com.ericafenyo.carehub.interactor.FindTeamByIdInteractor;
 import com.ericafenyo.carehub.mapper.MembershipMapper;
 import com.ericafenyo.carehub.mapper.TaskMapper;
 import com.ericafenyo.carehub.mapper.TeamMapper;
 import com.ericafenyo.carehub.model.Invitation;
 import com.ericafenyo.carehub.model.Membership;
+import com.ericafenyo.carehub.model.Note;
 import com.ericafenyo.carehub.model.Report;
-import com.ericafenyo.carehub.model.Role;
+import com.ericafenyo.carehub.domain.model.Role;
 import com.ericafenyo.carehub.model.Task;
 import com.ericafenyo.carehub.model.Team;
 import com.ericafenyo.carehub.model.VitalMeasurement;
@@ -51,30 +52,35 @@ import com.ericafenyo.carehub.repository.RoleRepository;
 import com.ericafenyo.carehub.repository.TaskRepository;
 import com.ericafenyo.carehub.repository.MembershipRepository;
 import com.ericafenyo.carehub.repository.TeamRepository;
-import com.ericafenyo.carehub.repository.UserRepository;
 import com.ericafenyo.carehub.services.InvitationService;
-import com.ericafenyo.carehub.services.TeamService;
+import com.ericafenyo.carehub.domain.service.TeamService;
 import com.ericafenyo.carehub.services.VitalMeasurementService;
 import com.ericafenyo.carehub.services.VitalReportService;
-import com.ericafenyo.carehub.services.VitalService;
 import com.ericafenyo.carehub.services.validation.Validations;
+import com.ericafenyo.carehub.domain.model.CreateVitalReportModel;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Validated
 public class DefaultTeamService extends AuthenticationContext implements TeamService {
-    private final VitalService vitalService;
     private final VitalReportService vitalReportService;
+    private final VitalMeasurementService vitalMeasurementService;
+
     private final TeamMapper mapper;
     private final TaskMapper taskMapper;
 
     private final TaskRepository taskRepository;
     private final TeamRepository teamRepository;
-    private final UserRepository userRepository;
+    private final HasMembershipRule hasMembershipRule;
+    //    private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final MembershipRepository teamMemberRepository;
 
@@ -85,10 +91,11 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
     private final MembershipRepository membershipRepository;
 
     private final MembershipMapper membershipMapper;
-    private final VitalMeasurementService vitalMeasurementService;
+
+    private final FindUserByIdDelegate userDelegate;
 
     @Override
-    public Team createTeam(String name, String description) throws HttpException {
+    public Team createTeam(String name, String description) throws DomainException {
 //        validations.validateTeamExists();
 
         if (teamRepository.existsByName(name)) {
@@ -97,7 +104,7 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
 
         var userId = getAuthenticatedUserId();
 
-        var owner = userRepository.findById(userId).get();
+        var owner = userDelegate.findUserById(userId);
         var role = roleRepository.findBySlug(Role.SLUG_OWNER).get();
 
         var team = new TeamEntity();
@@ -124,7 +131,7 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
     }
 
     @Override
-    public Team getTeamById(UUID teamId) throws HttpException {
+    public Team getTeamById(UUID teamId) throws DomainException {
         return findTeamById(teamId).map(mapper);
     }
 
@@ -144,7 +151,7 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
     }
 
     @Override
-    public List<Team> getUserTeams(UUID teamId) throws HttpException {
+    public List<Team> getUserTeams(UUID teamId) throws DomainException {
         return teamRepository.findAllByOwnerId(teamId)
                 .stream()
                 .map(mapper)
@@ -158,7 +165,7 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
             String firstName,
             String lastName,
             String email
-    ) throws HttpException {
+    ) throws DomainException {
         return invitationService.invite(teamId, role, firstName, lastName, email);
     }
 
@@ -168,7 +175,7 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
     }
 
     @Override
-    public Task createTask(CreateTaskContext context) throws HttpException {
+    public Task createTask(CreateTaskContext context) throws DomainException {
         var team = findTeamById(context.getTeamId());
 
         var entity = new TaskEntity()
@@ -200,7 +207,10 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
     }
 
     @Override
-    public Membership getMembership(UUID teamId, UUID userId) throws HttpException {
+    public Membership getMembership(UUID teamId, UUID userId) throws DomainException {
+        validations.validateTeamShouldExists(teamId);
+
+
         if (!teamRepository.existsById(teamId)) {
             throw new NotFoundException(
                     messages.format("error.resource.not.found", "Team", teamId),
@@ -208,12 +218,6 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
             );
         }
 
-        if (!userRepository.existsById(userId)) {
-            throw new NotFoundException(
-                    "messages.format(Messages.ERROR_RESOURCE_WITH_ID_NOTFOUND, User, userId)",
-                    "messages.format(Messages.ERROR_RESOURCE_NOTFOUND_CODE, user)"
-            );
-        }
 
         var member = teamMemberRepository.findByTeamIdAndUserId(teamId, userId)
                 .orElseThrow(() -> new NotFoundException(
@@ -225,8 +229,11 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
     }
 
     @Override
-    public Membership getMembership(UUID teamId) throws HttpException {
-        return getMembership(teamId, getAuthenticatedUserId());
+    public List<Membership> getTeamMembership(UUID teamId) throws DomainException {
+        return membershipRepository.findByTeamId(teamId)
+                .stream()
+                .map(membershipMapper)
+                .toList();
     }
 
     @Override
@@ -243,21 +250,37 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
     }
 
     @Override
-    public VitalReport createVitalReports(UUID teamId, CreateVitalReportRequest request) throws NotFoundException {
-        var team = findTeamById(teamId);
-        var user = userRepository.findById(getAuthenticatedUserId()).get();
+    public VitalReport createVitalReports(UUID teamId, CreateVitalReportModel report) throws DomainException {
+        // Pre-conditions check if the team exists
+        validations.validateTeamShouldExists(teamId);
 
-        return vitalReportService.createVitalReport(team, user, request);
+        // Pre-conditions check if the user exists
+        var userId = getAuthenticatedUserId();
+        validations.validateUserShouldExists(userId);
+
+        // Rule check if the user is a member of the team
+        hasMembershipRule.validate(new HasMembershipRule.Params(teamId, userId));
+
+        // All checks passed, create the vital report
+        var user = userDelegate.findUserById(userId);
+        var team = findTeamById(teamId);
+        return vitalReportService.createVitalReport(team, user, report);
     }
 
     @Override
     public VitalReport getVitalReport(UUID teamId, UUID reportId) {
-        validations.validateTeamExistsById(teamId);
+        validations.validateTeamShouldExists(teamId);
         return vitalReportService.getVitalReport(reportId);
     }
 
     @Override
     public List<VitalMeasurement> getVitalMeasurements(UUID teamId) {
+        validations.validateTeamShouldExists(teamId);
         return vitalMeasurementService.getMeasurements(teamId);
+    }
+
+
+    public Note createNote(String title, String content, UUID teamId) {
+        return null;
     }
 }
