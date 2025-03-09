@@ -37,9 +37,7 @@ import java.util.UUID;
 /**
  * A vital report is a collection of vital measurements taken at a specific time.
  */
-@Getter
-@Setter
-@Accessors(chain = true)
+@Getter @Setter @Accessors(chain = true)
 public class VitalReport {
     /**
      * The unique identifier of the vital report.
