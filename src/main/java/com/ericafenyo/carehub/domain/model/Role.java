@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2024 Eric Afenyo
+ * Copyright (C) 2025 Eric Afenyo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.model;
+package com.ericafenyo.carehub.domain.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +30,9 @@ import lombok.experimental.Accessors;
 
 import java.util.UUID;
 
+/**
+ * Represents a specific role a user has within a team.
+ */
 @Getter
 @Setter
 @Accessors(chain = true)
