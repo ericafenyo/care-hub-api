@@ -55,6 +55,13 @@ public class DefaultAuthService implements AuthService {
         return generateAuthenticationTokens(account.getEmail(), account.getId());
     }
 
+    /**
+     * Generates authentication tokens for the given email and user id
+     *
+     * @param email  the email of the user
+     * @param userId the id of the user
+     * @return a {@link Tokens} object containing the access and refresh tokens
+     */
     private Tokens generateAuthenticationTokens(String email, UUID userId) {
         var subject = "auth|%s".formatted(userId);
         var accessToken = jwt.sign(subject, Map.of(KEY_EMAIL, email));
