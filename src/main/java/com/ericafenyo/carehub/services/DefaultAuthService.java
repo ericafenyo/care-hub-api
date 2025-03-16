@@ -56,7 +56,7 @@ public class DefaultAuthService implements AuthService {
     }
 
     /**
-     * Generates authentication tokens for the given email and user id
+     * generates authentication tokens for the given email and user id
      *
      * @param email  the email of the user
      * @param userId the id of the user
