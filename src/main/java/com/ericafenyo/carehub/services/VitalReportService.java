@@ -27,8 +27,9 @@ package com.ericafenyo.carehub.services;
 import com.ericafenyo.carehub.dto.CreateVitalReportRequest;
 import com.ericafenyo.carehub.entities.TeamEntity;
 import com.ericafenyo.carehub.entities.UserEntity;
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.model.VitalReport;
+import com.ericafenyo.carehub.domain.model.CreateVitalReportModel;
 
 import java.util.List;
 import java.util.UUID;
@@ -38,5 +39,5 @@ public interface VitalReportService {
 
     VitalReport getVitalReport(UUID reportId);
 
-    VitalReport createVitalReport(TeamEntity team, UserEntity user, CreateVitalReportRequest request) throws HttpException;
+    VitalReport createVitalReport(TeamEntity team, UserEntity user, CreateVitalReportModel request);
 }

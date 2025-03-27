@@ -24,9 +24,12 @@
 
 package com.ericafenyo.carehub.services;
 
-import com.ericafenyo.carehub.model.Role;
+import com.ericafenyo.carehub.domain.model.Permission;
+import com.ericafenyo.carehub.domain.model.Role;
+import com.ericafenyo.carehub.entities.PermissionEntity;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * An interface that defines a contract for user role-related operations.
@@ -36,4 +39,9 @@ public interface RoleService {
      * Returns a list of user roles.
      */
     List<Role> getRoles();
+
+    /**
+     * Returns a list of permissions associated with a role.
+     */
+    List<Permission> getPermissions(UUID roleId);
 }

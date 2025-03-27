@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2024 Eric Afenyo
+ * Copyright (C) 2025 Eric Afenyo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +22,28 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.exceptions;
+package com.ericafenyo.carehub.domain.service.validation;
 
-import org.springframework.http.HttpStatus;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validation;
+import jakarta.validation.ValidatorFactory;
 
-public class ConflictException extends DomainException {
+import java.util.Set;
 
-  public ConflictException(String message, String code) {
-    super(HttpStatus.CONFLICT, message, code);
-  }
+public final class Validator {
+    public static final ValidatorFactory FACTORY = Validation.buildDefaultValidatorFactory();
 
-  public ConflictException(String message, String code, Throwable cause) {
-    super(HttpStatus.CONFLICT, message, code, cause);
-  }
+    public static final jakarta.validation.Validator VALIDATOR = FACTORY.getValidator();
+
+    // A private constructor to prevent instantiation
+    private Validator() {}
+
+    public static <T extends Validatable> T validate(T validatable) throws ConstraintViolationException {
+        Set<ConstraintViolation<T>> violations = VALIDATOR.validate(validatable);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
+        return validatable;
+    }
 }

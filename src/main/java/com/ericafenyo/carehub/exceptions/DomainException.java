@@ -24,6 +24,7 @@
 
 package com.ericafenyo.carehub.exceptions;
 
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -31,7 +32,8 @@ import org.springframework.http.HttpStatus;
  * Exception class representing HTTP-related errors.
  */
 @Getter
-public class HttpException extends RuntimeException {
+@Builder
+public class DomainException extends RuntimeException {
 
     /**
      * The HTTP status associated with the exception.
@@ -44,14 +46,20 @@ public class HttpException extends RuntimeException {
     private final String code;
 
     /**
+     * A unique error code associated with the exception.
+     */
+    private String message;
+
+    /**
      * Constructs a new {@code HttpException} with the specified HTTP status, error message, and code.
      *
      * @param status  The HTTP status code representing the error.
      * @param message A descriptive error message.
      * @param code    A unique error code associated with the exception.
      */
-    public HttpException(HttpStatus status, String message, String code) {
+    public DomainException(HttpStatus status, String message, String code) {
         super(message);
+        this.message = message;
         this.status = status;
         this.code = code;
     }
@@ -64,8 +72,9 @@ public class HttpException extends RuntimeException {
      * @param code    A unique error code associated with the exception.
      * @param cause   The cause of the exception.
      */
-    public HttpException(HttpStatus status, String message, String code, Throwable cause) {
+    public DomainException(HttpStatus status, String message, String code, Throwable cause) {
         super(message, cause);
+//        this.message = message;
         this.status = status;
         this.code = code;
     }

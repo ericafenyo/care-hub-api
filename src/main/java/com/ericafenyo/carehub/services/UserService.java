@@ -26,7 +26,7 @@ package com.ericafenyo.carehub.services;
 
 import com.ericafenyo.carehub.dto.CreateUserRequest;
 import com.ericafenyo.carehub.dto.UserUpdateDto;
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.model.Membership;
 import com.ericafenyo.carehub.model.Team;
 import com.ericafenyo.carehub.model.User;
@@ -38,17 +38,15 @@ import java.util.UUID;
 public interface UserService {
     List<User> getUsers();
 
-    User getUserById(UUID id) throws HttpException;
+    User getUserById(UUID id) throws DomainException;
 
-    User createUser(CreateUserRequest userCreationDto) throws HttpException;
+    User createUser(CreateUserRequest userCreationDto) throws DomainException;
 
-    User updateUser(UUID id, UserUpdateDto updateUserDto) throws HttpException;
-
-    ;
+    User updateUser(UUID id, UserUpdateDto updateUserDto) throws DomainException;
 
     void deleteUser(UUID id);
 
-    List<Team> getUserTeams(UUID id) throws HttpException;
+    List<Team> getUserTeams(UUID id) throws DomainException;
 
 //    /**
 //     * Get all team memberships for a user.
@@ -57,5 +55,5 @@ public interface UserService {
 //     * @return a list of team memberships
 //     * @throws HttpException if an error occurs
 //     */
-    List<Membership> getMemberships(UUID userId) throws HttpException;
+    List<Membership> getMemberships(UUID userId) throws DomainException;
 }

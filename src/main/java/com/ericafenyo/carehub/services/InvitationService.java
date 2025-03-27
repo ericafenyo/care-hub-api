@@ -26,7 +26,7 @@ package com.ericafenyo.carehub.services;
 
 import com.ericafenyo.carehub.dto.AcceptInvitationRequest;
 import com.ericafenyo.carehub.dto.ValidateInvitationRequest;
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.model.Invitation;
 import com.ericafenyo.carehub.model.Report;
 
@@ -45,24 +45,24 @@ public interface InvitationService {
      * @param lastName  The last name of the user being invited.
      * @param email     The email address of the user being invited.
      * @return A {@link Report} object containing the result of the invitation.
-     * @throws HttpException If the invitation fails, an InvitationException is thrown.
+     * @throws com.ericafenyo.carehub.exceptions.DomainException If the invitation fails, an InvitationException is thrown.
      */
-    Report invite(UUID teamId, String role, String firstName, String lastName, String email) throws HttpException;
+    Report invite(UUID teamId, String role, String firstName, String lastName, String email) throws DomainException;
 
     /**
      * Validates an invitation using the provided request.
      *
      * @param request The request object containing the necessary information to validate an invitation.
      * @return An  {@link Invitation} object if the validation is successful.
-     * @throws HttpException If the validation fails, an InvitationException is thrown.
+     * @throws com.ericafenyo.carehub.exceptions.DomainException If the validation fails, an InvitationException is thrown.
      */
-    Invitation validateInvitation(ValidateInvitationRequest request) throws HttpException;
+    Invitation validateInvitation(ValidateInvitationRequest request) throws DomainException;
 
     /**
      * Accepts an invitation using the provided request.
      *
      * @param request The request object containing the necessary information to accept an invitation.
-     * @throws HttpException If the acceptance fails, an InvitationException is thrown.
+     * @throws com.ericafenyo.carehub.exceptions.DomainException If the acceptance fails, an InvitationException is thrown.
      */
-    Report acceptInvitation(AcceptInvitationRequest request) throws HttpException;
+    Report acceptInvitation(AcceptInvitationRequest request) throws DomainException;
 }

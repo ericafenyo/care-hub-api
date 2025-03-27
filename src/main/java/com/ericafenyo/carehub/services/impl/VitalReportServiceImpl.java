@@ -24,7 +24,6 @@
 
 package com.ericafenyo.carehub.services.impl;
 
-import com.ericafenyo.carehub.dto.CreateVitalReportRequest;
 import com.ericafenyo.carehub.entities.TeamEntity;
 import com.ericafenyo.carehub.entities.UserEntity;
 import com.ericafenyo.carehub.entities.VitalMeasurementEntity;
@@ -35,6 +34,8 @@ import com.ericafenyo.carehub.repository.VitalReportRepository;
 import com.ericafenyo.carehub.services.VitalReportService;
 import com.ericafenyo.carehub.services.VitalService;
 import com.ericafenyo.carehub.services.validation.Validations;
+import com.ericafenyo.carehub.domain.model.CreateVitalReportModel;
+import com.ericafenyo.carehub.web.request.impl.CreateVitalReportRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +54,7 @@ public class VitalReportServiceImpl implements VitalReportService {
 
     @Override
     public List<VitalReport> getVitalReports(UUID teamId) {
-        validations.validateTeamExistsById(teamId);
+        validations.validateTeamShouldExists(teamId);
 
         return repository.findByTeamId(teamId)
                 .stream()
@@ -61,38 +62,17 @@ public class VitalReportServiceImpl implements VitalReportService {
                 .toList();
     }
 
-    @Override
-    public VitalReport createVitalReport(
-            TeamEntity team,
-            UserEntity user,
-            CreateVitalReportRequest request
-    ) {
 
-        var vitalReport = new VitalReportEntity();
-        vitalReport.setTeam(team);
-        vitalReport.setMember(user);
-        vitalReport.setRecordedAt(LocalDateTime.now(ZoneOffset.UTC));
-        vitalReport.setNotes(request.getNotes());
-
-
-        var vitals = request.getMeasurements().stream().map(item -> {
-            var vital = vitalService.findVitalById(item.getVitalId());
-            var measurement = new VitalMeasurementEntity();
-            measurement.setVital(vital);
-            measurement.setValue(item.getValue());
-            measurement.setReport(vitalReport);
-            return measurement;
-        }).toList();
-
-        vitalReport.setVitals(vitals);
-
-        return repository.save(vitalReport).map(mapper);
-    }
 
     @Override
     public VitalReport getVitalReport(UUID reportId) {
         return repository.findById(reportId)
                 .map(mapper)
                 .orElseThrow();
+    }
+
+    @Override
+    public VitalReport createVitalReport(TeamEntity team, UserEntity user, CreateVitalReportModel request) {
+        return null;
     }
 }

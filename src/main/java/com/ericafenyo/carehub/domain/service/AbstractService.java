@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2024 Eric Afenyo
+ * Copyright (C) 2025 Eric Afenyo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +22,14 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.exceptions;
+package com.ericafenyo.carehub.domain.service;
 
-import org.springframework.http.HttpStatus;
+import com.ericafenyo.carehub.domain.service.validation.Validatable;
+import com.ericafenyo.carehub.domain.service.validation.Validator;
+import jakarta.validation.ConstraintViolationException;
 
-public class ConflictException extends DomainException {
-
-  public ConflictException(String message, String code) {
-    super(HttpStatus.CONFLICT, message, code);
-  }
-
-  public ConflictException(String message, String code, Throwable cause) {
-    super(HttpStatus.CONFLICT, message, code, cause);
-  }
+public interface AbstractService {
+    default <T extends Validatable> T validate(T validatable) throws ConstraintViolationException {
+        return Validator.validate(validatable);
+    }
 }

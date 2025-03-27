@@ -22,34 +22,41 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.domain.service;
-
+package com.ericafenyo.carehub.domain.service.impl;
 
 import com.ericafenyo.carehub.Messages;
-import com.ericafenyo.carehub.entities.UserEntity;
+import com.ericafenyo.carehub.domain.service.MembershipService;
+import com.ericafenyo.carehub.entities.MembershipEntity;
+import com.ericafenyo.carehub.entities.RoleEntity;
 import com.ericafenyo.carehub.exceptions.NotFoundException;
-import com.ericafenyo.carehub.repository.UserRepository;
+import com.ericafenyo.carehub.mapper.RoleMapper;
+import com.ericafenyo.carehub.repository.MembershipRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Component
+@Service
 @RequiredArgsConstructor
-public class FindUserByIdDelegate {
-    private final UserRepository repository;
+public class DefaultMembershipService implements MembershipService {
+    private final MembershipRepository repository;
 
     private final Messages messages;
 
-    /**
-     * Find a user by the provided id.
-     *
-     * @param userId The id of the user to find.
-     * @return The user entity if found.
-     * @throws com.ericafenyo.carehub.exceptions.NotFoundException If the user is not found, a NotFoundException is thrown.
-     */
-    public UserEntity findUserById(UUID userId) throws NotFoundException {
-        return repository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(messages.get("user.error.resource.not.found")));
+    private final RoleMapper roleMapper;
+
+    @Override
+    public Object getRole(UUID membershipId) {
+        var membership = findById(membershipId);
+        var role = membership.getRole();
+        return null;
+    }
+
+    private MembershipEntity findById(UUID membershipId) {
+        return repository.findById(membershipId).orElseThrow(() -> NotFoundException.builder()
+                .message(messages.get("membership.error.resource.not.found"))
+                .code("membership.error.resource.not.found.code")
+                .build()
+        );
     }
 }

@@ -22,17 +22,22 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.exceptions;
+package com.ericafenyo.carehub.config;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
-public class ConflictException extends DomainException {
-
-  public ConflictException(String message, String code) {
-    super(HttpStatus.CONFLICT, message, code);
-  }
-
-  public ConflictException(String message, String code, Throwable cause) {
-    super(HttpStatus.CONFLICT, message, code, cause);
-  }
+@Configuration
+@EnableTransactionManagement
+@EnableJpaAuditing
+public class ApplicationConfig {
+    @Bean
+    public static MethodValidationPostProcessor validationPostProcessor() {
+        MethodValidationPostProcessor processor = new MethodValidationPostProcessor();
+        processor.setAdaptConstraintViolations(true);
+        return processor;
+    }
 }

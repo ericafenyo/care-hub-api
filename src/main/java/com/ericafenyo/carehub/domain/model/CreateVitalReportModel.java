@@ -22,36 +22,15 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.interactor;
+package com.ericafenyo.carehub.domain.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.ericafenyo.carehub.domain.service.validation.Validatable;
+import com.ericafenyo.carehub.web.request.impl.VitalMeasurementRequest;
 
-public abstract class Interactor<T, R> {
-    private static final Logger logger = LoggerFactory.getLogger(Interactor.class);
+import java.util.List;
 
-    /**
-     * Executes the business logic.
-     *
-     * @param params Parameters required for the business logic.
-     * @return The result of the business logic execution.
-     * @throws RuntimeException If an error occurs during execution.
-     */
-    public R execute(T params) {
-        try {
-            return create(params);
-        } catch (Exception e) {
-            logger.error("Error executing interactor", e);
-            throw new RuntimeException("Interactor execution failed", e);
-        }
-    }
+public interface CreateVitalReportModel extends Validatable {
+    String notes();
 
-    /**
-     * Core business logic to be implemented by subclasses.
-     *
-     * @param params Parameters required for execution.
-     * @return The result of the execution.
-     * @throws Exception If an error occurs during execution.
-     */
-    protected abstract R create(T params) throws Exception;
+    List<VitalMeasurementRequest> measurements();
 }

@@ -24,7 +24,7 @@
 
 package com.ericafenyo.carehub.services;
 
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.model.Medication;
 
 import java.time.LocalDate;
@@ -44,13 +44,13 @@ public interface MedicationService {
         LocalDate startDate,
         LocalDate endDate,
         UUID teamId
-    ) throws HttpException;
+    ) throws DomainException;
 
-    List<Medication> getMedications(UUID teamId) throws HttpException;
+    List<Medication> getMedications(UUID teamId) throws DomainException;
 
-    Medication getMedication(UUID teamId, UUID MedicationId) throws HttpException;
+    Medication getMedication(UUID teamId, UUID MedicationId) throws DomainException;
 
-    Medication updateMedication(UUID teamId, UUID MedicationId, String title, String content) throws HttpException;
+    Medication updateMedication(UUID teamId, UUID MedicationId, String title, String content) throws DomainException;
 
-    void deleteMedication(UUID teamId, UUID MedicationId) throws HttpException;
+    void deleteMedication(UUID teamId, UUID MedicationId) throws DomainException;
 }

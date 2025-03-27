@@ -24,26 +24,52 @@
 
 package com.ericafenyo.carehub.implementation.services;
 
+import com.ericafenyo.carehub.Messages;
+import com.ericafenyo.carehub.domain.mapper.PermissionMapper;
+import com.ericafenyo.carehub.domain.model.Permission;
+import com.ericafenyo.carehub.entities.RoleEntity;
+import com.ericafenyo.carehub.exceptions.NotFoundException;
 import com.ericafenyo.carehub.mapper.RoleMapper;
-import com.ericafenyo.carehub.model.Role;
+import com.ericafenyo.carehub.domain.model.Role;
 import com.ericafenyo.carehub.repository.RoleRepository;
 import com.ericafenyo.carehub.services.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository repository;
-    private final RoleMapper mapper;
+
+    private final RoleMapper roleMapper;
+    private final PermissionMapper permissionMapper;
+
+    private final Messages messages;
 
     @Override
     public List<Role> getRoles() {
         return repository.findAll()
-            .stream()
-            .map(mapper)
-            .toList();
+                .stream()
+                .map(roleMapper)
+                .toList();
+    }
+
+    @Override
+    public List<Permission> getPermissions(UUID roleId) {
+        var role = findById(roleId);
+        var permissions = role.getPermissions();
+        return permissions.stream()
+                .map(permissionMapper)
+                .toList();
+    }
+
+    private RoleEntity findById(UUID roleId) {
+        return repository.findById(roleId).orElseThrow(() -> NotFoundException.builder()
+                .message(messages.get("role.error.resource.not.found"))
+                .code("role.error.resource.not.found.code")
+                .build());
     }
 }

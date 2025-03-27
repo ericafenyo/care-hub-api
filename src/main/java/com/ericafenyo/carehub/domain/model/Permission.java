@@ -22,12 +22,27 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.web.request;
+package com.ericafenyo.carehub.domain.model;
+
+
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
-public interface VitalMeasurementRequest {
-    UUID vitalId();
-
-    String value();
+@Getter
+@Setter
+public class Permission {
+    /**
+     * The unique identifier for the permission.
+     */
+    private UUID id;
+    /**
+     * The name of the permission
+     */
+    private String name;
+    /**
+     * A brief description or explanation of the permission.
+     */
+    private String description;
 }

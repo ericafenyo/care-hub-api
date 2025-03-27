@@ -24,10 +24,10 @@
 
 package com.ericafenyo.carehub.exceptions.invitation;
 
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import org.springframework.http.HttpStatus;
 
-public class InvitationExpiredException extends HttpException {
+public class InvitationExpiredException extends DomainException {
     private static final String MESSAGE = "The invitation has expired";
     private static final String ERROR_CODE = "invitation_expired";
 

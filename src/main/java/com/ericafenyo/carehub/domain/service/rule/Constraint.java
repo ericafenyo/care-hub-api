@@ -22,17 +22,10 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.exceptions;
+package com.ericafenyo.carehub.domain.service.rule;
 
-import org.springframework.http.HttpStatus;
+import com.ericafenyo.carehub.exceptions.DomainException;
 
-public class ConflictException extends DomainException {
-
-  public ConflictException(String message, String code) {
-    super(HttpStatus.CONFLICT, message, code);
-  }
-
-  public ConflictException(String message, String code, Throwable cause) {
-    super(HttpStatus.CONFLICT, message, code, cause);
-  }
+public interface Constraint<T> {
+    void validate(T params) throws DomainException;
 }

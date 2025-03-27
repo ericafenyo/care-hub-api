@@ -26,7 +26,7 @@ package com.ericafenyo.carehub.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class InternalServerErrorException extends HttpException {
+public class InternalServerErrorException extends DomainException {
     private static final String ERROR_CODE = "internal_server_error";
 
     public InternalServerErrorException(String message) {

@@ -24,10 +24,10 @@
 
 package com.ericafenyo.carehub.exceptions.invitation;
 
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import org.springframework.http.HttpStatus;
 
-public class InvitationAlreadyUsedException extends HttpException {
+public class InvitationAlreadyUsedException extends DomainException {
     private static final String MESSAGE = "The invitation has already been used";
     private static final String ERROR_CODE = "invitation_already_used";
 

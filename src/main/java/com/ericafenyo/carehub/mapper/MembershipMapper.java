@@ -43,10 +43,10 @@ import java.util.stream.Collectors;
 public class MembershipMapper implements Function<MembershipEntity, Membership> {
     private final TeamMapper teamMapper;
     private final RoleMapper roleMapper;
+    private final PartialUserMapper userMapper;
 
     @Override
     public Membership apply(MembershipEntity entity) {
-        System.out.println(entity);
         var membership = new Membership()
                 .setId(entity.getId())
                 .setStatus(entity.getStatus())
@@ -56,12 +56,13 @@ public class MembershipMapper implements Function<MembershipEntity, Membership> 
                 .ifPresent(team -> membership.setTeam(teamMapper.apply(team)));
 
         Optional.ofNullable(entity.getUser())
-                .ifPresent(user -> membership.setUserId(user.getId()));
+                .map(userMapper)
+                .ifPresent(user -> membership.setUser(user));
 
         Optional.ofNullable(entity.getRole())
                 .ifPresent(role -> {
                     membership.setRole(roleMapper.apply(role));
-                    membership.setPermissions(constructPermissions(role));
+//                    membership.setPermissions(constructPermissions(role));
                 });
 
         return membership;

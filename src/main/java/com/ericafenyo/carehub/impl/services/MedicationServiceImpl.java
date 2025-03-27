@@ -27,7 +27,7 @@ package com.ericafenyo.carehub.impl.services;
 import com.ericafenyo.carehub.Messages;
 import com.ericafenyo.carehub.core.AuthenticationContext;
 import com.ericafenyo.carehub.entities.MedicationEntity;
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.mapper.MedicationMapper;
 import com.ericafenyo.carehub.model.Medication;
 import com.ericafenyo.carehub.repository.MedicationRepository;
@@ -62,7 +62,7 @@ public class MedicationServiceImpl extends AuthenticationContext implements Medi
       LocalDate startDate,
       LocalDate endDate,
       UUID teamId
-  ) throws HttpException {
+  ) throws DomainException {
     var team = teamRepository.findById(teamId).get();
 
     var user = userRepository.findById(getAuthenticatedUserId()).get();
@@ -90,17 +90,17 @@ public class MedicationServiceImpl extends AuthenticationContext implements Medi
   }
 
   @Override
-  public Medication getMedication(UUID teamId, UUID MedicationId) throws HttpException {
+  public Medication getMedication(UUID teamId, UUID MedicationId) throws DomainException {
     return null;
   }
 
   @Override
-  public Medication updateMedication(UUID teamId, UUID MedicationId, String title, String content) throws HttpException {
+  public Medication updateMedication(UUID teamId, UUID MedicationId, String title, String content) throws DomainException {
     return null;
   }
 
   @Override
-  public void deleteMedication(UUID teamId, UUID MedicationId) throws HttpException {
+  public void deleteMedication(UUID teamId, UUID MedicationId) throws DomainException {
 
   }
 }

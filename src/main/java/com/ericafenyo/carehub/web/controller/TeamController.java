@@ -29,7 +29,7 @@ import com.ericafenyo.carehub.dto.CreateTeamRequest;
 
 import com.ericafenyo.carehub.dto.InvitationRequest;
 import com.ericafenyo.carehub.dto.UpdateTeamRequest;
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.model.Membership;
 import com.ericafenyo.carehub.model.Note;
 import com.ericafenyo.carehub.model.Task;
@@ -88,7 +88,7 @@ public class TeamController {
     @PutMapping("/teams/{id}")
     public Team updateUser(
             @PathVariable @Valid @NotBlank UUID id,
-            @RequestBody @Valid UpdateTeamRequest userUpdateDto
+            @RequestBody UpdateTeamRequest userUpdateDto
     ) {
         return service.updateTeam(id, userUpdateDto);
     }
@@ -104,7 +104,7 @@ public class TeamController {
     public Object addMember(
             @PathVariable("id") UUID teamId,
             @RequestBody() InvitationRequest request
-    ) throws HttpException {
+    ) throws DomainException {
         return service.addMember(
                 teamId,
                 request.getRole(),
@@ -118,12 +118,12 @@ public class TeamController {
     public Object getMember(
             @PathVariable("id") UUID teamId,
             @PathVariable("userId") UUID userId
-    ) throws HttpException {
+    ) throws DomainException {
         return service.getMembership(teamId, userId);
     }
 
     @GetMapping("/teams/{id}/memberships")
-    public List<Membership> getMembership(@PathVariable("id") UUID teamId) throws HttpException {
+    public List<Membership> getMembership(@PathVariable("id") UUID teamId) throws DomainException {
         return service.getTeamMembership(teamId);
     }
 
@@ -133,7 +133,7 @@ public class TeamController {
     public Task createTask(
             @PathVariable UUID id,
             @RequestBody CreateTaskRequest request
-    ) throws HttpException {
+    ) throws DomainException {
         var context = CreateTaskContext.builder()
                 .setTitle(request.getTitle())
                 .setDescription(request.getDescription())
@@ -154,7 +154,8 @@ public class TeamController {
     public VitalReport createVitalReports(
             @PathVariable("id") UUID teamId,
             @RequestBody CreateVitalReportRequest request
-    ) throws HttpException {
+    ) throws DomainException {
+        service.validate(request);
         return service.createVitalReports(teamId, request);
     }
 
@@ -162,14 +163,14 @@ public class TeamController {
      * Get a list of vital reports belonging to a team
      */
     @GetMapping("/teams/{id}/vital-reports")
-    public List<VitalReport> getVitalReports(@PathVariable("id") UUID teamId) throws HttpException {
+    public List<VitalReport> getVitalReports(@PathVariable("id") UUID teamId) throws DomainException {
         return service.getVitalReports(teamId);
     }
 
 
     // Vitals sub-resources
     @GetMapping("/teams/{id}/vital-measurements")
-    public List<VitalMeasurement> getVitals(@PathVariable("id") UUID teamId) throws HttpException {
+    public List<VitalMeasurement> getVitals(@PathVariable("id") UUID teamId) throws DomainException {
         return service.getVitalMeasurements(teamId);
     }
 

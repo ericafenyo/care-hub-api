@@ -24,12 +24,13 @@
 
 package com.ericafenyo.carehub.controllers;
 
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.model.Note;
 import com.ericafenyo.carehub.requests.CreateNoteRequest;
 import com.ericafenyo.carehub.requests.UpdateNoteRequest;
 import com.ericafenyo.carehub.services.NoteService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,26 +48,26 @@ import java.util.UUID;
 public class NoteController {
     private final NoteService service;
 
-    // Notes sub-resources
-    @PostMapping("/teams/{teamId}/notes")
-    public Note createNote(
-        @PathVariable("teamId") UUID teamId,
-        @RequestBody CreateNoteRequest request
-    ) throws HttpException {
-        return service.createNote(request.getTitle(), request.getContent(), teamId);
-    }
+//    @PostMapping("/teams/{teamId}/notes")
+//    @PreAuthorize("hasAuthority('create:notes')")
+//    public Note createNote(
+//        @PathVariable("teamId") UUID teamId,
+//        @RequestBody CreateNoteRequest request
+//    ) throws DomainException {
+//        return service.createNote(request.getTitle(), request.getContent(), teamId);
+//    }
 
     @GetMapping("/teams/{teamId}/notes")
     public List<Note> getNotes(
         @PathVariable("teamId") UUID teamId,
         Authentication authentication
-    ) throws HttpException {
+    ) throws DomainException {
         return service.getNotes(teamId);
     }
 
     // Get note by id
     @GetMapping("/teams/{teamId}/notes/{noteId}")
-    public Note getNoteById(@PathVariable() UUID teamId, @PathVariable() UUID noteId) throws HttpException {
+    public Note getNoteById(@PathVariable() UUID teamId, @PathVariable() UUID noteId) throws DomainException {
         return service.getNote(teamId, noteId);
     }
 
@@ -76,13 +77,13 @@ public class NoteController {
         @PathVariable("teamId") UUID teamId,
         @PathVariable("noteId") UUID noteId,
         @RequestBody() UpdateNoteRequest request
-    ) throws HttpException {
+    ) throws DomainException {
         return service.updateNote(teamId, noteId, request.getTitle(), request.getContent());
     }
 
     // Delete a note by id
     @DeleteMapping("/teams/{teamId}/notes/{noteId}")
-    public void deleteNote(@PathVariable() UUID teamId, @PathVariable() UUID noteId) throws HttpException {
+    public void deleteNote(@PathVariable() UUID teamId, @PathVariable() UUID noteId) throws DomainException {
         service.deleteNote(teamId, noteId);
     }
 }

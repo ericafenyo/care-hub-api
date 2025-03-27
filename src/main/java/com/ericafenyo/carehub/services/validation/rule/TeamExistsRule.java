@@ -24,9 +24,9 @@
 
 package com.ericafenyo.carehub.services.validation.rule;
 
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.repository.TeamRepository;
 import com.ericafenyo.carehub.services.validation.Constraint;
-import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -35,10 +35,11 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class TeamExistsRule implements Constraint<UUID> {
+
     private final TeamRepository teamRepository;
 
     @Override
-    public void validate(UUID teamId) throws ValidationException {
+    public void validate(UUID teamId) throws DomainException {
         teamRepository.existsById(teamId);
     }
 }

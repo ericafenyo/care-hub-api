@@ -26,7 +26,7 @@ package com.ericafenyo.carehub.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class BadRequestException extends HttpException {
+public class BadRequestException extends DomainException {
 
     public BadRequestException(String message, String code) {
         super(HttpStatus.BAD_REQUEST, message, code);

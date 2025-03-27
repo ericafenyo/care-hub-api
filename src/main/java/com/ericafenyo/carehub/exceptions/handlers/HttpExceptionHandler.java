@@ -24,7 +24,7 @@
 
 package com.ericafenyo.carehub.exceptions.handlers;
 
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.exceptions.HttpExceptionResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
@@ -43,8 +43,8 @@ public class HttpExceptionHandler {
      * @param exception The HTTP exception to be handled.
      * @return A {@link ResponseEntity} containing an {@link HttpExceptionResponse} with relevant information.
      */
-    @ExceptionHandler(value = {HttpException.class})
-    ResponseEntity<Object> handle(HttpException exception, HttpServletRequest request) {
+    @ExceptionHandler(value = {DomainException.class})
+    ResponseEntity<Object> handle(DomainException exception, HttpServletRequest request) {
         HttpExceptionResponse response = new HttpExceptionResponse();
         response.setMessage(exception.getMessage());
         response.setPath(request.getRequestURI());

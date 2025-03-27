@@ -26,7 +26,7 @@ package com.ericafenyo.carehub.controllers;
 
 import com.ericafenyo.carehub.dto.BasicAuthenticateRequest;
 import com.ericafenyo.carehub.dto.VerifyEmailDto;
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.model.Report;
 import com.ericafenyo.carehub.model.Tokens;
 import com.ericafenyo.carehub.services.AuthService;
@@ -47,7 +47,7 @@ public class AuthController {
     private final AuthService service;
 
     @PostMapping("/auth/login")
-    public Tokens authenticate(@RequestBody BasicAuthenticateRequest request) throws HttpException {
+    public Tokens authenticate(@RequestBody BasicAuthenticateRequest request) throws DomainException {
         return service.authenticate(request.getEmail(), request.getPassword());
     }
 

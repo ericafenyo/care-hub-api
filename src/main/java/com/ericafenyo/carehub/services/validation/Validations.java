@@ -35,11 +35,11 @@ import java.util.UUID;
 public class Validations {
     private final TeamExistsRule teamExistsRule;
 
-    public void validateTeamExistsById(UUID teamId) {
+    public void validateTeamShouldExists(UUID teamId) {
         teamExistsRule.validate(teamId);
     }
 
-    public void validateUserIsTeamMember(UUID teamId, UUID userId) {
-
+    public void validateUserShouldExists(UUID teamId) {
+        teamExistsRule.validate(teamId);
     }
 }

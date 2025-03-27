@@ -63,6 +63,12 @@ public class VitalEntity {
     @Column(name = "unit", nullable = false, length = 20)
     private String unit;
 
+//    @Column(name = "min", nullable = false, length = 10)
+//    private Double min;
+//
+//    @Column(name = "max", nullable = false, length = 10)
+//    private Double max;
+
     @CreatedDate
     @Column(name = "created_at")
     private Instant createdAt;

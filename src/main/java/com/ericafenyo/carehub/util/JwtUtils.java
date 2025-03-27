@@ -24,12 +24,13 @@
 
 package com.ericafenyo.carehub.util;
 
-import com.ericafenyo.carehub.EnvironmentVariables;
+import com.ericafenyo.carehub.core.config.properties.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
 
 import javax.crypto.SecretKey;
 import java.time.Instant;
@@ -46,8 +47,7 @@ import java.util.function.Function;
 @Component
 @RequiredArgsConstructor
 public class JwtUtils {
-    // Used to access environment variables from the application.properties file
-    private final EnvironmentVariables env;
+    private final JwtProperties properties;
 
     /**
      * Signs a JWT token with the given subject and claims.
@@ -58,7 +58,7 @@ public class JwtUtils {
      */
     public String sign(String subject, Map<String, ?> claims) {
         Instant issuedAt = Instant.now();
-        Instant expiration = issuedAt.plus(env.getJwtExpirationTimeSeconds(), ChronoUnit.SECONDS);
+        Instant expiration = issuedAt.plus(properties.getExpiration(), ChronoUnit.SECONDS);
 
         return Jwts.builder()
                 .claims(claims)
@@ -108,6 +108,6 @@ public class JwtUtils {
     }
 
     private SecretKey getSecretKey() {
-        return Keys.hmacShaKeyFor(Base64.getDecoder().decode(env.getJwtSecret()));
+        return Keys.hmacShaKeyFor(Base64.getDecoder().decode(properties.getSecret()));
     }
 }

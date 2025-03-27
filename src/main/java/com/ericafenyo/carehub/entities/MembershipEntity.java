@@ -102,4 +102,13 @@ public class MembershipEntity {
     @LastModifiedDate
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    /**
+     * Checks if the team member is active.
+     *
+     * @return {@code true} if the team member is active, {@code false} otherwise.
+     */
+    public boolean isActive() {
+        return status == Status.ACTIVE;
+    }
 }

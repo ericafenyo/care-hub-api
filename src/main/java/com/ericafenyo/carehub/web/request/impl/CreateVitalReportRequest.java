@@ -24,22 +24,22 @@
 
 package com.ericafenyo.carehub.web.request.impl;
 
-import com.ericafenyo.carehub.web.request.CreateVitalRecordRequest;
-import com.ericafenyo.carehub.web.request.VitalMeasurementRequest;
+import com.ericafenyo.carehub.domain.model.CreateVitalReportModel;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public class CreateVitalRecordRequestModel implements CreateVitalRecordRequest {
-    private String notes;
-    private List<VitalMeasurementRequest> measurements;
+public record CreateVitalReportRequest(
+        @NotNull
+        String notes,
+        List<VitalMeasurementRequest> measurements
+) implements CreateVitalReportModel {
 
     @Override
-    public String notes() {
-        return "";
-    }
-
-    @Override
-    public List<VitalMeasurementRequest> measurements() {
-        return List.of();
+    public String toString() {
+        return "CreateVitalReportRequest{" +
+                "notes='" + notes + '\'' +
+                ", measurements=" + measurements +
+                '}';
     }
 }

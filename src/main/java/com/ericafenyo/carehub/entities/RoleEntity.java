@@ -35,6 +35,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -44,10 +45,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Entity(name = "roles")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
+@Accessors(chain = true)
+@Entity(name = "roles")
 public class RoleEntity {
     /**
      * The unique identifier for the role.
@@ -60,7 +62,7 @@ public class RoleEntity {
     /**
      * The name of the role
      */
-    @Column(name = "name", length = 50, nullable = false , unique = true)
+    @Column(name = "name", length = 50, nullable = false, unique = true)
     private String name;
 
     /**
@@ -77,28 +79,27 @@ public class RoleEntity {
     /**
      * Human-readable name of the role
      */
-    @Column(name = "slug", length = 50 , nullable = false, unique = true)
+    @Column(name = "slug", length = 50, nullable = false, unique = true)
     private String slug;
 
     /**
      * A brief description or explanation of the role.
      */
-    @Column(name = "description", length = 150 , nullable = false)
+    @Column(name = "description", length = 150, nullable = false)
     private String description;
-
 
 
     /**
      * The timestamp indicating when the role was created.
      */
     @CreatedDate
-    @Column(name = "created_at" , nullable = false)
+    @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
     /**
      * The timestamp indicating when the role was last updated.
      */
     @LastModifiedDate
-    @Column(name = "updated_at" , nullable = false)
+    @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 }

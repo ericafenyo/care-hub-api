@@ -26,7 +26,7 @@ package com.ericafenyo.carehub.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class UnauthorizedException extends HttpException{
+public class UnauthorizedException extends DomainException {
 
   public UnauthorizedException(String message, String code) {
     super(HttpStatus.UNAUTHORIZED, message, code);

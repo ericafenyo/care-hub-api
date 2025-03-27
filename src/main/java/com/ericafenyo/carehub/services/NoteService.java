@@ -24,7 +24,7 @@
 
 package com.ericafenyo.carehub.services;
 
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.model.Note;
 
 import java.util.List;
@@ -42,18 +42,18 @@ public interface NoteService {
      * @param content The content of the note.
      * @param teamId  The ID of the team to which the note belongs.
      * @return The created Note object.
-     * @throws HttpException if there is an error during the note creation process.
+     * @throws com.ericafenyo.carehub.exceptions.DomainException if there is an error during the note creation process.
      */
-    Note createNote(String title, String content, UUID teamId) throws HttpException;
+    Note createNote(String title, String content, UUID teamId) throws DomainException;
 
     /**
      * Retrieves all notes associated with a specified team.
      *
      * @param teamId The ID of the team whose notes are to be retrieved.
      * @return A list of Note objects for the specified team.
-     * @throws HttpException if there is an error during the retrieval of notes.
+     * @throws com.ericafenyo.carehub.exceptions.DomainException if there is an error during the retrieval of notes.
      */
-    List<Note> getNotes(UUID teamId) throws HttpException;
+    List<Note> getNotes(UUID teamId) throws DomainException;
 
     /**
      * Retrieves a specific note within a team by its unique ID.
@@ -61,9 +61,9 @@ public interface NoteService {
      * @param teamId The ID of the team to which the note belongs.
      * @param noteId The unique ID of the note to retrieve.
      * @return The Note object corresponding to the specified note ID.
-     * @throws HttpException if the note cannot be found or if an error occurs during retrieval.
+     * @throws com.ericafenyo.carehub.exceptions.DomainException if the note cannot be found or if an error occurs during retrieval.
      */
-    Note getNote(UUID teamId, UUID noteId) throws HttpException;
+    Note getNote(UUID teamId, UUID noteId) throws DomainException;
 
     /**
      * Updates an existing note within a specified team.
@@ -73,16 +73,16 @@ public interface NoteService {
      * @param title   The updated title of the note.
      * @param content The updated content of the note.
      * @return The updated Note object.
-     * @throws HttpException if an error occurs during the update process.
+     * @throws com.ericafenyo.carehub.exceptions.DomainException if an error occurs during the update process.
      */
-    Note updateNote(UUID teamId, UUID noteId, String title, String content) throws HttpException;
+    Note updateNote(UUID teamId, UUID noteId, String title, String content) throws DomainException;
 
     /**
      * Deletes a specific note within a team.
      *
      * @param teamId The ID of the team to which the note belongs.
      * @param noteId The unique ID of the note to delete.
-     * @throws HttpException if the note cannot be found or if an error occurs during deletion.
+     * @throws com.ericafenyo.carehub.exceptions.DomainException if the note cannot be found or if an error occurs during deletion.
      */
-    void deleteNote(UUID teamId, UUID noteId) throws HttpException;
+    void deleteNote(UUID teamId, UUID noteId) throws DomainException;
 }

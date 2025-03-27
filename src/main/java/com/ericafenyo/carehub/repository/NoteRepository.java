@@ -25,6 +25,7 @@
 package com.ericafenyo.carehub.repository;
 
 import com.ericafenyo.carehub.entities.NoteEntity;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,9 +34,23 @@ import java.util.UUID;
 /**
  * Repository for performing database operations on a {@link NoteEntity}.
  */
-@org.springframework.stereotype.Repository
+@Repository
 public interface NoteRepository extends AbstractRepository<NoteEntity> {
+    /**
+     * Retrieves a list of notes for a given team id.
+     *
+     * @param teamId The unique identifier of the team.
+     * @return A list of notes for the given team id or an empty list if none found.
+     */
     List<NoteEntity> findByTeamId(UUID teamId);
 
+    /**
+     * Retrieves a note for a given note id, team id and author id.
+     *
+     * @param id       The unique identifier of the note.
+     * @param teamId   The unique identifier of the team.
+     * @param authorId The unique identifier of the author.
+     * @return A note for the given note id, team id and author id or an empty optional if none found.
+     */
     Optional<NoteEntity> findByIdAndTeamIdAndAuthorId(UUID id, UUID teamId, UUID authorId);
 }

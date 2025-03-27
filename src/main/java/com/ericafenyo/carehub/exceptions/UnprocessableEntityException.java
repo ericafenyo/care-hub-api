@@ -26,7 +26,7 @@ package com.ericafenyo.carehub.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class UnprocessableEntityException extends HttpException{
+public class UnprocessableEntityException extends DomainException {
 
   public UnprocessableEntityException(HttpStatus status, String message, String code) {
     super(status, message, code);

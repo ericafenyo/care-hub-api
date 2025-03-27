@@ -27,20 +27,47 @@ package com.ericafenyo.carehub.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * A model class that represents an appointment
+ */
 @Setter
 @Getter
 public class Appointment {
+    /**
+     * The unique identifier of the appointment
+     */
     private UUID id;
+    /**
+     * The title of the appointment
+     */
     private String title;
+    /**
+     * A brief description of what the appointment is about
+     */
     private String description;
+    /**
+     * The location where the appointment will take place
+     */
     private String location;
+    /**
+     * The start date and time of the appointment
+     */
     private LocalDateTime startDate;
+    /**
+     * The end date and time of the appointment
+     */
     private LocalDateTime endDate;
-    private Instant createdAt;
-    private Instant updatedAt;
+
+    /**
+     * The team the appointment is associated with
+     */
     private Team team;
+
+    /**
+     * The user who created the appointment
+     */
+    private PartialUser user;
 }

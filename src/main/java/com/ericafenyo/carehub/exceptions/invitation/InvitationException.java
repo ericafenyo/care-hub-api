@@ -24,10 +24,10 @@
 
 package com.ericafenyo.carehub.exceptions.invitation;
 
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import org.springframework.http.HttpStatus;
 
-public class InvitationException extends HttpException {
+public class InvitationException extends DomainException {
 
     public InvitationException(HttpStatus status, String message, String code) {
         super(status, message, code);

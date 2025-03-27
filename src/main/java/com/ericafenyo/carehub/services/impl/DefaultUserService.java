@@ -33,7 +33,7 @@ import com.ericafenyo.carehub.entities.CountryEntity;
 import com.ericafenyo.carehub.entities.CredentialEntity;
 import com.ericafenyo.carehub.entities.UserEntity;
 import com.ericafenyo.carehub.exceptions.ConflictException;
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.exceptions.NotFoundException;
 import com.ericafenyo.carehub.mapper.UserMapper;
 import com.ericafenyo.carehub.model.Membership;
@@ -43,7 +43,7 @@ import com.ericafenyo.carehub.repository.CityRepository;
 import com.ericafenyo.carehub.repository.CountryRepository;
 import com.ericafenyo.carehub.repository.CredentialRepository;
 import com.ericafenyo.carehub.repository.UserRepository;
-import com.ericafenyo.carehub.services.TeamService;
+import com.ericafenyo.carehub.domain.service.TeamService;
 import com.ericafenyo.carehub.services.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -70,7 +70,7 @@ public class DefaultUserService implements UserService {
 
     @Override
     @Transactional
-    public User createUser(CreateUserRequest request) throws HttpException {
+    public User createUser(CreateUserRequest request) throws DomainException {
         // Validate if a user with the provided email already exists
         validateUserExistByEmail(request.getEmail());
 
@@ -126,7 +126,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public User updateUser(UUID userId, UserUpdateDto dto) throws HttpException {
+    public User updateUser(UUID userId, UserUpdateDto dto) throws DomainException {
         var user = findUserById(userId);
 
         AddressEntity address = user.getAddress();
@@ -156,7 +156,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public List<Team> getUserTeams(UUID userId) throws HttpException {
+    public List<Team> getUserTeams(UUID userId) throws DomainException {
         // Find the current user using the provided id
         var user = findUserById(userId);
 
@@ -164,7 +164,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public List<Membership> getMemberships(UUID userId) throws HttpException {
+    public List<Membership> getMemberships(UUID userId) throws DomainException {
         var user = this.findUserById(userId);
         return teamService.getMemberships(user.getId());
     }

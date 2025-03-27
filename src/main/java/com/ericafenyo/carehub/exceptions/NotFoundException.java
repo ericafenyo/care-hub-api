@@ -30,7 +30,10 @@ import org.springframework.http.HttpStatus;
 /**
  * Defines an exception for resource not found.
  */
-public class NotFoundException extends HttpException {
+public class NotFoundException extends DomainException {
+    public NotFoundException(String message) {
+        super(HttpStatus.NOT_FOUND, message, "resource-not-found");
+    }
 
     public NotFoundException(String message, String code) {
         super(HttpStatus.NOT_FOUND, message, code);

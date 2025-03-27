@@ -22,12 +22,34 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.web.request;
+package com.ericafenyo.carehub.domain.mapper;
 
-import java.util.List;
+import com.ericafenyo.carehub.domain.model.Permission;
+import com.ericafenyo.carehub.entities.PermissionEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
-public interface CreateVitalRecordRequest {
-    String notes();
+import java.util.function.Function;
 
-    List<VitalMeasurementRequest> measurements();
+/**
+ * A class responsible for converting a {@link PermissionEntity} to a {@link Permission}.
+ */
+@Component
+public class PermissionMapper implements Function<PermissionEntity, Permission> {
+
+    /**
+     * Converts a {@link PermissionEntity} to a {@link }.
+     *
+     * @param entity the {@link PermissionEntity} to be converted
+     * @return the corresponding {@link } object
+     */
+    @Override
+    public Permission apply(PermissionEntity entity) {
+        Assert.notNull(entity, "Permission entity cannot be null");
+        var permission = new Permission();
+        permission.setId(entity.getId());
+        permission.setName(entity.getName());
+        permission.setDescription(entity.getDescription());
+        return permission;
+    }
 }

@@ -48,9 +48,6 @@ public class TeamMapper implements Function<TeamEntity, Team> {
         team.setId(entity.getId());
         team.setName(entity.getName());
         team.setDescription(entity.getDescription());
-        team.setCreatedAt(entity.getCreatedAt());
-        team.setUpdatedAt(entity.getUpdatedAt());
-
         return team;
     }
 }

@@ -210,7 +210,6 @@ public class DefaultTeamService extends AuthenticationContext implements TeamSer
     public Membership getMembership(UUID teamId, UUID userId) throws DomainException {
         validations.validateTeamShouldExists(teamId);
 
-
         if (!teamRepository.existsById(teamId)) {
             throw new NotFoundException(
                     messages.format("error.resource.not.found", "Team", teamId),

@@ -27,7 +27,7 @@ package com.ericafenyo.carehub.controllers;
 import com.ericafenyo.carehub.core.AuthenticationContext;
 import com.ericafenyo.carehub.dto.CreateUserRequest;
 import com.ericafenyo.carehub.dto.UserUpdateDto;
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.model.Membership;
 import com.ericafenyo.carehub.model.User;
 import com.ericafenyo.carehub.services.UserService;
@@ -73,7 +73,7 @@ public class UserController extends AuthenticationContext {
     }
 
     @PutMapping("/users/{id}")
-    public User updateUser(@PathVariable UUID id, @RequestBody @Valid UserUpdateDto userUpdateDto) throws HttpException {
+    public User updateUser(@PathVariable UUID id, @RequestBody @Valid UserUpdateDto userUpdateDto) throws DomainException {
         return service.updateUser(id, userUpdateDto);
     }
 
@@ -83,8 +83,7 @@ public class UserController extends AuthenticationContext {
     }
 
     @GetMapping("/users/{id}/teams")
-    public List<Membership> getMemberships(@PathVariable("id") UUID userId) throws HttpException {
+    public List<Membership> getMemberships(@PathVariable("id") UUID userId) throws DomainException {
         return service.getMemberships(userId);
     }
-
 }

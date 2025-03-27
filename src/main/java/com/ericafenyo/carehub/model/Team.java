@@ -52,13 +52,4 @@ public class Team {
      */
     private String description;
 
-    /**
-     * The timestamp indicating when the team was created.
-     */
-    private Instant createdAt;
-
-    /**
-     * The timestamp indicating when the team was last updated.
-     */
-    private Instant updatedAt;
 }

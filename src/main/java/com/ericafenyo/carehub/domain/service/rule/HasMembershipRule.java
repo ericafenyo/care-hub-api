@@ -22,34 +22,49 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.domain.service;
-
+package com.ericafenyo.carehub.domain.service.rule;
 
 import com.ericafenyo.carehub.Messages;
-import com.ericafenyo.carehub.entities.UserEntity;
-import com.ericafenyo.carehub.exceptions.NotFoundException;
-import com.ericafenyo.carehub.repository.UserRepository;
+import com.ericafenyo.carehub.exceptions.DomainException;
+import com.ericafenyo.carehub.exceptions.ForbiddenException;
+import com.ericafenyo.carehub.repository.MembershipRepository;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+/**
+ * A rule that checks if a user has a membership in a team.
+ */
 @Component
 @RequiredArgsConstructor
-public class FindUserByIdDelegate {
-    private final UserRepository repository;
-
+public class HasMembershipRule implements Constraint<HasMembershipRule.Params> {
+    private final MembershipRepository repository;
     private final Messages messages;
 
-    /**
-     * Find a user by the provided id.
-     *
-     * @param userId The id of the user to find.
-     * @return The user entity if found.
-     * @throws com.ericafenyo.carehub.exceptions.NotFoundException If the user is not found, a NotFoundException is thrown.
-     */
-    public UserEntity findUserById(UUID userId) throws NotFoundException {
-        return repository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(messages.get("user.error.resource.not.found")));
+    @Override
+    public void validate(Params params) throws DomainException {
+        var membershipExists = repository.existsByTeamIdAndUserId(params.getTeamId(), params.getUserId());
+        if (!membershipExists) {
+            throw ForbiddenException.builder()
+                    .message(messages.get("membership.error.user.not.member"))
+                    .code("membership.error.user.not.member.code")
+                    .build();
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class Params {
+        /**
+         * The unique identifier of the team.
+         */
+        private UUID teamId;
+        /**
+         * The unique identifier of the user.
+         */
+        private UUID userId;
     }
 }

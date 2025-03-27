@@ -24,7 +24,7 @@
 
 package com.ericafenyo.carehub.controllers;
 
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.model.Medication;
 import com.ericafenyo.carehub.requests.CreateMedicationRequest;
 import com.ericafenyo.carehub.requests.UpdateMedicationRequest;
@@ -51,7 +51,7 @@ public class MedicationController {
   public Medication addMedication(
       @PathVariable("teamId") UUID teamId,
       @RequestBody CreateMedicationRequest request
-  ) throws HttpException {
+  ) throws DomainException {
     return service.addMedication(
         request.getName(),
         request.getDosage(),
@@ -68,13 +68,13 @@ public class MedicationController {
   public List<Medication> getMedications(
       @PathVariable("teamId") UUID teamId,
       Authentication authentication
-  ) throws HttpException {
+  ) throws DomainException {
     return service.getMedications(teamId);
   }
 
   // Get medication by id
   @GetMapping("/teams/{teamId}/medications/{medicationId}")
-  public Medication getMedicationById(@PathVariable() UUID teamId, @PathVariable() UUID medicationId) throws HttpException {
+  public Medication getMedicationById(@PathVariable() UUID teamId, @PathVariable() UUID medicationId) throws DomainException {
     return service.getMedication(teamId, medicationId);
   }
 
@@ -84,14 +84,14 @@ public class MedicationController {
       @PathVariable("teamId") UUID teamId,
       @PathVariable("medicationId") UUID medicationId,
       @RequestBody() UpdateMedicationRequest request
-  ) throws HttpException {
+  ) throws DomainException {
 //        return service.updateMedication(teamId, medicationId, request.getTitle(), request.getContent());
     return null;
   }
 
   // Delete a medication by id
   @DeleteMapping("/teams/{teamId}/medications/{medicationId}")
-  public void deleteMedication(@PathVariable() UUID teamId, @PathVariable() UUID medicationId) throws HttpException {
+  public void deleteMedication(@PathVariable() UUID teamId, @PathVariable() UUID medicationId) throws DomainException {
     service.deleteMedication(teamId, medicationId);
   }
 }

@@ -35,9 +35,6 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 public class EnvironmentVariables {
-    private String jwtSecret;
-    private Long jwtExpirationTimeSeconds;
-    private String jwtIssuer;
     private String mailSender;
     private String baseUrl;
     private Long invitationExpirySeconds;

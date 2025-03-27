@@ -24,10 +24,15 @@
 
 package com.ericafenyo.carehub.controllers;
 
+import com.ericafenyo.carehub.domain.model.Permission;
 import com.ericafenyo.carehub.services.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,5 +43,10 @@ public class RoleController {
     @GetMapping("/roles")
     public Object getRoles() {
         return service.getRoles();
+    }
+
+    @GetMapping("/roles/{id}")
+    public List<Permission> getPermissions(@PathVariable("id") UUID roleId) {
+        return service.getPermissions(roleId);
     }
 }

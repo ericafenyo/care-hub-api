@@ -24,11 +24,11 @@
 
 package com.ericafenyo.carehub.model;
 
+import com.ericafenyo.carehub.domain.model.Role;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.time.Instant;
-import java.util.Set;
 import java.util.UUID;
 
 // Rules:
@@ -55,9 +55,9 @@ public class Membership {
     private UUID id;
 
     /**
-     * The unique identifier of the user tied to the membership.
+     * The user associated with the membership.
      */
-    private UUID userId;
+    private PartialUser user;
 
     /**
      * The team tied to the membership.
@@ -68,11 +68,6 @@ public class Membership {
      * The role of the member in the team.
      */
     private Role role;
-
-    /**
-     * The permissions granted based on the role.
-     */
-    private Set<String> permissions;
 
     /**
      * The date the membership was created.

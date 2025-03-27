@@ -30,7 +30,7 @@ import com.ericafenyo.carehub.core.AuthenticationContext;
 import com.ericafenyo.carehub.dto.AcceptInvitationRequest;
 import com.ericafenyo.carehub.dto.ValidateInvitationRequest;
 import com.ericafenyo.carehub.entities.InvitationEntity;
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.exceptions.NotFoundException;
 import com.ericafenyo.carehub.exceptions.invitation.InvitationAlreadyUsedException;
 import com.ericafenyo.carehub.exceptions.invitation.InvitationExpiredException;
@@ -73,7 +73,7 @@ public class InvitationServiceImpl extends AuthenticationContext implements Invi
             String firstName,
             String lastName,
             String email
-    ) throws HttpException {
+    ) throws DomainException {
         // inviter = select owner from teams where id = teamId and owner.id = authenticatedUserId
         // Get the inviter or throw an error if it does not exist
         var inviter = userRepository.findById(getAuthenticatedUserId()).orElseThrow(
@@ -115,7 +115,7 @@ public class InvitationServiceImpl extends AuthenticationContext implements Invi
     }
 
     @Override
-    public Invitation validateInvitation(ValidateInvitationRequest request) throws HttpException {
+    public Invitation validateInvitation(ValidateInvitationRequest request) throws DomainException {
         var invitation = invitationRepository.findByToken(request.getToken())
                 .orElseThrow(() -> new InvitationNotFoundException());
 
@@ -142,7 +142,7 @@ public class InvitationServiceImpl extends AuthenticationContext implements Invi
 
     @Override
     @Transactional
-    public Report acceptInvitation(AcceptInvitationRequest request) throws HttpException {
+    public Report acceptInvitation(AcceptInvitationRequest request) throws DomainException {
         // Check if the invitation exists
         var invitation = invitationRepository.findByToken(request.getToken())
                 .orElseThrow(() -> new NotFoundException(

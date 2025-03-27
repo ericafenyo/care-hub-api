@@ -24,6 +24,7 @@
 
 package com.ericafenyo.carehub.model;
 
+import com.ericafenyo.carehub.domain.model.Role;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;

@@ -25,7 +25,7 @@
 package com.ericafenyo.carehub.mapper;
 
 import com.ericafenyo.carehub.entities.RoleEntity;
-import com.ericafenyo.carehub.model.Role;
+import com.ericafenyo.carehub.domain.model.Role;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;

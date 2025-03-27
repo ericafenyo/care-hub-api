@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.configurations;
+package com.ericafenyo.carehub.config;
 
 import com.ericafenyo.carehub.filters.JwtAuthenticationFilter;
 import com.ericafenyo.carehub.security.AuthenticationEntryPoint;

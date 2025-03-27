@@ -26,7 +26,7 @@ package com.ericafenyo.carehub.controllers;
 
 import com.ericafenyo.carehub.dto.AcceptInvitationRequest;
 import com.ericafenyo.carehub.dto.ValidateInvitationRequest;
-import com.ericafenyo.carehub.exceptions.HttpException;
+import com.ericafenyo.carehub.exceptions.DomainException;
 import com.ericafenyo.carehub.model.Invitation;
 import com.ericafenyo.carehub.model.Report;
 import com.ericafenyo.carehub.services.InvitationService;
@@ -44,12 +44,12 @@ public class InvitationController {
     private final InvitationService service;
 
     @PostMapping("/validate")
-    public Invitation validateInvitation(@RequestBody @Valid ValidateInvitationRequest request) throws HttpException {
+    public Invitation validateInvitation(@RequestBody @Valid ValidateInvitationRequest request) throws DomainException {
         return service.validateInvitation(request);
     }
 
     @PostMapping("/accept")
-    public Report acceptInvitation(@RequestBody @Valid AcceptInvitationRequest request) throws HttpException {
+    public Report acceptInvitation(@RequestBody @Valid AcceptInvitationRequest request) throws DomainException {
         return service.acceptInvitation(request);
     }
 }

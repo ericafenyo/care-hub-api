@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2024 Eric Afenyo
+ * Copyright (C) 2025 Eric Afenyo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,11 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.configurations;
+package com.ericafenyo.carehub.domain.service;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+import java.util.UUID;
 
-@Configuration
-@EnableTransactionManagement
-@EnableJpaAuditing
-public class ApplicationConfiguration { }
+
+public interface MembershipService {
+    Object getRole(UUID membershipId);
+}

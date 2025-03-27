@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (C) 2025 Eric Afenyo
+ * Copyright (C) 2024 Eric Afenyo
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,30 +22,17 @@
  * SOFTWARE.
  */
 
-package com.ericafenyo.carehub.interactor;
+package com.ericafenyo.carehub.exceptions;
 
-import com.ericafenyo.carehub.Messages;
-import com.ericafenyo.carehub.entities.TeamEntity;
-import com.ericafenyo.carehub.exceptions.NotFoundException;
-import com.ericafenyo.carehub.repository.TeamRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.http.HttpStatus;
 
-import java.util.UUID;
+public class ForbiddenException extends DomainException {
 
-@Component
-@RequiredArgsConstructor
-public class FindTeamByIdInteractor extends Interactor<UUID, TeamEntity> {
-    private final TeamRepository repository;
-    private final Messages messages;
+  public ForbiddenException(String message, String code) {
+    super(HttpStatus.FORBIDDEN, message, code);
+  }
 
-    @Override
-    protected TeamEntity create(UUID params) throws Exception {
-        return repository.findById(params)
-                .orElseThrow(() -> new NotFoundException(
-                                messages.format("error.resource.not.found", "Team"),
-                                messages.format("error.resource.not.found.code", "team")
-                        )
-                );
-    }
+  public ForbiddenException(String message, String code, Throwable cause) {
+    super(HttpStatus.CONFLICT, message, code, cause);
+  }
 }
