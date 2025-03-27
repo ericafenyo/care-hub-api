@@ -1,7 +1,7 @@
-# Senior Hub API
+# Care Hub API
 
 This is a Spring Boot project serving as the backend for
-my [Senior Hub Application](https://github.com/ericafenyo/senior-hub)
+my [Care Hub Application](https://github.com/ericafenyo/senior-hub)
 
 <img src="./docs/assets/postman-example.png">
 
